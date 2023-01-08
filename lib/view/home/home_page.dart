@@ -96,11 +96,19 @@ class HomePage extends StatelessWidget {
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 25.0),
-                                        child: Text(
-                                          '456, 56th lane, Puttur, Mangalore',
-                                          style: GoogleFonts.inter(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w300,
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.60,
+                                          child: Text(
+                                            homePageController
+                                                .currentPlace.value,
+                                            style: GoogleFonts.inter(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w300,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                       ),
@@ -394,7 +402,7 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          (homePageController.categories!.value.isEmpty)
+                          (homePageController.categories.isEmpty)
                               ? Center(
                                   child: Text(
                                     "No Categories To Display.",

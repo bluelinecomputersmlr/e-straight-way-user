@@ -1,9 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:estraightwayapp/model/categories_model.dart';
-import 'package:estraightwayapp/model/single_course_model.dart';
 import 'package:estraightwayapp/model/user_model.dart';
 import 'package:estraightwayapp/service/home/home_page_service.dart';
+import 'package:geocoding/geocoding.dart' as GeoCoding;
 import 'package:get/get.dart';
+import 'package:location/location.dart';
 
 class HomePageController extends GetxController {
   Rx<UserModel> userData = UserModel().obs;
@@ -16,13 +16,58 @@ class HomePageController extends GetxController {
 
   RxList categories = [].obs;
 
+  var longitude = 0.0.obs;
+
+  var latitude = 0.0.obs;
+
+  var currentPlace = "".obs;
+
   @override
   void onInit() {
     getUserData();
     getBanners();
     getCategories();
     notifyChildrens();
+    getLocation();
     super.onInit();
+  }
+
+  void getLocation() async {
+    Location location = Location();
+
+    bool serviceEnabled = false;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+
+    print(_locationData);
+
+    longitude.value = _locationData.longitude!;
+    latitude.value = _locationData.latitude!;
+
+    List<GeoCoding.Placemark> placemarks =
+        await GeoCoding.placemarkFromCoordinates(
+            _locationData.latitude!, _locationData.longitude!);
+
+    print("${placemarks[0].toString().split(",")[9].split(":")[1]},");
+    currentPlace.value =
+        "${placemarks[0].toString().split(",")[9].split(":")[1]},${placemarks[0].toString().split(",")[8].split(":")[1]},${placemarks[0].toString().split(",")[7].split(":")[1]}";
   }
 
   void getUserData() async {

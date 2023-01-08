@@ -278,7 +278,9 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 ((profilePageController.userData.value.isServiceProvider !=
-                        null)
+                            null &&
+                        profilePageController.userData.value.lastLoggedAsUser !=
+                            true)
                     ? Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: Row(
