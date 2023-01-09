@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:estraightwayapp/constants.dart';
 import 'package:estraightwayapp/controller/home/business_controller.dart';
-import 'package:estraightwayapp/controller/home/home_controller.dart';
 import 'package:estraightwayapp/model/business_model.dart';
 import 'package:estraightwayapp/payment/payment_methods.dart';
 import 'package:estraightwayapp/widget/angle_clipper.dart';
@@ -14,7 +13,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:location/location.dart';
 
 import '../../payment/paymentInitiationPage.dart';
 
@@ -29,9 +27,6 @@ class _BusinessByMapState extends State<BusinessByMap> {
   @override
   Widget build(BuildContext context) {
     final businessController = Get.put(BusinessController());
-
-    final Completer<GoogleMapController> _controller =
-        Completer<GoogleMapController>();
 
     NumberFormat formatCurrency = NumberFormat.simpleCurrency(
         locale: Platform.localeName, name: 'INR', decimalDigits: 0);
@@ -215,9 +210,12 @@ class _BusinessByMapState extends State<BusinessByMap> {
             Obx(
               () => GoogleMap(
                 mapType: MapType.terrain,
-                initialCameraPosition: businessController.kGooglePlex.value,
+                initialCameraPosition: CameraPosition(
+                  target: businessController.initalMapCameraPosition.value,
+                  zoom: 14.4746,
+                ),
                 onMapCreated: (GoogleMapController controller) {
-                  _controller.complete(controller);
+                  businessController.mapController.complete(controller);
                 },
                 zoomControlsEnabled: false,
               ),

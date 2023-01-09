@@ -36,10 +36,11 @@ class BusinessController extends GetxController {
     }
   ].obs;
 
-  Rx<CameraPosition> kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  ).obs;
+  Rx<LatLng> initalMapCameraPosition =
+      LatLng(37.42796133580664, -122.085749655962).obs;
+
+  final Completer<GoogleMapController> mapController =
+      Completer<GoogleMapController>();
 
   late Razorpay _razorpay;
 
@@ -118,12 +119,18 @@ class BusinessController extends GetxController {
     var longitude = locationData.longitude!;
     var latitude = locationData.latitude!;
 
-    kGooglePlex.value = CameraPosition(
+    initalMapCameraPosition.value = LatLng(
+      latitude,
+      longitude,
+    );
+
+    final GoogleMapController controller = await mapController.future;
+    controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
       target: LatLng(
         latitude,
         longitude,
       ),
       zoom: 14.4746,
-    );
+    )));
   }
 }
