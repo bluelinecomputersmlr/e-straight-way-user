@@ -56,8 +56,6 @@ class HomePageController extends GetxController {
 
     _locationData = await location.getLocation();
 
-    print(_locationData);
-
     longitude.value = _locationData.longitude!;
     latitude.value = _locationData.latitude!;
 

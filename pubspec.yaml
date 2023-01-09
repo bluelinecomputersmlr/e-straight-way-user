@@ -49,6 +49,7 @@ dependencies:
   get: ^4.6.5
   get_storage: ^2.0.3
   google_fonts: ^3.0.1
+  google_maps_flutter: ^2.2.3
   image_picker: null
   intl: ^0.17.0
   jwt_decoder: ^2.0.1
