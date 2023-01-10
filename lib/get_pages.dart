@@ -24,6 +24,7 @@ import 'package:estraightwayapp/view/service_provider/payouts_completed_page.dar
 import 'package:estraightwayapp/view/service_provider/payouts_page.dart';
 import 'package:estraightwayapp/view/service_provider/received_bookings.dart';
 import 'package:estraightwayapp/view/service_provider/select_category.dart';
+import 'package:estraightwayapp/view/service_provider/select_location_page.dart';
 import 'package:estraightwayapp/view/service_provider/select_sub_category.dart';
 import 'package:estraightwayapp/view/service_provider/slot_based_service_provider.dart';
 import 'package:estraightwayapp/view/splash_page.dart';
@@ -193,6 +194,11 @@ final pages = [
   GetPage(
     name: '/myBusiness',
     page: () => const MyBusinesPage(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/selectLocation',
+    page: () => const SelectLocationPage(),
     transition: Transition.rightToLeft,
   ),
 ];
