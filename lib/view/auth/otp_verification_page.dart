@@ -284,7 +284,7 @@ void _submitForm(
       UserModel user = UserModel.fromJson(response['user']);
       if (controller.isServiceProvider == true) {
         if (user.isServiceProviderRegistered == true) {
-          Get.offAllNamed('/homeServiceProvider');
+          Get.offAllNamed('/homeServiceProviderPage');
         } else {
           Get.offAllNamed('/signUpServiceProvider');
         }
