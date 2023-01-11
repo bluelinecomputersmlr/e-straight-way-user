@@ -16,7 +16,8 @@ class HomeServiceProviderPage extends StatelessWidget {
     final homePageController = Get.put(HomeServiceProviderController());
     NumberFormat formatCurrency = NumberFormat.simpleCurrency(
         locale: Platform.localeName, name: 'INR', decimalDigits: 0);
-    return Obx(() => SafeArea(
+    return Obx(
+      () => SafeArea(
         child: (homePageController.isMainPageLoading.value)
             ? const Center(
                 child: CircularProgressIndicator(),
@@ -432,6 +433,14 @@ class HomeServiceProviderPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                  )));
+                    floatingActionButton: FloatingActionButton(
+                      onPressed: () {
+                        Get.toNamed("/selectLocation");
+                      },
+                      child: Icon(Icons.map),
+                    ),
+                  ),
+      ),
+    );
   }
 }
