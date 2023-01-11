@@ -14,6 +14,10 @@ class SelectLocationController extends GetxController {
 
   RxMap<MarkerId, Marker> markers = <MarkerId, Marker>{}.obs;
 
+  Rx<LatLng> position = LatLng(37.42796133580664, -122.085749655962).obs;
+
+  var isLoading = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -62,13 +66,20 @@ class SelectLocationController extends GetxController {
     )));
   }
 
-  void selectPlace(LatLng position) {
+  void selectPlace(LatLng currentPosition) {
     markers.value = {};
+    position.value = currentPosition;
     var marker = Marker(
-      markerId: MarkerId('${position.latitude}-${position.longitude}'),
-      position: position,
+      markerId:
+          MarkerId('${currentPosition.latitude}-${currentPosition.longitude}'),
+      position: currentPosition,
     );
 
-    markers[MarkerId('${position.latitude}-${position.longitude}')] = marker;
+    markers[MarkerId(
+        '${currentPosition.latitude}-${currentPosition.longitude}')] = marker;
+  }
+
+  void toggleLoading(bool val) {
+    isLoading(val);
   }
 }

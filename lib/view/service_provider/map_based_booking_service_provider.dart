@@ -663,8 +663,7 @@ class MapBasedBookingSignUpServiceProviderPage extends StatelessWidget {
                                   .validate()) {
                                 await loginController
                                     .submitFormMapBasedBooking();
-                                await Get.offAllNamed(
-                                    '/homeServiceProviderPage');
+                                Get.offAllNamed('/selectLocation');
                               } else {
                                 showErrorSnackbar(
                                     context, 'please enter valid details');

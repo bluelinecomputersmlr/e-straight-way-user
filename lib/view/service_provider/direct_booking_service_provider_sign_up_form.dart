@@ -454,7 +454,7 @@ class DirectBookingSignUpServiceProviderPage extends StatelessWidget {
                               if (loginController.formKey.currentState!
                                   .validate()) {
                                 await loginController.submitFormDirectBooking();
-                                Get.offAllNamed('/homeServiceProviderPage');
+                                Get.offAllNamed('/selectLocation');
                               } else {
                                 showErrorSnackbar(
                                     context, 'please enter valid details');

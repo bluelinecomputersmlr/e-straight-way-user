@@ -654,7 +654,7 @@ class SlotBasedBookingSignUpServiceProviderPage extends StatelessWidget {
                                   .validate()) {
                                 await loginController
                                     .submitFormSlotBasedBooking();
-                                Get.offAllNamed('/homeServiceProviderPage');
+                                Get.offAllNamed('/selectLocation');
                               } else {
                                 showErrorSnackbar(
                                     context, 'please enter valid details');
