@@ -59,8 +59,6 @@ class BusinessController extends GetxController {
     isLoading(true);
     var id = Get.parameters["subCategoryUID"];
 
-    print(subCategory.subCategoryType);
-
     // JUST FOR BACKUP
     subCategoryUID.value = id.toString();
 

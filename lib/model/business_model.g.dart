@@ -30,6 +30,7 @@ BusinessModel _$BusinessModelFromJson(Map<String, dynamic> json) =>
       addedServices: (json['addedServices'] as List<dynamic>?)
           ?.map((e) => e as Map<String, dynamic>)
           .toList(),
+      location: json['location'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$BusinessModelToJson(BusinessModel instance) =>
@@ -52,6 +53,7 @@ Map<String, dynamic> _$BusinessModelToJson(BusinessModel instance) =>
       'experience': instance.experience,
       'vehicleRegistrationNo': instance.vehicleRegistrationNo,
       'addedServices': instance.addedServices,
+      'location': instance.location,
     };
 
 AddedServiceModelList _$AddedServiceModelListFromJson(

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:estraightwayapp/constants.dart';
@@ -13,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../payment/paymentInitiationPage.dart';
 
@@ -208,17 +208,44 @@ class _BusinessByMapState extends State<BusinessByMap> {
         child: Stack(
           children: [
             Obx(
-              () => GoogleMap(
-                mapType: MapType.terrain,
-                initialCameraPosition: CameraPosition(
-                  target: businessController.initalMapCameraPosition.value,
-                  zoom: 14.4746,
-                ),
-                onMapCreated: (GoogleMapController controller) {
-                  businessController.mapController.complete(controller);
-                },
-                zoomControlsEnabled: false,
-              ),
+              () => StreamBuilder(
+                  stream: businessController.getBusiness(),
+                  builder:
+                      (context, AsyncSnapshot<List<BusinessModel>?> snapshot) {
+                    return GoogleMap(
+                      mapType: MapType.terrain,
+                      initialCameraPosition: CameraPosition(
+                        target:
+                            businessController.initalMapCameraPosition.value,
+                        zoom: 14.4746,
+                      ),
+                      onMapCreated: (GoogleMapController controller) {
+                        businessController.mapController.complete(controller);
+                      },
+                      markers: (snapshot.hasData)
+                          ? snapshot.data!
+                              .map(
+                                (e) => (e.location != null)
+                                    ? Marker(
+                                        markerId: MarkerId(
+                                          '${e.location!["geopoint"].latitude}-${e.location!["geopoint"].longitude}',
+                                        ),
+                                        position: LatLng(
+                                          e.location!["geopoint"].latitude,
+                                          e.location!["geopoint"].longitude,
+                                        ),
+                                      )
+                                    : Marker(
+                                        markerId: MarkerId(const Uuid().v4()),
+                                      ),
+                              )
+                              .toSet()
+                          : {},
+                      myLocationButtonEnabled: true,
+                      myLocationEnabled: true,
+                      zoomControlsEnabled: false,
+                    );
+                  }),
             ),
             ClipPath(
               clipper: CustomShapeClipper(),
@@ -274,6 +301,8 @@ class _BusinessByMapState extends State<BusinessByMap> {
               builder: (BuildContext context,
                   AsyncSnapshot<List<BusinessModel>?> snapshot) {
                 if (snapshot.hasData) {
+                  print("**********************************");
+                  print(snapshot.data!.toList());
                   return (snapshot.data!.isEmpty)
                       ? Center(
                           child: Text(

@@ -259,6 +259,8 @@ class _BusinessByServiceState extends State<BusinessByService> {
               builder: (BuildContext context,
                   AsyncSnapshot<List<BusinessModel>?> snapshot) {
                 if (snapshot.hasData) {
+                  print("**********************************");
+                  print(snapshot.data!.toList());
                   return (snapshot.data!.isEmpty)
                       ? Center(
                           child: Text(

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:estraightwayapp/model/user_model.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'business_model.g.dart';
@@ -28,31 +29,42 @@ class BusinessModel {
   String? experience;
   String? vehicleRegistrationNo;
   List<Map<String, dynamic>>? addedServices;
+  Map<String, dynamic>? location;
 
-  BusinessModel(
-      {this.uid,
-      this.address,
-      this.businessName,
-      this.businessHours,
-      this.businessImage,
-      this.categoryUID,
-      this.subCategoryUID,
-      this.description,
-      this.gmapsLink,
-      this.phoneNumber,
-      this.serviceCharge,
-      this.creationTime,
-      this.rating,
-      this.serviceImages,
-      this.subCategoryType,
-      this.experience,
-      this.vehicleRegistrationNo,
-      this.addedServices});
+  BusinessModel({
+    this.uid,
+    this.address,
+    this.businessName,
+    this.businessHours,
+    this.businessImage,
+    this.categoryUID,
+    this.subCategoryUID,
+    this.description,
+    this.gmapsLink,
+    this.phoneNumber,
+    this.serviceCharge,
+    this.creationTime,
+    this.rating,
+    this.serviceImages,
+    this.subCategoryType,
+    this.experience,
+    this.vehicleRegistrationNo,
+    this.addedServices,
+    this.location,
+  });
 
   factory BusinessModel.fromJson(Map<String, dynamic> json) =>
       _$BusinessModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$BusinessModelToJson(this);
+
+  static GeoPoint? _fromJsonGeoPoint(GeoPoint? geoPoint) {
+    return geoPoint;
+  }
+
+  static GeoPoint? _toJsonGeoPoint(GeoPoint? geoPoint) {
+    return geoPoint;
+  }
 }
 
 @JsonSerializable()
