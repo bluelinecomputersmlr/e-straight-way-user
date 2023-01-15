@@ -204,7 +204,7 @@ class _BusinessByMapState extends State<BusinessByMap> {
         ),
       ),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(.5.sw),
+        preferredSize: Size.fromHeight(.7.sw),
         child: Stack(
           children: [
             Obx(
@@ -381,6 +381,19 @@ class _BusinessByMapState extends State<BusinessByMap> {
                                                         .businessName!,
                                                     style: GoogleFonts.inter(
                                                       fontSize: 15,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    "Experience ${snapshot.data![index].experience!} years",
+                                                    style: GoogleFonts.inter(
+                                                      fontSize: 12,
                                                       color: Colors.black,
                                                       fontWeight:
                                                           FontWeight.w400,
