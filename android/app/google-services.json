@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "858341299407",
-    "project_id": "e-straightway",
-    "storage_bucket": "e-straightway.appspot.com"
+    "project_number": "588813054756",
+    "project_id": "estrightway",
+    "storage_bucket": "estrightway.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:858341299407:android:00a4fde9bc02c47a50d3ba",
+        "mobilesdk_app_id": "1:588813054756:android:0315ac2c87a847db3f39b1",
         "android_client_info": {
           "package_name": "com.estraightway.estraightwayapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "858341299407-p9vr4d36em73nse85hab518psmm52ef9.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.estraightway.estraightwayapp",
-            "certificate_hash": "4000b692ab2d13323e842fee6289ee6907ae777e"
-          }
-        },
-        {
-          "client_id": "858341299407-o9jkhue431ldfg012rv6369831phr6l4.apps.googleusercontent.com",
+          "client_id": "588813054756-6kdalf80la4ta00g5582ss746l1no9ut.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDfwBrRbHyGBNDolBkCfRDsn4fcgeTntFk"
+          "current_key": "AIzaSyC-8BN-8UP0frkeUxmn5HKqxu8Ec_wwwho"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "858341299407-o9jkhue431ldfg012rv6369831phr6l4.apps.googleusercontent.com",
+              "client_id": "588813054756-6kdalf80la4ta00g5582ss746l1no9ut.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

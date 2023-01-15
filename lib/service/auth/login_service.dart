@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:estraightwayapp/model/business_model.dart';
 import 'package:estraightwayapp/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:estraightwayapp/controller/auth/login_controller.dart';
@@ -16,13 +17,29 @@ class LoginService extends GetConnect {
           .collection("straightWayUsers")
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get();
+
       if (response.data() != null) {
+        updateToken();
         return {"status": "success", "user": response.data()};
       } else {
         return {"status": "error", "message": "Some error occurred"};
       }
     } catch (e) {
       return {"status": "error", "message": "Some error occurred"};
+    }
+  }
+
+//Adding firebase token to the user account to trigger notification
+  Future<void> updateToken() async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    var id = FirebaseAuth.instance.currentUser?.uid;
+    try {
+      await FirebaseFirestore.instance
+          .collection("straightWayUsers")
+          .doc(id)
+          .update({"token": fcmToken});
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -100,6 +117,7 @@ class LoginService extends GetConnect {
         .collection("straightWayUsers")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .set(user.toJson());
+    updateToken();
   }
 
   Future addUserServiceProvider(
@@ -119,6 +137,7 @@ class LoginService extends GetConnect {
         .collection("straightWayUsers")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .set(user.toJson());
+    updateToken();
   }
 
   updateUser([bool? isServiceProvider]) {
@@ -136,6 +155,10 @@ class LoginService extends GetConnect {
         .collection("Businesses")
         .doc(business!.uid)
         .set(business.toJson(), SetOptions(merge: true));
+    await FirebaseFirestore.instance
+        .collection("Businesses")
+        .doc(business.uid)
+        .update({"isApproved": false});
   }
 
   Future addBusinessSlot(
