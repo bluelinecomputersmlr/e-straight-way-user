@@ -14,6 +14,7 @@ import 'package:estraightwayapp/view/home/home_page.dart';
 import 'package:estraightwayapp/view/home/plan_expired_page.dart';
 import 'package:estraightwayapp/view/home/profile_page.dart';
 import 'package:estraightwayapp/view/home/sub_category_page.dart';
+import 'package:estraightwayapp/view/home/verify_order.dart';
 import 'package:estraightwayapp/view/home/video_player_page.dart';
 import 'package:estraightwayapp/view/service_provider/direct_booking_service_provider_sign_up_form.dart';
 import 'package:estraightwayapp/view/service_provider/home_service_provider.dart';
@@ -199,6 +200,11 @@ final pages = [
   GetPage(
     name: '/selectLocation',
     page: () => const SelectLocationPage(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/verifyOrder',
+    page: () => const VerifyOrderPage(),
     transition: Transition.rightToLeft,
   ),
 ];

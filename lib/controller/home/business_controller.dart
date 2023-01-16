@@ -123,12 +123,16 @@ class BusinessController extends GetxController {
     );
 
     final GoogleMapController controller = await mapController.future;
-    controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
-      target: LatLng(
-        latitude,
-        longitude,
+    controller.moveCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(
+            latitude,
+            longitude,
+          ),
+          zoom: 14.4746,
+        ),
       ),
-      zoom: 14.4746,
-    )));
+    );
   }
 }

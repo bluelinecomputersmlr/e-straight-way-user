@@ -37,4 +37,12 @@ class BusinessServices extends GetConnect {
       yield null;
     }
   }
+
+  // Future<Map> getBusinessData()async{
+  //   try {
+  //     var response = await
+  //   } catch (e) {
+
+  //   }
+  // }
 }
