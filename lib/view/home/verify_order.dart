@@ -126,7 +126,7 @@ class VerifyOrderPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Initial Payment",
+                      "Token Advance Amount: ",
                       style: GoogleFonts.inter(
                         fontSize: 15.0,
                         fontWeight: FontWeight.w500,
@@ -192,29 +192,6 @@ class VerifyOrderPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                 child: Divider(
                   color: Colors.black,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Pending Offline Payment",
-                      style: GoogleFonts.inter(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      verifyOrderController.selectedOrder["price"],
-                      style: GoogleFonts.inter(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
                 ),
               ),
               const SizedBox(

@@ -48,6 +48,8 @@ class BusinessServices extends GetConnect {
 
   Future<Map> bookService(Map<String, dynamic> orderData) async {
     try {
+      // await FirebaseFirestore.instance
+      //     .collection("Bookings").where({""})
       await FirebaseFirestore.instance
           .collection("Bookings")
           .doc(orderData["id"])
