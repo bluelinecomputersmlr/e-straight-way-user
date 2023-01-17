@@ -45,4 +45,20 @@ class BusinessServices extends GetConnect {
 
   //   }
   // }
+
+  Future<Map> bookService(Map<String, dynamic> orderData) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Bookings")
+          .doc(orderData["id"])
+          .set(orderData, SetOptions(merge: true));
+      return {
+        "status": "success",
+      };
+    } catch (e) {
+      print(e);
+
+      return {"status": "error"};
+    }
+  }
 }
