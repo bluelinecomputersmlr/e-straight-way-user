@@ -48,8 +48,21 @@ class BusinessServices extends GetConnect {
 
   Future<Map> bookService(Map<String, dynamic> orderData) async {
     try {
-      // await FirebaseFirestore.instance
-      //     .collection("Bookings").where({""})
+      var today = DateTime.now();
+      var startDate = DateTime(today.year, today.month, today.day, 0, 0, 0);
+      var endDate = DateTime(today.year, today.month, today.day, 23, 59, 59);
+
+      var response = await FirebaseFirestore.instance
+          .collection("Bookings")
+          .where("bookedDate", isLessThanOrEqualTo: endDate)
+          .where("businessId", isEqualTo: orderData["businessId"])
+          .where("serviceName", isEqualTo: orderData["serviceName"])
+          .where("isCompleted", isEqualTo: false)
+          .get();
+
+      if (response.size > 0) {
+        return {"status": "error", "message": "Service is already booked!"};
+      }
       await FirebaseFirestore.instance
           .collection("Bookings")
           .doc(orderData["id"])
@@ -60,7 +73,7 @@ class BusinessServices extends GetConnect {
     } catch (e) {
       print(e);
 
-      return {"status": "error"};
+      return {"status": "error", "message": "Unable to place the order"};
     }
   }
 }

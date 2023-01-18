@@ -49,8 +49,8 @@ class VerifyOrderController extends GetxController {
       print("Order Placed");
     } else {
       final snackBar = SnackBar(
-        content: const Text(
-          "Unable to place the order",
+        content: Text(
+          response["message"],
         ),
         action: SnackBarAction(
           label: 'Okay',
