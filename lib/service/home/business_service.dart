@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:estraightwayapp/model/business_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:get/get.dart';
 
@@ -49,8 +50,14 @@ class BusinessServices extends GetConnect {
   Future<Map> bookService(Map<String, dynamic> orderData) async {
     try {
       var today = DateTime.now();
-      var startDate = DateTime(today.year, today.month, today.day, 0, 0, 0);
-      var endDate = DateTime(today.year, today.month, today.day, 23, 59, 59);
+      var endDate = DateTime(
+        orderData["bookedDate"].year,
+        orderData["bookedDate"].month,
+        orderData["bookedDate"].day,
+        23,
+        59,
+        59,
+      );
 
       var response = await FirebaseFirestore.instance
           .collection("Bookings")
@@ -74,6 +81,56 @@ class BusinessServices extends GetConnect {
       print(e);
 
       return {"status": "error", "message": "Unable to place the order"};
+    }
+  }
+
+  Future<Map> getBookedService() async {
+    try {
+      var response = await FirebaseFirestore.instance
+          .collection("Bookings")
+          .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .orderBy("bookedDate")
+          .get();
+
+      var data = response.docs.toList();
+
+      var responseData = [];
+
+      for (var doc in data) {
+        responseData.add(doc.data());
+      }
+
+      return {"status": "success", "data": responseData};
+    } catch (e) {
+      print(e);
+
+      return {"status": "error", "message": "Unable to get the booked service"};
+    }
+  }
+
+  Stream<List?> getBookingsStream() async* {
+    try {
+      yield* FirebaseFirestore.instance
+          .collection("Bookings")
+          .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .orderBy("bookedDate")
+          .snapshots()
+          .map((snapshot) {
+        return snapshot.docs.map((doc) => doc.data()).toList();
+      });
+    } catch (e) {
+      yield null;
+    }
+  }
+
+  Future<void> updateBookingsData(String id, Map<String, dynamic> data) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Bookings")
+          .doc(id)
+          .update(data);
+    } catch (e) {
+      print(e);
     }
   }
 }

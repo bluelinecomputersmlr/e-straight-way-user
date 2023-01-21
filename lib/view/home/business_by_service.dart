@@ -152,29 +152,51 @@ class _BusinessByServiceState extends State<BusinessByService> {
               padding: const EdgeInsets.only(right: 15.0),
               child: GestureDetector(
                 onTap: () async {
-                  businessController.paymentOptions.first['amount'] = 1 * 100;
-                  if (businessController.paymentOptions.first['method'] ==
-                      null) {
-                    businessController.paymentOptions = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PaymentSelectionPage(
-                                1 * 100,
-                              )),
-                    );
-                    // Get.toNamed('/bookingsuccessful', arguments: ["date"]);
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PaymentInitiationPage(
-                              double.parse(businessController
-                                  .paymentOptions.first['amount']
-                                  .toString()),
-                              '',
-                              businessController.paymentOptions.first)),
+                  if (businessController.selectedBusiness.value.uid != null) {
+                    Get.toNamed(
+                      '/verifyOrder',
+                      parameters: {
+                        "uid": businessController.selectedBusiness.value.uid
+                            .toString(),
+                        "businessImage": businessController
+                            .selectedBusiness.value.businessImage
+                            .toString(),
+                        "price": businessController
+                            .selectedBusiness.value.serviceCharge
+                            .toString(),
+                        "businessName": businessController
+                            .selectedBusiness.value.businessName
+                            .toString(),
+                        "businessContactNumber": businessController
+                            .selectedBusiness.value.phoneNumber
+                            .toString(),
+                        "serviceName": "",
+                      },
                     );
                   }
+                  //   businessController.paymentOptions.first['amount'] = 1 * 100;
+                  //   if (businessController.paymentOptions.first['method'] ==
+                  //       null) {
+                  //     businessController.paymentOptions = await Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) => PaymentSelectionPage(
+                  //                 1 * 100,
+                  //               )),
+                  //     );
+                  //     // Get.toNamed('/bookingsuccessful', arguments: ["date"]);
+                  //   } else {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) => PaymentInitiationPage(
+                  //               double.parse(businessController
+                  //                   .paymentOptions.first['amount']
+                  //                   .toString()),
+                  //               '',
+                  //               businessController.paymentOptions.first)),
+                  //     );
+                  //   }
                 },
                 child: Container(
                   width: .65.sw,
@@ -259,8 +281,6 @@ class _BusinessByServiceState extends State<BusinessByService> {
               builder: (BuildContext context,
                   AsyncSnapshot<List<BusinessModel>?> snapshot) {
                 if (snapshot.hasData) {
-                  print("**********************************");
-                  print(snapshot.data!.toList());
                   return (snapshot.data!.isEmpty)
                       ? Center(
                           child: Text(

@@ -22,6 +22,8 @@ class HomePageController extends GetxController {
 
   var currentPlace = "".obs;
 
+  var currentTabIndex = 0.obs;
+
   @override
   void onInit() {
     getUserData();
@@ -30,6 +32,10 @@ class HomePageController extends GetxController {
     notifyChildrens();
     getLocation();
     super.onInit();
+  }
+
+  void toggleTabIndex(int index) {
+    currentTabIndex.value = index;
   }
 
   void getLocation() async {

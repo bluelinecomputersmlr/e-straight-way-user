@@ -174,7 +174,11 @@ class _BusinessByMapState extends State<BusinessByMap> {
                           "businessName": businessController
                               .selectedBusiness.value.businessName
                               .toString(),
+                          "businessContactNumber": businessController
+                              .selectedBusiness.value.phoneNumber
+                              .toString(),
                           "serviceName": "",
+                          "bookingDate": DateTime.now().toString(),
                         },
                       );
                     }
