@@ -1,3 +1,4 @@
+import 'package:estraightwayapp/helper/send_notification.dart';
 import 'package:estraightwayapp/service/home/business_service.dart';
 import 'package:estraightwayapp/service/home/home_page_service.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,22 @@ class VerifyOrderController extends GetxController {
     var response = await BusinessServices().bookService(bookingData);
 
     if (response["status"] == "success") {
-      print("Order Placed");
+      sendNotification(
+          bookingData["businessId"],
+          "You have new Service Booking",
+          "${bookingData["userName"]} has booked a Service",
+          true);
+      final snackBar = SnackBar(
+        content: const Text(
+          "Order Place Successfuly!",
+        ),
+        action: SnackBarAction(
+          label: 'Okay',
+          onPressed: () {},
+        ),
+      );
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       final snackBar = SnackBar(
         content: Text(
