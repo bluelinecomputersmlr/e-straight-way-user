@@ -1,7 +1,9 @@
 import 'package:estraightwayapp/controller/service_provider/new_booking_controller.dart';
+import 'package:estraightwayapp/service/home/business_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class NewBookings extends StatelessWidget {
   const NewBookings({super.key});
@@ -79,130 +81,153 @@ class NewBookings extends StatelessWidget {
             height: 20.0,
           ),
 
-          GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: (itemWidth / itemHeight),
-            ),
-            itemCount: newBookingsController.bookings.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Container(
-                margin: const EdgeInsets.all(10.0),
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      newBookingsController.bookings[index]["name"].toString(),
-                      style: GoogleFonts.inter(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Text(
-                      newBookingsController.bookings[index]["category"]
-                          .toString(),
-                      style: GoogleFonts.inter(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF727272),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    Text(
-                      newBookingsController.bookings[index]["subCategory"]
-                          .toString(),
-                      style: GoogleFonts.inter(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF727272),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    Text(
-                      newBookingsController.bookings[index]["mobileNumber"]
-                          .toString(),
-                      style: GoogleFonts.inter(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF727272),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30.0,
-                    ),
-                    Container(
-                      height: 40.0,
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Confirm Request",
-                          style: GoogleFonts.inter(color: Colors.white),
+          StreamBuilder(
+              stream: newBookingsController.getBookingsStream(),
+              builder: (context, AsyncSnapshot<List<dynamic>?> snapshot) {
+                return (!snapshot.hasData)
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: (itemWidth / itemHeight),
                         ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                      height: 40.0,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Cancel Request",
-                          style: GoogleFonts.inter(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          newBookingsController.bookings[index]["date"]
-                              .toString(),
-                          style: GoogleFonts.inter(
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w500,
-                            color: const Color(0xFF727272),
-                          ),
-                        ),
-                        Text(
-                          newBookingsController.bookings[index]["time"]
-                              .toString(),
-                          style: GoogleFonts.inter(
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w500,
-                            color: const Color(0xFF727272),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              );
-            },
-          )
+                        itemCount: snapshot.data!.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: const EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.all(10.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Column(
+                              children: [
+                                Text(
+                                  snapshot.data![index]["userName"],
+                                  style: GoogleFonts.inter(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                Text(
+                                  snapshot.data![index]["businessName"],
+                                  style: GoogleFonts.inter(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: const Color(0xFF727272),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                // Text(
+                                //   newBookingsController.bookings[index]
+                                //           ["subCategory"]
+                                //       .toString(),
+                                //   style: GoogleFonts.inter(
+                                //     fontSize: 15.0,
+                                //     fontWeight: FontWeight.w500,
+                                //     color: const Color(0xFF727272),
+                                //   ),
+                                // ),
+                                // const SizedBox(
+                                //   height: 10.0,
+                                // ),
+                                Text(
+                                  snapshot.data![index]["phoneNumber"],
+                                  style: GoogleFonts.inter(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: const Color(0xFF727272),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 30.0,
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    var bookingId = snapshot.data![index]["id"];
+                                    var data = {
+                                      "isServiceProviderAccepted": true,
+                                    };
+
+                                    await BusinessServices()
+                                        .updateBookingsData(bookingId, data);
+                                  },
+                                  child: Container(
+                                    height: 40.0,
+                                    decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Confirm Request",
+                                        style: GoogleFonts.inter(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                Container(
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "Cancel Request",
+                                      style: GoogleFonts.inter(
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 30.0,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      DateFormat('dd/MM/yyyy').format(snapshot
+                                          .data![index]["bookedDate"]
+                                          .toDate()),
+                                      style: GoogleFonts.inter(
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF727272),
+                                      ),
+                                    ),
+                                    Text(
+                                      DateFormat().add_jm().format(snapshot
+                                          .data![index]["bookedDate"]
+                                          .toDate()),
+                                      style: GoogleFonts.inter(
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF727272),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+              })
         ],
       ),
     );

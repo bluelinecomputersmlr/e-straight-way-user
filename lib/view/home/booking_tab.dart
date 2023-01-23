@@ -186,20 +186,27 @@ class BookingsTab extends StatelessWidget {
                                                       TextOverflow.ellipsis,
                                                 ),
                                               ),
-                                              Row(
-                                                children: [
-                                                  const Icon(
-                                                    Icons.star,
-                                                    color: Colors.amber,
-                                                  ),
-                                                  Text(
-                                                    (snapshot.data![index]
-                                                            ["rating"])
-                                                        .toString(),
-                                                    style: GoogleFonts.inter(),
-                                                  )
-                                                ],
-                                              ),
+                                              (snapshot.data![index][
+                                                          "isOrderCompleted"] &&
+                                                      snapshot.data![index]
+                                                              ["rating"] !=
+                                                          0)
+                                                  ? Row(
+                                                      children: [
+                                                        const Icon(
+                                                          Icons.star,
+                                                          color: Colors.amber,
+                                                        ),
+                                                        Text(
+                                                          (snapshot.data![index]
+                                                                  ["rating"])
+                                                              .toString(),
+                                                          style: GoogleFonts
+                                                              .inter(),
+                                                        )
+                                                      ],
+                                                    )
+                                                  : Container(),
                                               const SizedBox(),
                                             ],
                                           ),
@@ -239,252 +246,235 @@ class BookingsTab extends StatelessWidget {
                                           const SizedBox(
                                             height: 20.0,
                                           ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return Dialog(
-                                                    backgroundColor:
-                                                        Colors.white,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
-                                                    ),
-                                                    child: Obx(
-                                                      () => Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.0),
-                                                        ),
-                                                        child:
-                                                            SingleChildScrollView(
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              const SizedBox(
-                                                                height: 20.0,
-                                                              ),
-                                                              Image.asset(
-                                                                "assets/icons/rate.png",
-                                                              ),
-                                                              const SizedBox(
-                                                                height: 20.0,
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
+                                          (snapshot.data![index]
+                                                      ["isOrderCompleted"] &&
+                                                  snapshot.data![index]
+                                                          ["rating"] ==
+                                                      0)
+                                              ? GestureDetector(
+                                                  onTap: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return Dialog(
+                                                          backgroundColor:
+                                                              Colors.white,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
                                                                         10.0),
-                                                                child: Text(
-                                                                  "Please share your feedback, your feedback will help us improve our services.",
-                                                                  style:
-                                                                      GoogleFonts
-                                                                          .inter(
-                                                                    fontSize:
-                                                                        16.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                  ),
-                                                                ),
+                                                          ),
+                                                          child: Obx(
+                                                            () => Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Colors
+                                                                    .white,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10.0),
                                                               ),
-                                                              const SizedBox(
-                                                                height: 20.0,
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        10.0),
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
+                                                              child:
+                                                                  SingleChildScrollView(
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
                                                                           .center,
                                                                   children: [
-                                                                    IconButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        bookingController
-                                                                            .setRating(1);
-                                                                      },
-                                                                      icon:
-                                                                          Icon(
-                                                                        (bookingController.givenRating.value >=
-                                                                                1)
-                                                                            ? Icons.star
-                                                                            : Icons.star_border,
-                                                                        color: Colors
-                                                                            .amber,
+                                                                    const SizedBox(
+                                                                      height:
+                                                                          20.0,
+                                                                    ),
+                                                                    Image.asset(
+                                                                      "assets/icons/rate.png",
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      height:
+                                                                          20.0,
+                                                                    ),
+                                                                    Padding(
+                                                                      padding: const EdgeInsets
+                                                                              .all(
+                                                                          10.0),
+                                                                      child:
+                                                                          Text(
+                                                                        "Please share your feedback, your feedback will help us improve our services.",
+                                                                        style: GoogleFonts
+                                                                            .inter(
+                                                                          fontSize:
+                                                                              16.0,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
                                                                       ),
                                                                     ),
-                                                                    IconButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        bookingController
-                                                                            .setRating(2);
-                                                                      },
-                                                                      icon:
-                                                                          Icon(
-                                                                        (bookingController.givenRating.value >=
-                                                                                2)
-                                                                            ? Icons.star
-                                                                            : Icons.star_border,
-                                                                        color: Colors
-                                                                            .amber,
+                                                                    const SizedBox(
+                                                                      height:
+                                                                          20.0,
+                                                                    ),
+                                                                    Padding(
+                                                                      padding: const EdgeInsets
+                                                                              .all(
+                                                                          10.0),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          IconButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              bookingController.setRating(1);
+                                                                            },
+                                                                            icon:
+                                                                                Icon(
+                                                                              (bookingController.givenRating.value >= 1) ? Icons.star : Icons.star_border,
+                                                                              color: Colors.amber,
+                                                                            ),
+                                                                          ),
+                                                                          IconButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              bookingController.setRating(2);
+                                                                            },
+                                                                            icon:
+                                                                                Icon(
+                                                                              (bookingController.givenRating.value >= 2) ? Icons.star : Icons.star_border,
+                                                                              color: Colors.amber,
+                                                                            ),
+                                                                          ),
+                                                                          IconButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              bookingController.setRating(3);
+                                                                            },
+                                                                            icon:
+                                                                                Icon(
+                                                                              (bookingController.givenRating.value >= 3) ? Icons.star : Icons.star_border,
+                                                                              color: Colors.amber,
+                                                                            ),
+                                                                          ),
+                                                                          IconButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              bookingController.setRating(4);
+                                                                            },
+                                                                            icon:
+                                                                                Icon(
+                                                                              (bookingController.givenRating.value >= 4) ? Icons.star : Icons.star_border,
+                                                                              color: Colors.amber,
+                                                                            ),
+                                                                          ),
+                                                                          IconButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              bookingController.setRating(5);
+                                                                            },
+                                                                            icon:
+                                                                                Icon(
+                                                                              (bookingController.givenRating.value >= 5) ? Icons.star : Icons.star_border,
+                                                                              color: Colors.amber,
+                                                                            ),
+                                                                          ),
+                                                                        ],
                                                                       ),
                                                                     ),
-                                                                    IconButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        bookingController
-                                                                            .setRating(3);
+                                                                    const SizedBox(
+                                                                      height:
+                                                                          20.0,
+                                                                    ),
+                                                                    GestureDetector(
+                                                                      onTap:
+                                                                          () async {
+                                                                        var rating = bookingController
+                                                                            .givenRating
+                                                                            .value;
+
+                                                                        var bookingId =
+                                                                            snapshot.data![index]["id"];
+
+                                                                        var data =
+                                                                            {
+                                                                          "rating":
+                                                                              rating
+                                                                        };
+
+                                                                        await BusinessServices().updateBookingsData(
+                                                                            bookingId,
+                                                                            data);
+
+                                                                        Get.back();
                                                                       },
-                                                                      icon:
-                                                                          Icon(
-                                                                        (bookingController.givenRating.value >=
-                                                                                3)
-                                                                            ? Icons.star
-                                                                            : Icons.star_border,
-                                                                        color: Colors
-                                                                            .amber,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            40.0,
+                                                                        width: size.width *
+                                                                            0.40,
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color: const Color.fromRGBO(
+                                                                              63,
+                                                                              92,
+                                                                              159,
+                                                                              1),
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10.0),
+                                                                        ),
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              Text(
+                                                                            "Submit",
+                                                                            style:
+                                                                                GoogleFonts.inter(
+                                                                              color: Colors.white,
+                                                                              fontWeight: FontWeight.w600,
+                                                                            ),
+                                                                          ),
+                                                                        ),
                                                                       ),
                                                                     ),
-                                                                    IconButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        bookingController
-                                                                            .setRating(4);
-                                                                      },
-                                                                      icon:
-                                                                          Icon(
-                                                                        (bookingController.givenRating.value >=
-                                                                                4)
-                                                                            ? Icons.star
-                                                                            : Icons.star_border,
-                                                                        color: Colors
-                                                                            .amber,
-                                                                      ),
-                                                                    ),
-                                                                    IconButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        bookingController
-                                                                            .setRating(5);
-                                                                      },
-                                                                      icon:
-                                                                          Icon(
-                                                                        (bookingController.givenRating.value >=
-                                                                                5)
-                                                                            ? Icons.star
-                                                                            : Icons.star_border,
-                                                                        color: Colors
-                                                                            .amber,
-                                                                      ),
+                                                                    const SizedBox(
+                                                                      height:
+                                                                          20.0,
                                                                     ),
                                                                   ],
                                                                 ),
                                                               ),
-                                                              const SizedBox(
-                                                                height: 20.0,
-                                                              ),
-                                                              GestureDetector(
-                                                                onTap:
-                                                                    () async {
-                                                                  var rating =
-                                                                      bookingController
-                                                                          .givenRating
-                                                                          .value;
-
-                                                                  var bookingId =
-                                                                      snapshot.data![
-                                                                              index]
-                                                                          [
-                                                                          "id"];
-
-                                                                  var data = {
-                                                                    "rating":
-                                                                        rating
-                                                                  };
-
-                                                                  await BusinessServices()
-                                                                      .updateBookingsData(
-                                                                          bookingId,
-                                                                          data);
-
-                                                                  Get.back();
-                                                                },
-                                                                child:
-                                                                    Container(
-                                                                  height: 40.0,
-                                                                  width:
-                                                                      size.width *
-                                                                          0.40,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: const Color
-                                                                            .fromRGBO(
-                                                                        63,
-                                                                        92,
-                                                                        159,
-                                                                        1),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            10.0),
-                                                                  ),
-                                                                  child: Center(
-                                                                    child: Text(
-                                                                      "Submit",
-                                                                      style: GoogleFonts
-                                                                          .inter(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight.w600,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              const SizedBox(
-                                                                height: 20.0,
-                                                              ),
-                                                            ],
+                                                            ),
                                                           ),
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    height: 40.0,
+                                                    width: size.width * 0.40,
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(
+                                                          0xFF3F5C9F),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "Rate & Review",
+                                                        style:
+                                                            GoogleFonts.inter(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w600,
                                                         ),
                                                       ),
                                                     ),
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            child: Container(
-                                              height: 40.0,
-                                              width: size.width * 0.40,
-                                              decoration: BoxDecoration(
-                                                color: const Color(0xFF3F5C9F),
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  "Rate & Review",
-                                                  style: GoogleFonts.inter(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w600,
                                                   ),
-                                                ),
-                                              ),
-                                            ),
-                                          )
+                                                )
+                                              : Container(),
                                         ],
                                       ),
                                     ),

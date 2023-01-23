@@ -165,14 +165,15 @@ class _BusinessesByDateDetailsPageState
                                         width: 1.sw,
                                         fit: BoxFit.cover,
                                         placeholder: (context, url) => Center(
-                                            child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          backgroundColor:
-                                              Theme.of(context).primaryColor,
-                                          valueColor:
-                                              const AlwaysStoppedAnimation<
-                                                  Color>(Colors.white),
-                                        )),
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            backgroundColor:
+                                                Theme.of(context).primaryColor,
+                                            valueColor:
+                                                const AlwaysStoppedAnimation<
+                                                    Color>(Colors.white),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ))

@@ -171,6 +171,7 @@ class _BusinessByServiceState extends State<BusinessByService> {
                             .selectedBusiness.value.phoneNumber
                             .toString(),
                         "serviceName": "",
+                        "bookingDate": DateTime.now().toString(),
                       },
                     );
                   }

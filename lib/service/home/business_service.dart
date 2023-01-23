@@ -123,6 +123,28 @@ class BusinessServices extends GetConnect {
     }
   }
 
+  Stream<List?> getBookingsStreamServiceProvider() async* {
+    try {
+      var response = await FirebaseFirestore.instance
+          .collection("straightWayUsers")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      var businessId = response.data()!["businessUID"];
+      yield* FirebaseFirestore.instance
+          .collection("Bookings")
+          .where("businessId", isEqualTo: businessId)
+          .where("isServiceProviderAccepted", isEqualTo: false)
+          .orderBy("bookedDate")
+          .snapshots()
+          .map((snapshot) {
+        return snapshot.docs.map((doc) => doc.data()).toList();
+      });
+    } catch (e) {
+      yield null;
+    }
+  }
+
   Future<void> updateBookingsData(String id, Map<String, dynamic> data) async {
     try {
       await FirebaseFirestore.instance
