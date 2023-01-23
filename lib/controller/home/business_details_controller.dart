@@ -55,6 +55,7 @@ class BusinessDetailsController extends GetxController {
   void onCalanderChanged(DateTime date) {
     targetDateTime.value = date;
     currentMonth.value = DateFormat.yMMM().format(targetDateTime.value);
+    print(targetDateTime.value);
     targetDateTime.update((val) {});
   }
 

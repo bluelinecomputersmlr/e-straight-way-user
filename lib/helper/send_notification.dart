@@ -10,7 +10,8 @@ void sendNotification(
       await NotificatioService().getUserNotificationToken(isBusiness, userId);
 
   if (userData["status"] == "success") {
-    var token = userData["data"][0]["token"];
+    var token = userData["data"]["token"];
+    print(token);
     try {
       var func = FirebaseFunctions.instance.httpsCallable("notifySubscribers");
       var res = await func.call(<String, dynamic>{
@@ -18,7 +19,7 @@ void sendNotification(
         "messageTitle": title,
         "messageBody": body,
       });
-      print(res);
+      print(res.data);
     } on FirebaseFunctionsException catch (error) {
       print(error.code);
       print(error.details);

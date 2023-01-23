@@ -463,110 +463,113 @@ class _BusinessesByDateDetailsPageState
                 ),
               )),
           ListView.builder(
-              itemCount: businessController.business.addedServices!.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (BuildContext context, int index) {
-                return Obx(
-                  () => Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0, vertical: 8),
-                    child: GestureDetector(
-                      onTap: () {
-                        businessController.selectedBusinessIndex.value = index;
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                                color: businessController
-                                            .selectedBusinessIndex.value ==
-                                        index
-                                    ? kPrimaryColor
-                                    : Colors.grey.withOpacity(0.5),
-                                width: 3)),
-                        child: ListView(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: .55.sw,
-                                      child: Text(
-                                        businessController
-                                                .business.addedServices![index]
-                                            ['addedServiceName'],
-                                        style: GoogleFonts.inter(
-                                          fontSize: 16,
-                                          color: kPrimaryColor,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+            itemCount: businessController.business.addedServices!.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              return Obx(
+                () => Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      businessController.selectedBusinessIndex.value = index;
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color:
+                              businessController.selectedBusinessIndex.value ==
+                                      index
+                                  ? kPrimaryColor
+                                  : Colors.grey.withOpacity(0.5),
+                          width: 3,
+                        ),
+                      ),
+                      child: ListView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: .55.sw,
+                                    child: Text(
+                                      businessController
+                                              .business.addedServices![index]
+                                          ['addedServiceName'],
+                                      style: GoogleFonts.inter(
+                                        fontSize: 16,
+                                        color: kPrimaryColor,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                    Container(
-                                      width: .25.sw,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Color(0xffF4F7FF),
-                                      ),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            formatCurrency.format(
-                                              businessController.business
-                                                      .addedServices![index]
-                                                  ['addedServicePrice'],
-                                            ),
-                                            style: GoogleFonts.inter(
-                                              fontSize: 14,
-                                              color: kPrimaryColor,
-                                              fontWeight: FontWeight.w400,
-                                            ),
+                                  ),
+                                  Container(
+                                    width: .25.sw,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Color(0xffF4F7FF),
+                                    ),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          formatCurrency.format(
+                                            businessController.business
+                                                    .addedServices![index]
+                                                ['addedServicePrice'],
+                                          ),
+                                          style: GoogleFonts.inter(
+                                            fontSize: 14,
+                                            color: kPrimaryColor,
+                                            fontWeight: FontWeight.w400,
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0, vertical: 10),
-                                child: Container(
-                                  width: .6.sw,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Color(0xffF4F7FF),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      businessController
-                                              .business.addedServices![index]
-                                          ['addedServiceDescription'],
-                                      style: GoogleFonts.inter(
-                                        fontSize: 14,
-                                        color: kPrimaryColor,
-                                        fontWeight: FontWeight.w400,
-                                      ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10.0, vertical: 10),
+                              child: Container(
+                                width: .6.sw,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Color(0xffF4F7FF),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    businessController
+                                            .business.addedServices![index]
+                                        ['addedServiceDescription'],
+                                    style: GoogleFonts.inter(
+                                      fontSize: 14,
+                                      color: kPrimaryColor,
+                                      fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                 ),
                               ),
-                            ]),
-                      ),
+                            ),
+                          ]),
                     ),
                   ),
-                );
-              }),
+                ),
+              );
+            },
+          ),
           Row(
             children: [
               Checkbox(
@@ -695,15 +698,15 @@ class _BusinessesByDateDetailsPageState
                                                                       height:
                                                                           0.15.sw,
                                                                     )
-                                                                  : Icon(Icons.account_balance_wallet_rounded)
-                                                              : Text(
+                                                                  : const Icon(Icons.account_balance_wallet_rounded)
+                                                              : const Text(
                                                                   "Choose\npayment\nmethod",
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center,
                                                                 ),
                             ),
-                            Icon(Icons.arrow_drop_down_sharp)
+                            const Icon(Icons.arrow_drop_down_sharp)
                           ],
                         ),
                       ],
@@ -715,29 +718,54 @@ class _BusinessesByDateDetailsPageState
                 padding: const EdgeInsets.only(right: 15.0),
                 child: GestureDetector(
                   onTap: () async {
-                    businessController.paymentOptions.first['amount'] = 1 * 100;
-                    if (businessController.paymentOptions.first['method'] ==
-                        null) {
-                      businessController.paymentOptions = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PaymentSelectionPage(
-                                  1 * 100,
-                                )),
-                      );
-                      // Get.toNamed('/bookingsuccessful', arguments: ["date"]);
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PaymentInitiationPage(
-                                double.parse(businessController
-                                    .paymentOptions.first['amount']
-                                    .toString()),
-                                '',
-                                businessController.paymentOptions.first)),
-                      );
-                    }
+                    // businessController.paymentOptions.first['amount'] = 1 * 100;
+                    // if (businessController.paymentOptions.first['method'] ==
+                    //     null) {
+                    //   businessController.paymentOptions = await Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => PaymentSelectionPage(
+                    //               1 * 100,
+                    //             )),
+                    //   );
+                    //   // Get.toNamed('/bookingsuccessful', arguments: ["date"]);
+                    // } else {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => PaymentInitiationPage(
+                    //             double.parse(businessController
+                    //                 .paymentOptions.first['amount']
+                    //                 .toString()),
+                    //             '',
+                    //             businessController.paymentOptions.first)),
+                    //   );
+                    // }
+                    var bookingDate = businessController.currentDate2.value;
+                    Get.toNamed(
+                      '/verifyOrder',
+                      parameters: {
+                        "uid": businessController.business.uid.toString(),
+                        "businessImage": businessController
+                            .business.businessImage
+                            .toString(),
+                        "price": businessController
+                            .business
+                            .addedServices![businessController
+                                .selectedBusinessIndex
+                                .value]['addedServicePrice']
+                            .toString(),
+                        "businessName":
+                            businessController.business.businessName.toString(),
+                        "businessContactNumber":
+                            businessController.business.phoneNumber.toString(),
+                        "serviceName": businessController
+                                    .business.addedServices![
+                                businessController.selectedBusinessIndex.value]
+                            ['addedServiceName'],
+                        "bookingDate": bookingDate.toString(),
+                      },
+                    );
                   },
                   child: Container(
                     width: .65.sw,

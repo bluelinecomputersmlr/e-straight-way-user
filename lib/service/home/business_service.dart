@@ -113,7 +113,7 @@ class BusinessServices extends GetConnect {
       yield* FirebaseFirestore.instance
           .collection("Bookings")
           .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-          .orderBy("bookedDate")
+          .orderBy("bookedDate", descending: true)
           .snapshots()
           .map((snapshot) {
         return snapshot.docs.map((doc) => doc.data()).toList();
