@@ -253,6 +253,8 @@ class BookingsTab extends StatelessWidget {
                                                       0)
                                               ? GestureDetector(
                                                   onTap: () {
+                                                    final reviewController =
+                                                        TextEditingController();
                                                     showDialog(
                                                       context: context,
                                                       builder: (context) {
@@ -386,6 +388,46 @@ class BookingsTab extends StatelessWidget {
                                                                       height:
                                                                           20.0,
                                                                     ),
+                                                                    Padding(
+                                                                      padding: const EdgeInsets
+                                                                              .all(
+                                                                          10.0),
+                                                                      child:
+                                                                          TextFormField(
+                                                                        controller:
+                                                                            reviewController,
+                                                                        maxLines:
+                                                                            4,
+                                                                        decoration:
+                                                                            InputDecoration(
+                                                                          border:
+                                                                              const OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.all(Radius.circular(5.0)),
+                                                                            borderSide:
+                                                                                BorderSide(color: Colors.grey),
+                                                                          ),
+                                                                          focusedBorder:
+                                                                              const OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.all(Radius.circular(5.0)),
+                                                                            borderSide:
+                                                                                BorderSide(color: Colors.grey),
+                                                                          ),
+                                                                          labelText:
+                                                                              "Comment",
+                                                                          labelStyle:
+                                                                              GoogleFonts.inter(
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      height:
+                                                                          20.0,
+                                                                    ),
                                                                     GestureDetector(
                                                                       onTap:
                                                                           () async {
@@ -393,13 +435,18 @@ class BookingsTab extends StatelessWidget {
                                                                             .givenRating
                                                                             .value;
 
+                                                                        var comments =
+                                                                            reviewController.text;
+
                                                                         var bookingId =
                                                                             snapshot.data![index]["id"];
 
                                                                         var data =
                                                                             {
                                                                           "rating":
-                                                                              rating
+                                                                              rating,
+                                                                          "comments":
+                                                                              comments,
                                                                         };
 
                                                                         await BusinessServices().updateBookingsData(
