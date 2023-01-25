@@ -1,4 +1,5 @@
 import 'package:estraightwayapp/controller/service_provider/new_booking_controller.dart';
+import 'package:estraightwayapp/helper/send_notification.dart';
 import 'package:estraightwayapp/service/home/business_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -160,6 +161,13 @@ class NewBookings extends StatelessWidget {
 
                                     await BusinessServices()
                                         .updateBookingsData(bookingId, data);
+
+                                    sendNotification(
+                                      snapshot.data![index]["userId"],
+                                      "Your booking request got accepted",
+                                      "${snapshot.data![index]["businessName"]} accepted your booking",
+                                      false,
+                                    );
                                   },
                                   child: Container(
                                     height: 40.0,
@@ -179,17 +187,34 @@ class NewBookings extends StatelessWidget {
                                 const SizedBox(
                                   height: 20.0,
                                 ),
-                                Container(
-                                  height: 40.0,
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "Cancel Request",
-                                      style: GoogleFonts.inter(
-                                          color: Colors.white),
+                                GestureDetector(
+                                  onTap: () async {
+                                    var bookingId = snapshot.data![index]["id"];
+                                    var data = {
+                                      "isServiceProviderAccepted": false,
+                                      "isRejected": true,
+                                    };
+                                    await BusinessServices()
+                                        .updateBookingsData(bookingId, data);
+                                    sendNotification(
+                                      snapshot.data![index]["userId"],
+                                      "Your booking request got accepted",
+                                      "${snapshot.data![index]["businessName"]} accepted your booking",
+                                      false,
+                                    );
+                                  },
+                                  child: Container(
+                                    height: 40.0,
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Cancel Request",
+                                        style: GoogleFonts.inter(
+                                            color: Colors.white),
+                                      ),
                                     ),
                                   ),
                                 ),

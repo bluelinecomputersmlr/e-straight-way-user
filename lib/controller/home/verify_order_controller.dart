@@ -52,6 +52,7 @@ class VerifyOrderController extends GetxController {
       bookingData["id"] = const Uuid().v4();
       bookingData["isOrderCompleted"] = false;
       bookingData["rating"] = 0;
+      bookingData["isRejected"] = false;
     }
 
     var response = await BusinessServices().bookService(bookingData);
