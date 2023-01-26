@@ -28,6 +28,7 @@ import 'package:estraightwayapp/view/service_provider/select_category.dart';
 import 'package:estraightwayapp/view/service_provider/select_location_page.dart';
 import 'package:estraightwayapp/view/service_provider/select_sub_category.dart';
 import 'package:estraightwayapp/view/service_provider/slot_based_service_provider.dart';
+import 'package:estraightwayapp/view/service_provider/todays_confirmed_orders.dart';
 import 'package:estraightwayapp/view/splash_page.dart';
 import 'package:get/get.dart';
 
@@ -205,6 +206,11 @@ final pages = [
   GetPage(
     name: '/verifyOrder',
     page: () => const VerifyOrderPage(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/todaysConfirmedOrder',
+    page: () => const TodaysConfirmedOrders(),
     transition: Transition.rightToLeft,
   ),
 ];

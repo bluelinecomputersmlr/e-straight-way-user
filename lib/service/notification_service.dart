@@ -29,9 +29,6 @@ class NotificatioService {
 
         userData = response.data();
       }
-
-      print(userData);
-
       return {"status": "success", "data": userData};
     } catch (e) {
       print(e);

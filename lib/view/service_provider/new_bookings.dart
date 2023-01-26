@@ -157,6 +157,7 @@ class NewBookings extends StatelessWidget {
                                     var bookingId = snapshot.data![index]["id"];
                                     var data = {
                                       "isServiceProviderAccepted": true,
+                                      "acceptedDate": DateTime.now(),
                                     };
 
                                     await BusinessServices()
@@ -193,13 +194,14 @@ class NewBookings extends StatelessWidget {
                                     var data = {
                                       "isServiceProviderAccepted": false,
                                       "isRejected": true,
+                                      "rejectedDate": DateTime.now(),
                                     };
                                     await BusinessServices()
                                         .updateBookingsData(bookingId, data);
                                     sendNotification(
                                       snapshot.data![index]["userId"],
-                                      "Your booking request got accepted",
-                                      "${snapshot.data![index]["businessName"]} accepted your booking",
+                                      "Your booking request got rejected",
+                                      "${snapshot.data![index]["businessName"]} rejected your booking",
                                       false,
                                     );
                                   },

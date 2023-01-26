@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-class ReceivedBookings extends StatelessWidget {
-  const ReceivedBookings({super.key});
+class TodaysConfirmedOrders extends StatelessWidget {
+  const TodaysConfirmedOrders({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class ReceivedBookings extends StatelessWidget {
             height: 20.0,
           ),
           Text(
-            "Received Bookings",
+            "Today's Confimed Orders",
             style: GoogleFonts.inter(
               fontSize: 22.0,
               fontWeight: FontWeight.w500,
@@ -74,7 +74,8 @@ class ReceivedBookings extends StatelessWidget {
           ),
 
           StreamBuilder(
-            stream: receivedBookingsController.getBookingsStream(),
+            stream:
+                receivedBookingsController.getTodaysAcceptedBookingsStream(),
             builder: (context, AsyncSnapshot<List<dynamic>?> snapshot) {
               return (!snapshot.hasData)
                   ? const Center(
