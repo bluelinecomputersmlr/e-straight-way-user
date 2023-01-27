@@ -134,5 +134,19 @@ class BusinessController extends GetxController {
         ),
       ),
     );
+
+    location.onLocationChanged.listen((newLoc) {
+      longitude = newLoc.longitude!;
+      latitude = newLoc.latitude!;
+
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(newLoc.latitude!, newLoc.longitude!),
+            zoom: 13.4746,
+          ),
+        ),
+      );
+    });
   }
 }

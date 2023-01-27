@@ -69,9 +69,18 @@ class HomePageController extends GetxController {
         await GeoCoding.placemarkFromCoordinates(
             _locationData.latitude!, _locationData.longitude!);
 
-    print("${placemarks[0].toString().split(",")[9].split(":")[1]},");
     currentPlace.value =
         "${placemarks[0].toString().split(",")[9].split(":")[1]},${placemarks[0].toString().split(",")[8].split(":")[1]},${placemarks[0].toString().split(",")[7].split(":")[1]}";
+
+    location.onLocationChanged.listen((newLoc) async {
+      longitude.value = newLoc.longitude!;
+      latitude.value = newLoc.latitude!;
+      List<GeoCoding.Placemark> placemarks =
+          await GeoCoding.placemarkFromCoordinates(
+              newLoc.latitude!, newLoc.longitude!);
+      currentPlace.value =
+          "${placemarks[0].toString().split(",")[9].split(":")[1]},${placemarks[0].toString().split(",")[8].split(":")[1]},${placemarks[0].toString().split(",")[7].split(":")[1]}";
+    });
   }
 
   void getUserData() async {
