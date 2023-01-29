@@ -510,6 +510,9 @@ class HomeServiceProviderPage extends StatelessWidget {
                                         ),
                                       ),
                                       GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed("/todaysCancelledOrder");
+                                        },
                                         child: Container(
                                           width: MediaQuery.of(context)
                                                   .size

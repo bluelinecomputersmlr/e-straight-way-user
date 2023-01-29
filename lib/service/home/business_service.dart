@@ -190,12 +190,48 @@ class BusinessServices extends GetConnect {
           .where("businessId", isEqualTo: businessId)
           .where("isServiceProviderAccepted", isEqualTo: true)
           .where("acceptedDate", isLessThanOrEqualTo: endDate)
-          .orderBy("bookedDate")
+          .orderBy("acceptedDate")
           .snapshots()
           .map((snapshot) {
         return snapshot.docs.map((doc) => doc.data()).toList();
       });
     } catch (e) {
+      print(e);
+      yield null;
+    }
+  }
+
+  Stream<List?> getTodaysRejectedBookingsStreamServiceProvider() async* {
+    try {
+      var response = await FirebaseFirestore.instance
+          .collection("straightWayUsers")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      var businessId = response.data()!["businessUID"];
+
+      var endDate = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        23,
+        59,
+        59,
+      );
+
+      yield* FirebaseFirestore.instance
+          .collection("Bookings")
+          .where("businessId", isEqualTo: businessId)
+          .where("isServiceProviderAccepted", isEqualTo: false)
+          .where("isRejected", isEqualTo: true)
+          .where("rejectedDate", isLessThanOrEqualTo: endDate)
+          .orderBy("rejectedDate")
+          .snapshots()
+          .map((snapshot) {
+        return snapshot.docs.map((doc) => doc.data()).toList();
+      });
+    } catch (e) {
+      print(e);
       yield null;
     }
   }

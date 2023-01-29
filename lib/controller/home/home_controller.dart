@@ -70,7 +70,7 @@ class HomePageController extends GetxController {
             _locationData.latitude!, _locationData.longitude!);
 
     currentPlace.value =
-        "${placemarks[0].toString().split(",")[9].split(":")[1]},${placemarks[0].toString().split(",")[8].split(":")[1]},${placemarks[0].toString().split(",")[7].split(":")[1]}";
+        "${placemarks[0].toString().split(",")[9].split(":")[1]} ${placemarks[0].toString().split(",")[8].split(":")[1]} ${placemarks[0].toString().split(",")[7].split(":")[1]}";
 
     location.onLocationChanged.listen((newLoc) async {
       longitude.value = newLoc.longitude!;
@@ -79,7 +79,7 @@ class HomePageController extends GetxController {
           await GeoCoding.placemarkFromCoordinates(
               newLoc.latitude!, newLoc.longitude!);
       currentPlace.value =
-          "${placemarks[0].toString().split(",")[9].split(":")[1]},${placemarks[0].toString().split(",")[8].split(":")[1]},${placemarks[0].toString().split(",")[7].split(":")[1]}";
+          "${placemarks[0].toString().split(",")[9].split(":")[1]} ${placemarks[0].toString().split(",")[8].split(":")[1]} ${placemarks[0].toString().split(",")[7].split(":")[1]}";
     });
   }
 

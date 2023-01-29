@@ -17,4 +17,12 @@ class ReceivedBookingController extends GetxController {
 
     return response;
   }
+
+  Stream<List?> getTodaysCancelledBookingsStream() {
+    // REQUESTING FOR DATA
+    var response =
+        BusinessServices().getTodaysRejectedBookingsStreamServiceProvider();
+
+    return response;
+  }
 }
