@@ -30,8 +30,8 @@ class SignUpServiceProviderPage extends StatelessWidget {
                 width: .45.sw,
                 fit: BoxFit.fitWidth,
               )),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          ListView(
+            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 height: .35.sh,
@@ -66,7 +66,7 @@ class SignUpServiceProviderPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Padding(

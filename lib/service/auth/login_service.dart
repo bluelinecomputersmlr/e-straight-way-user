@@ -150,7 +150,7 @@ class LoginService extends GetConnect {
     }, SetOptions(merge: true));
   }
 
-  Future addBusiness(BusinessModel? business) async {
+  Future addBusiness(business) async {
     await FirebaseFirestore.instance
         .collection("Businesses")
         .doc(business!.uid)

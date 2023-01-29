@@ -57,6 +57,8 @@ class SignUpServiceProviderController extends GetxController {
 
   var currentIndex = 0.obs;
 
+  var isGstRegistered = "".obs;
+
   var businessDescriptionConroller = TextEditingController();
   var addedServiceModel = <AddedServiceModel>[AddedServiceModel()].obs;
   @override
@@ -69,6 +71,10 @@ class SignUpServiceProviderController extends GetxController {
     currentIndex.value = index;
     currentIndex.update((val) {});
     notifyChildrens();
+  }
+
+  void setGstRegistered(String value) {
+    isGstRegistered(value);
   }
 
   void getUserData() async {
@@ -284,9 +290,11 @@ class SignUpServiceProviderController extends GetxController {
       ifscCode: ifscCodeController.text,
       bankName: '',
     );
+    var businessJSON = business!.toJson();
+    businessJSON["gstRegisteredStatus"] = isGstRegistered.value;
     await LoginService()
         .addUserServiceProvider(userNameController.text, serviceProvider);
-    await LoginService().addBusiness(business).whenComplete(() async {
+    await LoginService().addBusiness(businessJSON).whenComplete(() async {
       await LoginService()
           .uploadDocument(aadharPhoto, 'aadharDocument', businessUID);
       await LoginService().uploadBusinessPhoto(

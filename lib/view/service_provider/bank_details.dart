@@ -179,6 +179,11 @@ class BankDetails extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.toNamed("/signUpServiceProvider");
+        },
+      ),
     );
   }
 }

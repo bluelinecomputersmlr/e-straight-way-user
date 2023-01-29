@@ -445,6 +445,39 @@ class DirectBookingSignUpServiceProviderPage extends StatelessWidget {
                           ),
                         ),
                       ),
+                      Obx(
+                        () => Column(
+                          children: [
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            RadioListTile(
+                              title: Text(
+                                "Registered Under GST",
+                                style: GoogleFonts.inter(),
+                              ),
+                              value: "Registered Under GST",
+                              groupValue: loginController.isGstRegistered.value,
+                              onChanged: (value) {
+                                loginController
+                                    .setGstRegistered(value.toString());
+                              },
+                            ),
+                            RadioListTile(
+                              title: Text(
+                                "Unregistered",
+                                style: GoogleFonts.inter(),
+                              ),
+                              value: "Unregistered",
+                              groupValue: loginController.isGstRegistered.value,
+                              onChanged: (value) {
+                                loginController
+                                    .setGstRegistered(value.toString());
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
                       Align(
                         alignment: Alignment.center,
                         child: Padding(
