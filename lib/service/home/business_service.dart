@@ -236,6 +236,30 @@ class BusinessServices extends GetConnect {
     }
   }
 
+  Stream<List?> getCustomerReviewsStreamServiceProvider() async* {
+    try {
+      var response = await FirebaseFirestore.instance
+          .collection("straightWayUsers")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      var businessId = response.data()!["businessUID"];
+
+      yield* FirebaseFirestore.instance
+          .collection("Bookings")
+          .where("businessId", isEqualTo: businessId)
+          .where("rating", isGreaterThan: 0)
+          .orderBy("rating")
+          .snapshots()
+          .map((snapshot) {
+        return snapshot.docs.map((doc) => doc.data()).toList();
+      });
+    } catch (e) {
+      print(e);
+      yield null;
+    }
+  }
+
   Future<void> updateBookingsData(String id, Map<String, dynamic> data) async {
     try {
       await FirebaseFirestore.instance

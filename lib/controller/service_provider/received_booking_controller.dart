@@ -25,4 +25,11 @@ class ReceivedBookingController extends GetxController {
 
     return response;
   }
+
+  Stream<List?> getCustomerReviews() {
+    // REQUESTING FOR DATA
+    var response = BusinessServices().getCustomerReviewsStreamServiceProvider();
+
+    return response;
+  }
 }

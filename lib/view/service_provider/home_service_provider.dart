@@ -142,21 +142,22 @@ class HomeServiceProviderPage extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 40,
                             ),
                             Container(
                               width: 1.sw,
                               decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
                                   color: servicePrimaryColor,
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.grey.withOpacity(0.2),
                                       spreadRadius: 5,
                                       blurRadius: 4,
-                                      offset: Offset(
+                                      offset: const Offset(
                                           0, 4), // changes position of shadow
                                     ),
                                   ]),
@@ -164,25 +165,29 @@ class HomeServiceProviderPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
-                                  Text("Total Amount Received",
-                                      style: GoogleFonts.inter(
-                                        fontSize: 14.0,
-                                        color: kPrimaryColor,
-                                        fontWeight: FontWeight.w400,
-                                      )),
-                                  SizedBox(
+                                  Text(
+                                    "Total Amount Received",
+                                    style: GoogleFonts.inter(
+                                      fontSize: 14.0,
+                                      color: kPrimaryColor,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  const SizedBox(
                                     height: 20,
                                   ),
-                                  Text(formatCurrency.format(16000),
-                                      style: GoogleFonts.inter(
-                                        fontSize: 24.0,
-                                        color: kPrimaryColor,
-                                        fontWeight: FontWeight.w500,
-                                      )),
-                                  SizedBox(
+                                  Text(
+                                    formatCurrency.format(16000),
+                                    style: GoogleFonts.inter(
+                                      fontSize: 24.0,
+                                      color: kPrimaryColor,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   Padding(
@@ -200,20 +205,22 @@ class HomeServiceProviderPage extends StatelessWidget {
                                             width: .32.sw,
                                             height: .15.sw,
                                             decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(10),
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(10),
+                                              ),
+                                              color: kPrimaryColor,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.2),
+                                                  spreadRadius: 5,
+                                                  blurRadius: 4,
+                                                  offset: const Offset(0,
+                                                      4), // changes position of shadow
                                                 ),
-                                                color: kPrimaryColor,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.2),
-                                                    spreadRadius: 5,
-                                                    blurRadius: 4,
-                                                    offset: Offset(0,
-                                                        4), // changes position of shadow
-                                                  ),
-                                                ]),
+                                              ],
+                                            ),
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
@@ -572,67 +579,73 @@ class HomeServiceProviderPage extends StatelessWidget {
                             const SizedBox(
                               height: 20.0,
                             ),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.90,
-                              padding: const EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFCEEED9),
-                                border: Border.all(
-                                  color: const Color(0xFFFFFFFF),
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed("/customerReviews");
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.90,
+                                padding: const EdgeInsets.all(10.0),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFCEEED9),
+                                  border: Border.all(
+                                    color: const Color(0xFFFFFFFF),
+                                  ),
+                                  borderRadius: BorderRadius.circular(20.0),
                                 ),
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.35,
-                                        child: Text(
-                                          "Customer Reviews",
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.35,
+                                          child: Text(
+                                            "Customer Reviews",
+                                            style: GoogleFonts.inter(
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 20.0,
+                                        ),
+                                        Text(
+                                          "10",
                                           style: GoogleFonts.inter(
-                                            fontSize: 14.0,
+                                            fontSize: 18.0,
                                             fontWeight: FontWeight.w500,
                                           ),
                                           textAlign: TextAlign.center,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 20.0,
-                                      ),
-                                      Text(
-                                        "10",
-                                        style: GoogleFonts.inter(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.w500,
+                                        const SizedBox(
+                                          height: 20.0,
                                         ),
-                                        textAlign: TextAlign.center,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(
-                                        height: 20.0,
-                                      ),
-                                      Image.asset(
-                                        'assets/icons/stars.png',
-                                        width: .2.sw,
-                                        fit: BoxFit.fitWidth,
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 20.0,
-                                  ),
-                                  Image.asset(
-                                    'assets/icons/ratings.png',
-                                    width: .45.sw,
-                                    fit: BoxFit.fitWidth,
-                                  ),
-                                ],
+                                        Image.asset(
+                                          'assets/icons/stars.png',
+                                          width: .2.sw,
+                                          fit: BoxFit.fitWidth,
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 20.0,
+                                    ),
+                                    Image.asset(
+                                      'assets/icons/ratings.png',
+                                      width: .45.sw,
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                  ],
+                                ),
                               ),
                             )
                           ],
