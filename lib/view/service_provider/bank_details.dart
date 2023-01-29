@@ -12,177 +12,201 @@ class BankDetails extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFCEEED9),
       body: Obx(
-        () => ListView(
+        () => Stack(
           children: [
-            Image.asset('assets/icons/wave.png'),
-            const SizedBox(
-              height: 20.0,
-            ),
-            //App Bar
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ListView(
               children: [
-                IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back_rounded,
-                    size: 30.0,
-                    color: Color(0xFF3F5C9F),
-                  ),
+                Image.asset('assets/icons/wave.png'),
+                const SizedBox(
+                  height: 20.0,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                //App Bar
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset(
-                      'assets/icons/logo/estraightway_logo_service_provider.png',
-                      width: MediaQuery.of(context).size.width * 0.40,
-                    ),
-                    Center(
-                      child: Text(
-                        "Service Provider",
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xFF3F5C9F),
-                        ),
+                    IconButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back_rounded,
+                        size: 30.0,
+                        color: Color(0xFF3F5C9F),
                       ),
-                    )
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/icons/logo/estraightway_logo_service_provider.png',
+                          width: MediaQuery.of(context).size.width * 0.40,
+                        ),
+                        Center(
+                          child: Text(
+                            "Service Provider",
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xFF3F5C9F),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 20.0,
+                    ),
                   ],
                 ),
+
+                //App Bar Ends Here
                 const SizedBox(
-                  width: 20.0,
+                  height: 20.0,
                 ),
+                Text(
+                  "Bank Details",
+                  style: GoogleFonts.inter(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF727272),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+
+                (profilePageController.isLoading.value)
+                    ? const CircularProgressIndicator()
+                    : Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.90,
+                                child: Text(
+                                  profilePageController.userData.value.userName
+                                      .toString(),
+                                  style: GoogleFonts.inter(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              const Divider(
+                                color: Colors.black,
+                                thickness: 0.7,
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.90,
+                                child: Text(
+                                  "Bank Name: ${profilePageController.userData.value.serviceProviderDetails!.bankName.toString()}",
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16.0,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.90,
+                                child: Text(
+                                  "Account Holder's Name: ${profilePageController.userData.value.serviceProviderDetails!.bankAccountName.toString()}",
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16.0,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.90,
+                                child: Text(
+                                  "Account Number: ${profilePageController.userData.value.serviceProviderDetails!.bankAccountNumber.toString()}",
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16.0,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.90,
+                                child: Text(
+                                  "IFSC Code : ${profilePageController.userData.value.serviceProviderDetails!.bankAccountNumber.toString()}",
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16.0,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.90,
+                                child: Text(
+                                  "UPI Number : ${profilePageController.userData.value.serviceProviderDetails!.bankAccountNumber.toString()}",
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16.0,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
               ],
             ),
-
-            //App Bar Ends Here
-            const SizedBox(
-              height: 20.0,
-            ),
-            Text(
-              "Bank Details",
-              style: GoogleFonts.inter(
-                fontSize: 22.0,
-                fontWeight: FontWeight.w500,
-                color: const Color(0xFF727272),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(
-              height: 20.0,
-            ),
-
-            (profilePageController.isLoading.value)
-                ? const CircularProgressIndicator()
-                : Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: GestureDetector(
+                onTap: () {},
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 20.0),
+                  height: 50.0,
+                  width: MediaQuery.of(context).size.width * 0.40,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE20A32),
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Edit",
+                      style: GoogleFonts.inter(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.90,
-                            child: Text(
-                              profilePageController.userData.value.userName
-                                  .toString(),
-                              style: GoogleFonts.inter(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const Divider(
-                            color: Colors.black,
-                            thickness: 0.7,
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.90,
-                            child: Text(
-                              "Bank Name: ${profilePageController.userData.value.serviceProviderDetails!.bankName.toString()}",
-                              style: GoogleFonts.inter(
-                                fontSize: 16.0,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.90,
-                            child: Text(
-                              "Account Holder's Name: ${profilePageController.userData.value.serviceProviderDetails!.bankAccountName.toString()}",
-                              style: GoogleFonts.inter(
-                                fontSize: 16.0,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.90,
-                            child: Text(
-                              "Account Number: ${profilePageController.userData.value.serviceProviderDetails!.bankAccountNumber.toString()}",
-                              style: GoogleFonts.inter(
-                                fontSize: 16.0,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.90,
-                            child: Text(
-                              "IFSC Code : ${profilePageController.userData.value.serviceProviderDetails!.bankAccountNumber.toString()}",
-                              style: GoogleFonts.inter(
-                                fontSize: 16.0,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.90,
-                            child: Text(
-                              "UPI Number : ${profilePageController.userData.value.serviceProviderDetails!.bankAccountNumber.toString()}",
-                              style: GoogleFonts.inter(
-                                fontSize: 16.0,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18.0,
                       ),
                     ),
-                  )
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.toNamed("/signUpServiceProvider");
-        },
       ),
     );
   }
