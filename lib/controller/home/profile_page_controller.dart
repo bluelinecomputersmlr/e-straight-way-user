@@ -21,6 +21,7 @@ class ProfilePageController extends GetxController {
   }
 
   void getUserData() async {
+    isLoading(true);
     var response = await HomePageService().getUserData();
     if (response["status"] == "success") {
       userData.value = UserModel.fromJson(response["user"]);
@@ -30,6 +31,7 @@ class ProfilePageController extends GetxController {
     } else {
       notifyChildrens();
     }
+    isLoading(false);
   }
 
   getFromGalleryProfile() async {

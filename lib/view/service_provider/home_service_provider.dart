@@ -64,7 +64,7 @@ class HomeServiceProviderPage extends StatelessWidget {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.person),
+                                    const Icon(Icons.person),
                                     Text("Profile",
                                         style: GoogleFonts.inter(
                                           fontSize: 14.0,
@@ -80,19 +80,24 @@ class HomeServiceProviderPage extends StatelessWidget {
                               height: .15.sw,
                               color: Colors.grey,
                             ),
-                            SizedBox(
-                              width: .4.sw,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.credit_card),
-                                  Text("Bank Details",
-                                      style: GoogleFonts.inter(
-                                        fontSize: 14.0,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                      )),
-                                ],
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed("/bankDetails");
+                              },
+                              child: SizedBox(
+                                width: .4.sw,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.credit_card),
+                                    Text("Bank Details",
+                                        style: GoogleFonts.inter(
+                                          fontSize: 14.0,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                        )),
+                                  ],
+                                ),
                               ),
                             ),
                           ],

@@ -16,6 +16,7 @@ import 'package:estraightwayapp/view/home/profile_page.dart';
 import 'package:estraightwayapp/view/home/sub_category_page.dart';
 import 'package:estraightwayapp/view/home/verify_order.dart';
 import 'package:estraightwayapp/view/home/video_player_page.dart';
+import 'package:estraightwayapp/view/service_provider/bank_details.dart';
 import 'package:estraightwayapp/view/service_provider/customer_reviews.dart';
 import 'package:estraightwayapp/view/service_provider/direct_booking_service_provider_sign_up_form.dart';
 import 'package:estraightwayapp/view/service_provider/home_service_provider.dart';
@@ -223,6 +224,11 @@ final pages = [
   GetPage(
     name: '/customerReviews',
     page: () => const CustomerReviews(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/bankDetails',
+    page: () => const BankDetails(),
     transition: Transition.rightToLeft,
   ),
 ];
