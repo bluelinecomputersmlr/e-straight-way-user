@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:estraightwayapp/view/home/booking_tab.dart';
+import 'package:estraightwayapp/view/home/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:estraightwayapp/constants.dart';
 import 'package:estraightwayapp/controller/home/home_controller.dart';
@@ -168,37 +169,46 @@ class HomePage extends StatelessWidget {
                                 //DESCRIPTION TEXT
                                 Padding(
                                   padding: const EdgeInsets.all(20.0),
-                                  child: Container(
-                                    width: 1.sw,
-                                    height: .12.sw,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(15.0),
-                                        ),
-                                        border: Border.all(
-                                            color: Colors.grey.withOpacity(0.5),
-                                            width: 1)),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          child: Text(
-                                            'Search Service',
-                                            style: GoogleFonts.inter(
-                                              fontSize: 16,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showSearch(
+                                        context: context,
+                                        delegate: SearchBar(),
+                                      );
+                                    },
+                                    child: Container(
+                                      width: 1.sw,
+                                      height: .12.sw,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(15.0),
+                                          ),
+                                          border: Border.all(
                                               color:
                                                   Colors.grey.withOpacity(0.5),
-                                              fontWeight: FontWeight.w300,
+                                              width: 1)),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            child: Text(
+                                              'Search Service',
+                                              style: GoogleFonts.inter(
+                                                fontSize: 16,
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                fontWeight: FontWeight.w300,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -469,7 +479,7 @@ class HomePage extends StatelessWidget {
                                             },
                                             child: ListView(
                                               physics:
-                                                  NeverScrollableScrollPhysics(),
+                                                  const NeverScrollableScrollPhysics(),
                                               shrinkWrap: true,
                                               children: [
                                                 Hero(

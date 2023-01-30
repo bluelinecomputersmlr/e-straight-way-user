@@ -16,6 +16,8 @@ class HomePageController extends GetxController {
 
   RxList categories = [].obs;
 
+  RxList subCategories = [].obs;
+
   var longitude = 0.0.obs;
 
   var latitude = 0.0.obs;
@@ -31,6 +33,7 @@ class HomePageController extends GetxController {
     getCategories();
     notifyChildrens();
     getLocation();
+    getSubCategories();
     super.onInit();
   }
 
@@ -110,6 +113,15 @@ class HomePageController extends GetxController {
     isMainPageLoading(true);
     categories.value = await HomePageService().getCategories().whenComplete(() {
       categories.obs.update((val) {});
+    });
+    isMainPageLoading(false);
+  }
+
+  void getSubCategories() async {
+    isMainPageLoading(true);
+    subCategories.value =
+        await HomePageService().getSubCategories().whenComplete(() {
+      subCategories.obs.update((val) {});
     });
     isMainPageLoading(false);
   }

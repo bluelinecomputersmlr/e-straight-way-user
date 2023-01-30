@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:estraightwayapp/constants.dart';
 import 'package:estraightwayapp/main.dart';
 import 'package:estraightwayapp/model/categories_model.dart';
+import 'package:estraightwayapp/model/sub_category_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
@@ -57,6 +58,23 @@ class HomePageService extends GetConnect {
         return [];
       }
     } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<SubCategoryModel>> getSubCategories() async {
+    try {
+      var response =
+          await FirebaseFirestore.instance.collection("subCategories").get();
+      if (response.docs.isNotEmpty) {
+        return response.docs
+            .map((e) => SubCategoryModel.fromJson(e.data()))
+            .toList();
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print(e);
       return [];
     }
   }
