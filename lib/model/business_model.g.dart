@@ -31,7 +31,7 @@ BusinessModel _$BusinessModelFromJson(Map<String, dynamic> json) =>
           ?.map((e) => e as Map<String, dynamic>)
           .toList(),
       location: json['location'] as Map<String, dynamic>?,
-    );
+    )..tokenAdvance = (json['tokenAdvance'] as num?)?.toDouble();
 
 Map<String, dynamic> _$BusinessModelToJson(BusinessModel instance) =>
     <String, dynamic>{
@@ -48,6 +48,7 @@ Map<String, dynamic> _$BusinessModelToJson(BusinessModel instance) =>
       'creationTime': firestoreTimestampToJson(instance.creationTime),
       'rating': instance.rating,
       'serviceCharge': instance.serviceCharge,
+      'tokenAdvance': instance.tokenAdvance,
       'serviceImages': instance.serviceImages,
       'subCategoryType': instance.subCategoryType,
       'experience': instance.experience,

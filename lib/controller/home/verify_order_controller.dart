@@ -24,6 +24,7 @@ class VerifyOrderController extends GetxController {
     selectedOrder["bookingDate"] = Get.parameters["bookingDate"];
     selectedOrder["businessContactNumber"] =
         Get.parameters["businessContactNumber"];
+    selectedOrder["tokenAdvance"] = Get.parameters["tokenAdvance"];
   }
 
   void submitData(BuildContext context) async {

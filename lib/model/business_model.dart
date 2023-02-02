@@ -24,6 +24,7 @@ class BusinessModel {
   Timestamp? creationTime;
   double? rating;
   double? serviceCharge;
+  double? tokenAdvance;
   List<String>? serviceImages;
   String? subCategoryType;
   String? experience;

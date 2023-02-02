@@ -21,7 +21,8 @@ class BusinessServices extends GetConnect {
       final geo = GeoFlutterFire();
       var collectionReference = FirebaseFirestore.instance
           .collection('Businesses')
-          .where('subCategoryUID', isEqualTo: id);
+          .where('subCategoryUID', isEqualTo: id)
+          .where('isApproved', isEqualTo: true);
       GeoFirePoint center =
           geo.point(latitude: 12.871184881131773, longitude: 74.8443603515625);
 
@@ -49,7 +50,6 @@ class BusinessServices extends GetConnect {
 
   Future<Map> bookService(Map<String, dynamic> orderData) async {
     try {
-      var today = DateTime.now();
       var endDate = DateTime(
         orderData["bookedDate"].year,
         orderData["bookedDate"].month,
@@ -59,9 +59,19 @@ class BusinessServices extends GetConnect {
         59,
       );
 
+      var startDate = DateTime(
+        orderData["bookedDate"].year,
+        orderData["bookedDate"].month,
+        orderData["bookedDate"].day,
+        00,
+        00,
+        00,
+      );
+
       var response = await FirebaseFirestore.instance
           .collection("Bookings")
           .where("bookedDate", isLessThanOrEqualTo: endDate)
+          .where("bookedDate", isGreaterThanOrEqualTo: startDate)
           .where("businessId", isEqualTo: orderData["businessId"])
           .where("serviceName", isEqualTo: orderData["serviceName"])
           .where("isCompleted", isEqualTo: false)

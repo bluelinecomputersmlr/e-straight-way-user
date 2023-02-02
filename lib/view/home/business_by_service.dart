@@ -164,6 +164,9 @@ class _BusinessByServiceState extends State<BusinessByService> {
                         "price": businessController
                             .selectedBusiness.value.serviceCharge
                             .toString(),
+                        "tokenAdvance": businessController
+                            .selectedBusiness.value.tokenAdvance
+                            .toString(),
                         "businessName": businessController
                             .selectedBusiness.value.businessName
                             .toString(),

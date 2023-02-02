@@ -755,6 +755,8 @@ class _BusinessesByDateDetailsPageState
                                 .selectedBusinessIndex
                                 .value]['addedServicePrice']
                             .toString(),
+                        "tokenAdvance":
+                            businessController.business.tokenAdvance.toString(),
                         "businessName":
                             businessController.business.businessName.toString(),
                         "businessContactNumber":

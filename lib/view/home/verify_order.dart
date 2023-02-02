@@ -133,7 +133,7 @@ class VerifyOrderPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      verifyOrderController.selectedOrder["price"],
+                      verifyOrderController.selectedOrder["tokenAdvance"],
                       style: GoogleFonts.inter(
                         fontSize: 15.0,
                         fontWeight: FontWeight.w600,
@@ -156,7 +156,7 @@ class VerifyOrderPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "100",
+                      "9%",
                       style: GoogleFonts.inter(
                         fontSize: 15.0,
                         fontWeight: FontWeight.w600,
@@ -179,7 +179,7 @@ class VerifyOrderPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "100",
+                      "9%",
                       style: GoogleFonts.inter(
                         fontSize: 15.0,
                         fontWeight: FontWeight.w600,
@@ -199,7 +199,9 @@ class VerifyOrderPage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 10.0),
+                  horizontal: 20.0,
+                  vertical: 10.0,
+                ),
                 child: Text(
                   "Choose Payment Option",
                   style: GoogleFonts.inter(
@@ -235,7 +237,7 @@ class VerifyOrderPage extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            "₹ ${verifyOrderController.selectedOrder["price"]}",
+                            "₹ ${(num.parse(verifyOrderController.selectedOrder["tokenAdvance"]) < 10) ? ((num.parse(verifyOrderController.selectedOrder["tokenAdvance"]) * 0.18) + (num.parse(verifyOrderController.selectedOrder["tokenAdvance"]))).toString() : verifyOrderController.selectedOrder["tokenAdvance"]}",
                             style: GoogleFonts.inter(
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
