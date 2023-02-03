@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:estraightwayapp/controller/home/home_controller.dart';
 import 'package:estraightwayapp/model/business_model.dart';
+import 'package:estraightwayapp/service/home/home_page_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:get/get.dart';
@@ -18,17 +20,22 @@ class BusinessServices extends GetConnect {
       //       .toList();
       // });
 
+      var homePageController = Get.put(HomePageController());
+
       final geo = GeoFlutterFire();
       var collectionReference = FirebaseFirestore.instance
           .collection('Businesses')
           .where('subCategoryUID', isEqualTo: id)
           .where('isApproved', isEqualTo: true);
-      GeoFirePoint center =
-          geo.point(latitude: 12.871184881131773, longitude: 74.8443603515625);
+      GeoFirePoint center = geo.point(
+          latitude: homePageController.latitude.value,
+          longitude: homePageController.longitude.value);
+
+      print(center.longitude);
 
       yield* geo
           .collection(collectionRef: collectionReference)
-          .within(center: center, radius: 50.0, field: "location")
+          .within(center: center, radius: 10.0, field: "location")
           .map((snapshot) {
         return snapshot
             .map((doc) =>

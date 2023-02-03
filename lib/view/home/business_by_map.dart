@@ -171,9 +171,6 @@ class _BusinessByMapState extends State<BusinessByMap> {
                           "price": businessController
                               .selectedBusiness.value.serviceCharge
                               .toString(),
-                          "tokenAdvance": businessController
-                              .selectedBusiness.value.tokenAdvance
-                              .toString(),
                           "businessName": businessController
                               .selectedBusiness.value.businessName
                               .toString(),
@@ -331,6 +328,8 @@ class _BusinessByMapState extends State<BusinessByMap> {
               builder: (BuildContext context,
                   AsyncSnapshot<List<BusinessModel>?> snapshot) {
                 if (snapshot.hasData) {
+                  print("**********************************");
+                  print(snapshot.data!.toList());
                   return (snapshot.data!.isEmpty)
                       ? Center(
                           child: Text(
@@ -355,17 +354,18 @@ class _BusinessByMapState extends State<BusinessByMap> {
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        border: Border.all(
-                                            color: businessController
-                                                        .selectedBusiness
-                                                        .value
-                                                        .uid ==
-                                                    snapshot.data![index].uid
-                                                ? kPrimaryColor
-                                                : Colors.grey.withOpacity(0.5),
-                                            width: 2),
-                                      ),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          border: Border.all(
+                                              color: businessController
+                                                          .selectedBusiness
+                                                          .value
+                                                          .uid ==
+                                                      snapshot.data![index].uid
+                                                  ? kPrimaryColor
+                                                  : Colors.grey
+                                                      .withOpacity(0.5),
+                                              width: 2)),
                                       child: Row(
                                         children: [
                                           const SizedBox(
