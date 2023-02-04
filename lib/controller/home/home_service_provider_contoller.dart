@@ -3,7 +3,10 @@ import 'package:estraightwayapp/model/categories_model.dart';
 import 'package:estraightwayapp/model/single_course_model.dart';
 import 'package:estraightwayapp/model/user_model.dart';
 import 'package:estraightwayapp/service/home/home_page_service.dart';
+import 'package:estraightwayapp/service/service_provider/location_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:ntp/ntp.dart';
 
@@ -19,10 +22,12 @@ class HomeServiceProviderController extends GetxController {
 
   RxList categories = [].obs;
 
+  var lastLocationUpdated = DateTime.now();
+
   @override
   void onInit() {
     getUserData();
-    getLocation();
+
     super.onInit();
   }
 
@@ -50,7 +55,22 @@ class HomeServiceProviderController extends GetxController {
 
     _locationData = await location.getLocation();
 
-    print(_locationData);
+    location.onLocationChanged.listen((newLoc) async {
+      if (lastLocationUpdated.difference(DateTime.now()) >
+          const Duration(minutes: 5)) {
+        lastLocationUpdated = DateTime.now();
+        print(FirebaseAuth.instance.currentUser!.uid);
+        await LocationService().updateBusinessLocation(
+          FirebaseAuth.instance.currentUser!.uid,
+          LatLng(newLoc.latitude!, newLoc.longitude!),
+        );
+      }
+      // print(FirebaseAuth.instance.currentUser!.uid);
+      // var response = await LocationService().updateBusinessLocation(
+      //   FirebaseAuth.instance.currentUser!.uid,
+      //   LatLng(newLoc.latitude!, newLoc.longitude!),
+      // );
+    });
   }
 
   void getUserData() async {
@@ -62,6 +82,12 @@ class HomeServiceProviderController extends GetxController {
     } else {
       isMainError(true);
       mainErrorMessage.value = response["message"];
+    }
+    if (userData.value.isServiceProvider == true &&
+        userData.value.lastLoggedAsUser == false) {
+      if (userData.value.serviceProviderDetails!.businessType == "map") {
+        getLocation();
+      }
     }
     isMainPageLoading(false);
   }
