@@ -181,38 +181,43 @@ class ReceivedBookings extends StatelessWidget {
                               const SizedBox(
                                 height: 30.0,
                               ),
-                              GestureDetector(
-                                onTap: () async {
-                                  var bookingId = snapshot.data![index]["id"];
-                                  var data = {
-                                    "isCompleted": true,
-                                    "isOrderCompleted": true,
-                                    "completedDate": DateTime.now(),
-                                  };
-                                  await BusinessServices()
-                                      .updateBookingsData(bookingId, data);
-                                  sendNotification(
-                                    snapshot.data![index]["userId"],
-                                    "Your booking request is completed",
-                                    "${snapshot.data![index]["businessName"]} completed your booking",
-                                    false,
-                                  );
-                                },
-                                child: Container(
-                                  height: 40.0,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "Complete Request",
-                                      style: GoogleFonts.inter(
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              (!snapshot.data![index]["isOrderCompleted"])
+                                  ? GestureDetector(
+                                      onTap: () async {
+                                        var bookingId =
+                                            snapshot.data![index]["id"];
+                                        var data = {
+                                          "isCompleted": true,
+                                          "isOrderCompleted": true,
+                                          "completedDate": DateTime.now(),
+                                        };
+                                        await BusinessServices()
+                                            .updateBookingsData(
+                                                bookingId, data);
+                                        sendNotification(
+                                          snapshot.data![index]["userId"],
+                                          "Your booking request is completed",
+                                          "${snapshot.data![index]["businessName"]} completed your booking",
+                                          false,
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 40.0,
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            "Complete Request",
+                                            style: GoogleFonts.inter(
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
                             ],
                           ),
                         );
