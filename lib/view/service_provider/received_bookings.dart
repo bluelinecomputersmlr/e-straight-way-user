@@ -1,4 +1,6 @@
 import 'package:estraightwayapp/controller/service_provider/received_booking_controller.dart';
+import 'package:estraightwayapp/helper/send_notification.dart';
+import 'package:estraightwayapp/service/home/business_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +12,13 @@ class ReceivedBookings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var receivedBookingsController = Get.put(ReceivedBookingController());
+
+    var size = MediaQuery.of(context).size;
+
+    /*24 is for notification bar on Android*/
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 2.7;
+    final double itemWidth = size.width / 2;
+
     return Scaffold(
       backgroundColor: const Color(0xFFCEEED9),
       body: ListView(
@@ -81,9 +90,9 @@ class ReceivedBookings extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     )
                   : GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
+                        childAspectRatio: (itemWidth / itemHeight),
                       ),
                       itemCount: snapshot.data!.length,
                       shrinkWrap: true,
@@ -168,7 +177,42 @@ class ReceivedBookings extends StatelessWidget {
                                     ),
                                   ),
                                 ],
-                              )
+                              ),
+                              const SizedBox(
+                                height: 30.0,
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  var bookingId = snapshot.data![index]["id"];
+                                  var data = {
+                                    "isCompleted": true,
+                                    "isOrderCompleted": true,
+                                    "completedDate": DateTime.now(),
+                                  };
+                                  await BusinessServices()
+                                      .updateBookingsData(bookingId, data);
+                                  sendNotification(
+                                    snapshot.data![index]["userId"],
+                                    "Your booking request is completed",
+                                    "${snapshot.data![index]["businessName"]} completed your booking",
+                                    false,
+                                  );
+                                },
+                                child: Container(
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "Complete Request",
+                                      style: GoogleFonts.inter(
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         );
