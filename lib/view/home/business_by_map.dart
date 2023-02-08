@@ -171,6 +171,9 @@ class _BusinessByMapState extends State<BusinessByMap> {
                           "price": businessController
                               .selectedBusiness.value.serviceCharge
                               .toString(),
+                          "tokenAdvance": businessController
+                              .selectedBusiness.value.tokenAdvance
+                              .toString(),
                           "businessName": businessController
                               .selectedBusiness.value.businessName
                               .toString(),
@@ -344,189 +347,186 @@ class _BusinessByMapState extends State<BusinessByMap> {
                       : ListView.builder(
                           itemCount: snapshot.data!.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return Obx(() => Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0, vertical: 4),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      businessController.selectedBusiness(
-                                          snapshot.data![index]);
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          border: Border.all(
-                                              color: businessController
-                                                          .selectedBusiness
-                                                          .value
-                                                          .uid ==
-                                                      snapshot.data![index].uid
-                                                  ? kPrimaryColor
-                                                  : Colors.grey
-                                                      .withOpacity(0.5),
-                                              width: 2)),
-                                      child: Row(
-                                        children: [
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Container(
-                                              width: 60,
-                                              height: 60,
-                                              clipBehavior: Clip.hardEdge,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: Colors.white,
-                                                image: (snapshot.data![index]
-                                                            .businessImage !=
-                                                        null)
-                                                    ? DecorationImage(
-                                                        fit: BoxFit.cover,
-                                                        image:
-                                                            CachedNetworkImageProvider(
-                                                          snapshot.data![index]
-                                                              .businessImage!,
-                                                        ),
-                                                      )
-                                                    : null,
-                                              )),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          SizedBox(
-                                            width: .4.sw,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    snapshot.data![index]
-                                                        .businessName!,
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 15,
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.w400,
+                            print(snapshot.data);
+                            return Obx(
+                              () => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0, vertical: 4),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    businessController.selectedBusiness(
+                                        snapshot.data![index]);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        border: Border.all(
+                                            color: businessController
+                                                        .selectedBusiness
+                                                        .value
+                                                        .uid ==
+                                                    snapshot.data![index].uid
+                                                ? kPrimaryColor
+                                                : Colors.grey.withOpacity(0.5),
+                                            width: 2)),
+                                    child: Row(
+                                      children: [
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Container(
+                                          width: 60,
+                                          height: 60,
+                                          clipBehavior: Clip.hardEdge,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
+                                            image: (snapshot.data![index]
+                                                        .businessImage !=
+                                                    null)
+                                                ? DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image:
+                                                        CachedNetworkImageProvider(
+                                                      snapshot.data![index]
+                                                          .businessImage!,
                                                     ),
+                                                  )
+                                                : null,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        SizedBox(
+                                          width: .4.sw,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  snapshot.data![index]
+                                                      .businessName!,
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 15,
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    "Experience ${snapshot.data![index].experience!} years",
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 12,
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  "Experience ${snapshot.data![index].experience!} years",
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 12,
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Container(
-                                                      width: 50,
-                                                      decoration: BoxDecoration(
-                                                        color: kPrimaryColor,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(50),
-                                                      ),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal: 8.0,
-                                                                vertical: 2),
-                                                        child: Row(
-                                                          children: [
-                                                            Text(
-                                                              snapshot
-                                                                          .data![
-                                                                              index]
-                                                                          .rating ==
-                                                                      null
-                                                                  ? "0"
-                                                                  : snapshot
-                                                                      .data![
-                                                                          index]
-                                                                      .rating
-                                                                      .toString(),
-                                                              style: GoogleFonts
-                                                                  .inter(
-                                                                fontSize: 12,
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                              ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                    width: 50,
+                                                    decoration: BoxDecoration(
+                                                      color: kPrimaryColor,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50),
+                                                    ),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 8.0,
+                                                          vertical: 2),
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                            snapshot
+                                                                        .data![
+                                                                            index]
+                                                                        .rating ==
+                                                                    null
+                                                                ? "0"
+                                                                : snapshot
+                                                                    .data![
+                                                                        index]
+                                                                    .rating
+                                                                    .toString(),
+                                                            style: GoogleFonts
+                                                                .inter(
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
                                                             ),
-                                                            const Icon(
-                                                              Icons.star,
-                                                              size: 15,
-                                                              color: Color(
-                                                                  0xffFFC700),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      )),
-                                                )
-                                              ],
-                                            ),
+                                                          ),
+                                                          const Icon(
+                                                            Icons.star,
+                                                            size: 15,
+                                                            color: Color(
+                                                                0xffFFC700),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )),
+                                              )
+                                            ],
                                           ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Container(
-                                            width: .25.sw,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 8.0),
-                                                  child: Text(
-                                                    "Basic Service charge",
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 10,
-                                                      color: Colors.grey,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Container(
+                                          width: .25.sw,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8.0),
+                                                child: Text(
+                                                  "Basic Service charge",
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 10,
+                                                    color: Colors.grey,
+                                                    fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    formatCurrency.format(
-                                                        snapshot.data![index]
-                                                            .serviceCharge!),
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: 15,
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  formatCurrency.format(snapshot
+                                                      .data![index]
+                                                      .serviceCharge!),
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 15,
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
-                                ));
+                                ),
+                              ),
+                            );
                           });
                 } else if (snapshot.hasError) {
                   return Container();

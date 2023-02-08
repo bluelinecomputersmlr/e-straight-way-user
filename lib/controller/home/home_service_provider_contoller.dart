@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:estraightwayapp/model/categories_model.dart';
 import 'package:estraightwayapp/model/single_course_model.dart';
 import 'package:estraightwayapp/model/user_model.dart';
+import 'package:estraightwayapp/service/home/business_service.dart';
 import 'package:estraightwayapp/service/home/home_page_service.dart';
 import 'package:estraightwayapp/service/service_provider/location_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +24,14 @@ class HomeServiceProviderController extends GetxController {
   RxList categories = [].obs;
 
   var lastLocationUpdated = DateTime.now();
+
+  var dashboardDataCount = {
+    "receivedBookingCount": 0,
+    "newBookingCount": 0,
+    "todaysConfirmedBookingCount": 0,
+    "todaysCancelledBookingCount": 0,
+    "customerReviewsCount": 0,
+  }.obs;
 
   @override
   void onInit() {
@@ -56,7 +65,7 @@ class HomeServiceProviderController extends GetxController {
     _locationData = await location.getLocation();
 
     location.onLocationChanged.listen((newLoc) async {
-      if (lastLocationUpdated.difference(DateTime.now()) >
+      if (-lastLocationUpdated.difference(DateTime.now()) >
           const Duration(minutes: 5)) {
         lastLocationUpdated = DateTime.now();
         print(FirebaseAuth.instance.currentUser!.uid);
@@ -65,11 +74,6 @@ class HomeServiceProviderController extends GetxController {
           LatLng(newLoc.latitude!, newLoc.longitude!),
         );
       }
-      // print(FirebaseAuth.instance.currentUser!.uid);
-      // var response = await LocationService().updateBusinessLocation(
-      //   FirebaseAuth.instance.currentUser!.uid,
-      //   LatLng(newLoc.latitude!, newLoc.longitude!),
-      // );
     });
   }
 
@@ -89,6 +93,10 @@ class HomeServiceProviderController extends GetxController {
         getLocation();
       }
     }
+    Map<String, int> dashboardData =
+        await BusinessServices().getAllDasboardData();
+    print(dashboardData);
+    dashboardDataCount.value = dashboardData;
     isMainPageLoading(false);
   }
 

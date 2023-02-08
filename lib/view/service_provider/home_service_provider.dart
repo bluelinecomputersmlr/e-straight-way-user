@@ -1,5 +1,6 @@
 import 'package:estraightwayapp/constants.dart';
 import 'package:estraightwayapp/controller/home/home_service_provider_contoller.dart';
+import 'package:estraightwayapp/controller/service_provider/provider_home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -206,7 +207,11 @@ class HomeServiceProviderPage extends StatelessWidget {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text("10",
+                                              Text(
+                                                  homePageController
+                                                      .dashboardDataCount[
+                                                          "receivedBookingCount"]
+                                                      .toString(),
                                                   style: GoogleFonts.inter(
                                                     fontSize: 18.0,
                                                     color: Colors.black,
@@ -268,7 +273,10 @@ class HomeServiceProviderPage extends StatelessWidget {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                "10",
+                                                homePageController
+                                                    .dashboardDataCount[
+                                                        "newBookingCount"]
+                                                    .toString(),
                                                 style: GoogleFonts.inter(
                                                   fontSize: 18.0,
                                                   color: Colors.black,
@@ -338,7 +346,10 @@ class HomeServiceProviderPage extends StatelessWidget {
                                               height: 20.0,
                                             ),
                                             Text(
-                                              "10",
+                                              homePageController
+                                                  .dashboardDataCount[
+                                                      "todaysConfirmedBookingCount"]
+                                                  .toString(),
                                               style: GoogleFonts.inter(
                                                 fontSize: 18.0,
                                                 fontWeight: FontWeight.w500,
@@ -389,7 +400,10 @@ class HomeServiceProviderPage extends StatelessWidget {
                                               height: 20.0,
                                             ),
                                             Text(
-                                              "10",
+                                              homePageController
+                                                  .dashboardDataCount[
+                                                      "todaysCancelledBookingCount"]
+                                                  .toString(),
                                               style: GoogleFonts.inter(
                                                 fontSize: 18.0,
                                                 fontWeight: FontWeight.w500,
@@ -455,7 +469,9 @@ class HomeServiceProviderPage extends StatelessWidget {
                                         height: 20.0,
                                       ),
                                       Text(
-                                        "10",
+                                        homePageController.dashboardDataCount[
+                                                "customerReviewsCount"]
+                                            .toString(),
                                         style: GoogleFonts.inter(
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.w500,

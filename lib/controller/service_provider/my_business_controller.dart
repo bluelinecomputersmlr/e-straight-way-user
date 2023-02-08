@@ -7,6 +7,9 @@ class MyBusinessController extends GetxController {
   var businessData = [].obs;
   var isError = false.obs;
   var errorMessage = "".obs;
+  var isInitialValueSet = false.obs;
+
+  var editBusinessButtonText = "Save".obs;
 
   @override
   void onInit() {
@@ -28,5 +31,13 @@ class MyBusinessController extends GetxController {
     }
 
     isLoading(false);
+  }
+
+  void changeEditButtonText(String text) {
+    editBusinessButtonText.value = text;
+  }
+
+  void toggleInitialValueStatus(bool val) {
+    isInitialValueSet(val);
   }
 }

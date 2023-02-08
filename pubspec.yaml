@@ -60,7 +60,7 @@ dependencies:
   location: ^4.4.0
   lottie: null
   ntp: null
-  pinput: ^2.2.12
+  pinput: ^2.2.23
   razorpay_flutter_customui: null
   readmore: ^2.2.0
   uuid: null

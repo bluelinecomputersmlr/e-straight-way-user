@@ -19,6 +19,8 @@ import 'package:estraightwayapp/view/home/video_player_page.dart';
 import 'package:estraightwayapp/view/service_provider/bank_details.dart';
 import 'package:estraightwayapp/view/service_provider/customer_reviews.dart';
 import 'package:estraightwayapp/view/service_provider/direct_booking_service_provider_sign_up_form.dart';
+import 'package:estraightwayapp/view/service_provider/edit_date_business.dart';
+import 'package:estraightwayapp/view/service_provider/edit_map_and_slot_business.dart';
 import 'package:estraightwayapp/view/service_provider/home_service_provider.dart';
 import 'package:estraightwayapp/view/service_provider/map_based_booking_service_provider.dart';
 import 'package:estraightwayapp/view/service_provider/my_business_page.dart';
@@ -229,6 +231,16 @@ final pages = [
   GetPage(
     name: '/bankDetails',
     page: () => const BankDetails(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/editMapAndSlot',
+    page: () => EditMapAndSlotBasedBusiness(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/editDateBusiess',
+    page: () => EditDateBasedBusiness(),
     transition: Transition.rightToLeft,
   ),
 ];

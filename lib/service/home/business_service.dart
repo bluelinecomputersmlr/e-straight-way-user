@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:estraightwayapp/controller/home/home_controller.dart';
 import 'package:estraightwayapp/model/business_model.dart';
-import 'package:estraightwayapp/service/home/home_page_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:get/get.dart';
@@ -35,7 +34,7 @@ class BusinessServices extends GetConnect {
 
       yield* geo
           .collection(collectionRef: collectionReference)
-          .within(center: center, radius: 10.0, field: "location")
+          .within(center: center, radius: 30.0, field: "location")
           .map((snapshot) {
         return snapshot
             .map((doc) =>
@@ -43,6 +42,7 @@ class BusinessServices extends GetConnect {
             .toList();
       });
     } catch (e) {
+      print(e);
       yield null;
     }
   }
@@ -147,7 +147,8 @@ class BusinessServices extends GetConnect {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get();
 
-      var businessId = response.data()!["businessUID"];
+      var businessId =
+          response.data()!["serviceProviderDetails"]["businessUID"];
       yield* FirebaseFirestore.instance
           .collection("Bookings")
           .where("businessId", isEqualTo: businessId)
@@ -169,7 +170,8 @@ class BusinessServices extends GetConnect {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get();
 
-      var businessId = response.data()!["businessUID"];
+      var businessId =
+          response.data()!["serviceProviderDetails"]["businessUID"];
       yield* FirebaseFirestore.instance
           .collection("Bookings")
           .where("businessId", isEqualTo: businessId)
@@ -191,7 +193,8 @@ class BusinessServices extends GetConnect {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get();
 
-      var businessId = response.data()!["businessUID"];
+      var businessId =
+          response.data()!["serviceProviderDetails"]["businessUID"];
 
       var endDate = DateTime(
         DateTime.now().year,
@@ -225,7 +228,8 @@ class BusinessServices extends GetConnect {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get();
 
-      var businessId = response.data()!["businessUID"];
+      var businessId =
+          response.data()!["serviceProviderDetails"]["businessUID"];
 
       var endDate = DateTime(
         DateTime.now().year,
@@ -260,7 +264,8 @@ class BusinessServices extends GetConnect {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get();
 
-      var businessId = response.data()!["businessUID"];
+      var businessId =
+          response.data()!["serviceProviderDetails"]["businessUID"];
 
       yield* FirebaseFirestore.instance
           .collection("Bookings")
@@ -285,6 +290,102 @@ class BusinessServices extends GetConnect {
           .update(data);
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<Map> updateBusinessData(String id, Map<String, dynamic> data) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Businesses")
+          .doc(id)
+          .update(data);
+
+      return {"status": "success"};
+    } catch (e) {
+      print(e);
+      return {"status": "error"};
+    }
+  }
+
+  Future<Map<String, int>> getAllDasboardData() async {
+    try {
+      var response = await FirebaseFirestore.instance
+          .collection("straightWayUsers")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      var businessId =
+          response.data()!["serviceProviderDetails"]["businessUID"];
+
+      var endDate = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        23,
+        59,
+        59,
+      );
+
+      var receivedBooking = await FirebaseFirestore.instance
+          .collection("Bookings")
+          .where("businessId", isEqualTo: businessId)
+          .where("isServiceProviderAccepted", isEqualTo: true)
+          .orderBy("bookedDate")
+          .get();
+
+      var newBooking = await FirebaseFirestore.instance
+          .collection("Bookings")
+          .where("businessId", isEqualTo: businessId)
+          .where("isServiceProviderAccepted", isEqualTo: false)
+          .orderBy("bookedDate")
+          .get();
+
+      var todaysConfirmedBooking = await FirebaseFirestore.instance
+          .collection("Bookings")
+          .where("businessId", isEqualTo: businessId)
+          .where("isServiceProviderAccepted", isEqualTo: true)
+          .where("acceptedDate", isLessThanOrEqualTo: endDate)
+          .orderBy("acceptedDate")
+          .get();
+
+      var todaysCancelledBooking = await FirebaseFirestore.instance
+          .collection("Bookings")
+          .where("businessId", isEqualTo: businessId)
+          .where("isServiceProviderAccepted", isEqualTo: false)
+          .where("isRejected", isEqualTo: true)
+          .where("rejectedDate", isLessThanOrEqualTo: endDate)
+          .orderBy("rejectedDate")
+          .get();
+
+      var customerReviews = await FirebaseFirestore.instance
+          .collection("Bookings")
+          .where("businessId", isEqualTo: businessId)
+          .where("rating", isGreaterThan: 0)
+          .orderBy("rating")
+          .get();
+
+      var receivedBookingCount = receivedBooking.size;
+      var newBookingCount = newBooking.size;
+      var todaysConfirmedBookingCount = todaysConfirmedBooking.size;
+      var todaysCancelledBookingCount = todaysCancelledBooking.size;
+      var customerReviewsCount = customerReviews.size;
+
+      return {
+        "receivedBookingCount": receivedBookingCount,
+        "newBookingCount": newBookingCount,
+        "todaysConfirmedBookingCount": todaysConfirmedBookingCount,
+        "todaysCancelledBookingCount": todaysCancelledBookingCount,
+        "customerReviewsCount": customerReviewsCount,
+      };
+    } catch (e) {
+      print(e);
+      return {
+        "receivedBookingCount": 0,
+        "newBookingCount": 0,
+        "todaysConfirmedBookingCount": 0,
+        "todaysCancelledBookingCount": 0,
+        "customerReviewsCount": 0,
+      };
     }
   }
 }
