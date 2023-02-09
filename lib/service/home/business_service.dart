@@ -153,6 +153,8 @@ class BusinessServices extends GetConnect {
           .collection("Bookings")
           .where("businessId", isEqualTo: businessId)
           .where("isServiceProviderAccepted", isEqualTo: false)
+          .where("isOrderCompleted", isEqualTo: false)
+          .where("isRejected", isEqualTo: false)
           .orderBy("bookedDate")
           .snapshots()
           .map((snapshot) {
@@ -205,11 +207,21 @@ class BusinessServices extends GetConnect {
         59,
       );
 
+      var startDate = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        00,
+        00,
+        00,
+      );
+
       yield* FirebaseFirestore.instance
           .collection("Bookings")
           .where("businessId", isEqualTo: businessId)
           .where("isServiceProviderAccepted", isEqualTo: true)
           .where("acceptedDate", isLessThanOrEqualTo: endDate)
+          .where("acceptedDate", isGreaterThanOrEqualTo: startDate)
           .orderBy("acceptedDate")
           .snapshots()
           .map((snapshot) {
@@ -240,12 +252,22 @@ class BusinessServices extends GetConnect {
         59,
       );
 
+      var startDate = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        00,
+        00,
+        00,
+      );
+
       yield* FirebaseFirestore.instance
           .collection("Bookings")
           .where("businessId", isEqualTo: businessId)
           .where("isServiceProviderAccepted", isEqualTo: false)
           .where("isRejected", isEqualTo: true)
           .where("rejectedDate", isLessThanOrEqualTo: endDate)
+          .where("rejectedDate", isGreaterThanOrEqualTo: startDate)
           .orderBy("rejectedDate")
           .snapshots()
           .map((snapshot) {
@@ -326,6 +348,15 @@ class BusinessServices extends GetConnect {
         59,
       );
 
+      var startDate = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        00,
+        00,
+        00,
+      );
+
       var receivedBooking = await FirebaseFirestore.instance
           .collection("Bookings")
           .where("businessId", isEqualTo: businessId)
@@ -337,6 +368,8 @@ class BusinessServices extends GetConnect {
           .collection("Bookings")
           .where("businessId", isEqualTo: businessId)
           .where("isServiceProviderAccepted", isEqualTo: false)
+          .where("isOrderCompleted", isEqualTo: false)
+          .where("isRejected", isEqualTo: false)
           .orderBy("bookedDate")
           .get();
 
@@ -345,6 +378,7 @@ class BusinessServices extends GetConnect {
           .where("businessId", isEqualTo: businessId)
           .where("isServiceProviderAccepted", isEqualTo: true)
           .where("acceptedDate", isLessThanOrEqualTo: endDate)
+          .where("acceptedDate", isGreaterThanOrEqualTo: startDate)
           .orderBy("acceptedDate")
           .get();
 
@@ -354,6 +388,7 @@ class BusinessServices extends GetConnect {
           .where("isServiceProviderAccepted", isEqualTo: false)
           .where("isRejected", isEqualTo: true)
           .where("rejectedDate", isLessThanOrEqualTo: endDate)
+          .where("rejectedDate", isGreaterThanOrEqualTo: startDate)
           .orderBy("rejectedDate")
           .get();
 
