@@ -285,20 +285,25 @@ class MyBusinesPage extends StatelessWidget {
                           bottom: 0,
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Container(
-                              height: 45.0,
-                              width: size.width * 0.95,
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Add Service",
-                                  style: GoogleFonts.inter(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16.0,
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.toNamed("/addService");
+                              },
+                              child: Container(
+                                height: 45.0,
+                                width: size.width * 0.95,
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Add Service",
+                                    style: GoogleFonts.inter(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16.0,
+                                    ),
                                   ),
                                 ),
                               ),

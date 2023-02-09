@@ -8,23 +8,26 @@ class MyBusinessController extends GetxController {
   var isError = false.obs;
   var errorMessage = "".obs;
   var isInitialValueSet = false.obs;
+  var businessId = "".obs;
 
   var editBusinessButtonText = "Save".obs;
 
+  var addNewServiceButtonText = "Add Service".obs;
+
   @override
   void onInit() {
-    getBusinessDate();
+    getBusinessData();
     super.onInit();
   }
 
-  void getBusinessDate() async {
+  void getBusinessData() async {
     isLoading(true);
     var profileController = Get.put(ProfilePageController());
-    var businessId = profileController
+    businessId.value = profileController
         .userData.value.serviceProviderDetails!.businessUID
         .toString();
 
-    var response = await ServiceProviderService().getBusiness(businessId);
+    var response = await ServiceProviderService().getBusiness(businessId.value);
 
     if (response["status"] == "success") {
       businessData.value = response["data"];
@@ -39,5 +42,9 @@ class MyBusinessController extends GetxController {
 
   void toggleInitialValueStatus(bool val) {
     isInitialValueSet(val);
+  }
+
+  void toggleAddServiceButton(String val) {
+    addNewServiceButtonText(val);
   }
 }

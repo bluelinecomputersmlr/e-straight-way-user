@@ -19,19 +19,21 @@ class EditDateBasedBusiness extends StatelessWidget {
     final businessController = Get.put(MyBusinessController());
 
     var index = int.parse(Get.parameters["index"].toString());
+    if (!businessController.isInitialValueSet.value) {
+      basicServiceChargeController.text = businessController.businessData[0]
+              ["addedServices"][index]["addedServicePrice"]
+          .toString();
 
-    basicServiceChargeController.text = businessController.businessData[0]
-            ["addedServices"][index]["addedServicePrice"]
-        .toString();
+      businesNameController.text = businessController.businessData[0]
+              ["addedServices"][index]["addedServiceName"]
+          .toString();
 
-    businesNameController.text = businessController.businessData[0]
-            ["addedServices"][index]["addedServiceName"]
-        .toString();
+      businesDescriptionontroller.text = businessController.businessData[0]
+              ["addedServices"][index]["addedServiceDescription"]
+          .toString();
 
-    businesDescriptionontroller.text = businessController.businessData[0]
-            ["addedServices"][index]["addedServiceDescription"]
-        .toString();
-
+      businessController.toggleInitialValueStatus(true);
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFCEEED9),
       body: Obx(
