@@ -76,67 +76,67 @@ class DirectBookingSignUpServiceProviderPage extends StatelessWidget {
                               child: GestureDetector(
                                 onTap: () {
                                   showModalBottomSheet(
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(20))),
-                                      context: context,
-                                      builder: (BuildContext bc) {
-                                        return Container(
-                                            height: 0.3.sw,
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(20))),
+                                    context: context,
+                                    builder: (BuildContext bc) {
+                                      return Container(
+                                          height: 0.3.sw,
+                                          child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 15),
+                                                  child: InkWell(
+                                                    child: const Text(
+                                                      'Pick From Gallery',
+                                                      style: TextStyle(
+                                                        fontSize: 17,
+                                                      ),
+                                                    ),
+                                                    onTap: () {
+                                                      loginController
+                                                          .getFromGalleryProfile(
+                                                              loginController
+                                                                  .profilePhoto);
+
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                ),
+                                                const Divider(
+                                                  thickness: 1,
+                                                ),
+                                                Padding(
                                                     padding: const EdgeInsets
                                                             .symmetric(
                                                         vertical: 5,
                                                         horizontal: 15),
                                                     child: InkWell(
                                                       child: const Text(
-                                                        'Pick From Gallery',
+                                                        'Pick From Camera',
                                                         style: TextStyle(
                                                           fontSize: 17,
                                                         ),
                                                       ),
                                                       onTap: () {
                                                         loginController
-                                                            .getFromGalleryProfile(
+                                                            .getFromCameraProfile(
                                                                 loginController
                                                                     .profilePhoto);
-
                                                         Navigator.pop(context);
                                                       },
-                                                    ),
-                                                  ),
-                                                  const Divider(
-                                                    thickness: 1,
-                                                  ),
-                                                  Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          vertical: 5,
-                                                          horizontal: 15),
-                                                      child: InkWell(
-                                                        child: const Text(
-                                                          'Pick From Camera',
-                                                          style: TextStyle(
-                                                            fontSize: 17,
-                                                          ),
-                                                        ),
-                                                        onTap: () {
-                                                          loginController
-                                                              .getFromCameraProfile(
-                                                                  loginController
-                                                                      .profilePhoto);
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                      ))
-                                                ]));
-                                      });
+                                                    ))
+                                              ]));
+                                    },
+                                  );
                                 },
                                 child: Obx(
                                   () => Stack(
@@ -147,25 +147,29 @@ class DirectBookingSignUpServiceProviderPage extends StatelessWidget {
                                               ''
                                           ? Container(
                                               decoration: BoxDecoration(
-                                                  color: Colors.black,
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(15)),
-                                                  image: DecorationImage(
-                                                      fit: BoxFit.cover,
-                                                      image: FileImage(
-                                                          loginController
-                                                              .profilePhoto
-                                                              .value))),
+                                                color: Colors.black,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(15)),
+                                                image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: FileImage(
+                                                    loginController
+                                                        .profilePhoto.value,
+                                                  ),
+                                                ),
+                                              ),
                                               height: .5.sw,
                                               width: .38,
                                             )
                                           : Container(
                                               decoration: const BoxDecoration(
-                                                  color: Color(0xffe9effd),
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(15))),
+                                                color: Color(0xffe9effd),
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                  Radius.circular(15),
+                                                ),
+                                              ),
                                               height: .5.sw,
                                               width: .38,
                                               child: const Icon(
@@ -486,11 +490,18 @@ class DirectBookingSignUpServiceProviderPage extends StatelessWidget {
                             onTap: () async {
                               if (loginController.formKey.currentState!
                                   .validate()) {
-                                await loginController.submitFormDirectBooking();
-                                Get.offAllNamed('/selectLocation');
+                                if (loginController.profilePhoto.value.path ==
+                                    "") {
+                                  showErrorSnackbar(context,
+                                      'Please choose the profile picture');
+                                } else {
+                                  await loginController
+                                      .submitFormDirectBooking();
+                                  Get.offAllNamed('/selectLocation');
+                                }
                               } else {
                                 showErrorSnackbar(
-                                    context, 'please enter valid details');
+                                    context, 'Please enter valid details');
                               }
                             },
                             child: Container(

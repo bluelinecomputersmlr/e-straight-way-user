@@ -21,6 +21,8 @@ class BusinessServices extends GetConnect {
 
       var homePageController = Get.put(HomePageController());
 
+      print(id);
+
       final geo = GeoFlutterFire();
       var collectionReference = FirebaseFirestore.instance
           .collection('Businesses')

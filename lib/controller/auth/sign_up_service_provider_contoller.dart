@@ -181,16 +181,17 @@ class SignUpServiceProviderController extends GetxController {
     isMainPageLoading(true);
     var businessUID = const Uuid().v4().trimRight();
     business = BusinessModel(
-        uid: businessUID,
-        address: addressController.text,
-        businessName: businessNameConroller.text,
-        categoryUID: category!.uid,
-        subCategoryUID: subCategory!.uid,
-        serviceCharge: double.parse(serviceChargeController.text),
-        phoneNumber: businessPhoneController.text,
-        creationTime: Timestamp.now(),
-        subCategoryType: subCategory!.subCategoryType,
-        experience: experienceController.text);
+      uid: businessUID,
+      address: addressController.text,
+      businessName: businessNameConroller.text,
+      categoryUID: category!.uid,
+      subCategoryUID: subCategory!.uid,
+      serviceCharge: double.parse(serviceChargeController.text),
+      phoneNumber: businessPhoneController.text,
+      creationTime: Timestamp.now(),
+      subCategoryType: subCategory!.subCategoryType,
+      experience: experienceController.text,
+    );
     ServiceProviderModel serviceProvider = ServiceProviderModel(
       serviceProviderCategory: category!.name,
       serviceProviderCategoryUID: category!.uid,
