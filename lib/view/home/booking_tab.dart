@@ -176,7 +176,10 @@ class BookingsTab extends StatelessWidget {
                                                               "isOrderCompleted"])
                                                           ? "Completed"
                                                           : "Accepted"
-                                                      : "Pending",
+                                                      : (snapshot.data![index][
+                                                              "isUserCancelled"])
+                                                          ? "Cancelled"
+                                                          : "Pending",
                                                   style: GoogleFonts.inter(
                                                     fontSize: 17.0,
                                                     fontWeight: FontWeight.w600,
@@ -511,6 +514,144 @@ class BookingsTab extends StatelessWidget {
                                                     child: Center(
                                                       child: Text(
                                                         "Rate & Review",
+                                                        style:
+                                                            GoogleFonts.inter(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container(),
+                                          (!snapshot.data![index][
+                                                      "isServiceProviderAccepted"] &&
+                                                  !snapshot.data![index]
+                                                      ["isUserCancelled"])
+                                              ? GestureDetector(
+                                                  onTap: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AlertDialog(
+                                                          title: const Text(
+                                                            "Are you want to cancel?",
+                                                          ),
+                                                          titleTextStyle:
+                                                              GoogleFonts.inter(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 16.0,
+                                                          ),
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Get.back();
+                                                              },
+                                                              child: Text(
+                                                                "Cancel",
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .inter(),
+                                                              ),
+                                                            ),
+                                                            TextButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                var data = {
+                                                                  "isUserCancelled":
+                                                                      true,
+                                                                  "userCancelledDate":
+                                                                      DateTime
+                                                                          .now(),
+                                                                  "isRefunded":
+                                                                      false,
+                                                                };
+
+                                                                var bookingId =
+                                                                    snapshot.data![
+                                                                            index]
+                                                                        ["id"];
+
+                                                                var cancelStatus =
+                                                                    await BusinessServices()
+                                                                        .updateBookingsData(
+                                                                            bookingId,
+                                                                            data);
+
+                                                                if (cancelStatus[
+                                                                        "status"] ==
+                                                                    "success") {
+                                                                  final snackBar =
+                                                                      SnackBar(
+                                                                    content:
+                                                                        const Text(
+                                                                      "Booking Cancelled Successfully",
+                                                                    ),
+                                                                    action:
+                                                                        SnackBarAction(
+                                                                      label:
+                                                                          'Okay',
+                                                                      onPressed:
+                                                                          () {},
+                                                                    ),
+                                                                  );
+                                                                  // ignore: use_build_context_synchronously
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                          snackBar);
+                                                                  Get.back();
+                                                                } else {
+                                                                  final snackBar =
+                                                                      SnackBar(
+                                                                    content:
+                                                                        const Text(
+                                                                      "Unable to cancel the order",
+                                                                    ),
+                                                                    action:
+                                                                        SnackBarAction(
+                                                                      label:
+                                                                          'Okay',
+                                                                      onPressed:
+                                                                          () {},
+                                                                    ),
+                                                                  );
+                                                                  // ignore: use_build_context_synchronously
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                          snackBar);
+                                                                  Get.back();
+                                                                }
+                                                              },
+                                                              child: Text(
+                                                                "Confirm",
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .inter(),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    height: 40.0,
+                                                    width: size.width * 0.40,
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(
+                                                          0xFF3F5C9F),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "Cancel Booking",
                                                         style:
                                                             GoogleFonts.inter(
                                                           color: Colors.white,

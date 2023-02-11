@@ -306,14 +306,16 @@ class BusinessServices extends GetConnect {
     }
   }
 
-  Future<void> updateBookingsData(String id, Map<String, dynamic> data) async {
+  Future<Map> updateBookingsData(String id, Map<String, dynamic> data) async {
     try {
       await FirebaseFirestore.instance
           .collection("Bookings")
           .doc(id)
           .update(data);
+      return {"status": "success"};
     } catch (e) {
       print(e);
+      return {"status": "error"};
     }
   }
 

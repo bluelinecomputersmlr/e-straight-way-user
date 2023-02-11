@@ -47,11 +47,12 @@ class VerifyOrderController extends GetxController {
       bookingData["phoneNumber"] = userData["user"]["phoneNumber"];
       bookingData["bookedDate"] = DateTime.parse(selectedOrder["bookingDate"]);
       bookingData["createdDate"] = DateTime.now();
-      bookingData["modfiedDate"] = DateTime.now();
+      bookingData["modifiedDate"] = DateTime.now();
       bookingData["isCompleted"] = false;
       bookingData["isServiceProviderAccepted"] = false;
       bookingData["id"] = const Uuid().v4();
       bookingData["isOrderCompleted"] = false;
+      bookingData["isCancelled"] = false;
       bookingData["rating"] = 0;
       bookingData["isRejected"] = false;
     }
