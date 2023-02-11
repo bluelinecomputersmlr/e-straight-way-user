@@ -122,6 +122,51 @@ class SignUpServiceProviderPage extends StatelessWidget {
                         maxText: 15,
                       ),
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Obx(
+                      () => Container(
+                        height: 50.0,
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25.0),
+                          color: const Color(0xffDEE8FF),
+                        ),
+                        padding: const EdgeInsets.all(10.0),
+                        child: DropdownButton<String>(
+                          focusColor: Colors.white,
+                          value: loginController.choosenArea.toString(),
+                          style: GoogleFonts.poppins(
+                            color: const Color(0xff97AFDE),
+                            fontSize: 16.0,
+                          ),
+                          iconEnabledColor: Colors.black,
+                          underline: Container(),
+                          items: loginController.areas
+                              .map<DropdownMenuItem<String>>((value) {
+                            return DropdownMenuItem<String>(
+                              alignment: AlignmentDirectional.center,
+                              value: value,
+                              child: Text(
+                                value,
+                                style: GoogleFonts.poppins(
+                                  color: const Color(0xff97AFDE),
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String? value) {
+                            loginController.selectArea(value.toString());
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 150,
+                    ),
                   ],
                 ),
               ),
@@ -138,7 +183,8 @@ class SignUpServiceProviderPage extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () {
                       if (loginController.category != null &&
-                          loginController.subCategory != null) {
+                          loginController.subCategory != null &&
+                          loginController.choosenArea.value == "Select Area") {
                         _submitForm(
                             loginController.subCategory!.subCategoryType);
                       } else {

@@ -59,6 +59,10 @@ class SignUpServiceProviderController extends GetxController {
 
   var isGstRegistered = "".obs;
 
+  var areas = [].obs;
+
+  var choosenArea = "Select Area".obs;
+
   var businessDescriptionConroller = TextEditingController();
   var addedServiceModel = <AddedServiceModel>[AddedServiceModel()].obs;
   @override
@@ -88,7 +92,26 @@ class SignUpServiceProviderController extends GetxController {
       businessPhoneController.text = response["phone"];
       mainErrorMessage.value = response["message"];
     }
+
+    var areaData = await HomePageService().getAreaData();
+
+    if (areaData["status"] == "success") {
+      var responseData = areaData["data"];
+
+      areas.insert(0, "Select Area");
+      for (var data in responseData) {
+        areas.add(data["areaName"]);
+      }
+    } else {
+      businessPhoneController.text = response["phone"];
+      mainErrorMessage.value = response["message"];
+    }
+
     isMainPageLoading(false);
+  }
+
+  void selectArea(String value) {
+    choosenArea.value = value;
   }
 
   Future<List<CategoryModel>> getCategories() async {
@@ -204,9 +227,11 @@ class SignUpServiceProviderController extends GetxController {
       ifscCode: ifscCodeController.text,
       bankName: '',
     );
+    var businessJSON = business!.toJson();
+    businessJSON["area"] = choosenArea.value;
     await LoginService()
         .addUserServiceProvider(userNameController.text, serviceProvider);
-    await LoginService().addBusiness(business).whenComplete(() async {
+    await LoginService().addBusiness(businessJSON).whenComplete(() async {
       await LoginService()
           .uploadDocument(aadharPhoto, 'aadharDocument', businessUID);
       await LoginService()
@@ -244,9 +269,11 @@ class SignUpServiceProviderController extends GetxController {
       ifscCode: ifscCodeController.text,
       bankName: '',
     );
+    var businessJSON = business!.toJson();
+    businessJSON["area"] = choosenArea.value;
     await LoginService()
         .addUserServiceProvider(userNameController.text, serviceProvider);
-    await LoginService().addBusiness(business).whenComplete(() async {
+    await LoginService().addBusiness(businessJSON).whenComplete(() async {
       await LoginService()
           .uploadDocument(aadharPhoto, 'aadharDocument', businessUID);
       await LoginService()
@@ -293,6 +320,7 @@ class SignUpServiceProviderController extends GetxController {
     );
     var businessJSON = business!.toJson();
     businessJSON["gstRegisteredStatus"] = isGstRegistered.value;
+    businessJSON["area"] = choosenArea.value;
     await LoginService()
         .addUserServiceProvider(userNameController.text, serviceProvider);
     await LoginService().addBusiness(businessJSON).whenComplete(() async {

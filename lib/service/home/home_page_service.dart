@@ -28,6 +28,23 @@ class HomePageService extends GetConnect {
     }
   }
 
+  Future<Map> getAreaData() async {
+    try {
+      var response = await FirebaseFirestore.instance.collection("Areas").get();
+
+      var data = response.docs.toList();
+
+      var responseData = [];
+
+      for (var doc in data) {
+        responseData.add(doc.data());
+      }
+      return {"status": "success", "data": responseData};
+    } catch (e) {
+      return {"status": "error", "message": "Some error occurred"};
+    }
+  }
+
   Future<List<String>> getBanners() async {
     try {
       var response = await FirebaseFirestore.instance
