@@ -42,81 +42,74 @@ class SelectCategoryPage extends StatelessWidget {
                   fit: BoxFit.fitWidth,
                 )),
           ])),
-      body: Obx(
-        () => CustomLoadingIndicator(
-          isBusy: signUpController.isMainPageLoading.isTrue,
-          hasError: signUpController.isMainError.isTrue,
-          child: FutureBuilder(
-            future: signUpController.getCategories(),
-            builder: (BuildContext context,
-                AsyncSnapshot<List<CategoryModel>> snapshot) {
-              if (snapshot.hasData) {
-                return GridView.builder(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                  itemCount: snapshot.data!.length,
-                  shrinkWrap: false,
-                  primary: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 0.7,
-                    crossAxisSpacing: 16.0,
-                    mainAxisSpacing: 16.0,
-                  ),
-                  itemBuilder: (BuildContext context, int index) =>
-                      GestureDetector(
-                    onTap: () {
-                      signUpController.category = snapshot.data![index];
-                      signUpController.categoryController.text =
-                          snapshot.data![index].name!;
-                      signUpController.subCategoryController.text = '';
-                      signUpController.subCategory = null;
-                      Get.back();
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: CachedNetworkImageProvider(
-                                snapshot.data![index].photoUrl!,
-                              ),
-                              fit: BoxFit.cover,
-                            ),
+      body: FutureBuilder(
+        future: signUpController.getCategories(),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<CategoryModel>> snapshot) {
+          if (snapshot.hasData) {
+            return GridView.builder(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+              itemCount: snapshot.data!.length,
+              shrinkWrap: false,
+              primary: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 0.7,
+                crossAxisSpacing: 16.0,
+                mainAxisSpacing: 16.0,
+              ),
+              itemBuilder: (BuildContext context, int index) => GestureDetector(
+                onTap: () {
+                  signUpController.category = snapshot.data![index];
+                  signUpController.categoryController.text =
+                      snapshot.data![index].name!;
+                  signUpController.subCategoryController.text = '';
+                  signUpController.subCategory = null;
+                  Get.back();
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                            snapshot.data![index].photoUrl!,
                           ),
+                          fit: BoxFit.cover,
                         ),
-                        Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            snapshot.data![index].name!,
-                            style: GoogleFonts.inter(
-                              fontSize: 16,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return Container();
-              } else {
-                return Container(
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-        ),
+                    Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        snapshot.data![index].name!,
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Container();
+          } else {
+            return Container(
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }

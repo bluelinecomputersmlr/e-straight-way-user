@@ -678,7 +678,7 @@ class SlotBasedBookingSignUpServiceProviderPage extends StatelessWidget {
                               Get.offAllNamed('/selectLocation');
                             } else {
                               showErrorSnackbar(
-                                  context, 'please enter valid details');
+                                  context, 'Please enter valid details');
                             }
                           },
                           child: Container(

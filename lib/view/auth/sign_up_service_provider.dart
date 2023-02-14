@@ -135,33 +135,38 @@ class SignUpServiceProviderPage extends StatelessWidget {
                           color: const Color(0xffDEE8FF),
                         ),
                         padding: const EdgeInsets.all(10.0),
-                        child: DropdownButton<String>(
-                          focusColor: Colors.white,
-                          value: loginController.choosenArea.toString(),
-                          style: GoogleFonts.poppins(
-                            color: const Color(0xff97AFDE),
-                            fontSize: 16.0,
-                          ),
-                          iconEnabledColor: Colors.black,
-                          underline: Container(),
-                          items: loginController.areas
-                              .map<DropdownMenuItem<String>>((value) {
-                            return DropdownMenuItem<String>(
-                              alignment: AlignmentDirectional.center,
-                              value: value,
-                              child: Text(
-                                value,
+                        child: (loginController.isMainPageLoading.value)
+                            ? Text(
+                                "Loading...",
+                                style: GoogleFonts.inter(),
+                              )
+                            : DropdownButton<String>(
+                                focusColor: Colors.white,
+                                value: loginController.choosenArea.toString(),
                                 style: GoogleFonts.poppins(
                                   color: const Color(0xff97AFDE),
                                   fontSize: 16.0,
                                 ),
+                                iconEnabledColor: Colors.black,
+                                underline: Container(),
+                                items: loginController.areas
+                                    .map<DropdownMenuItem<String>>((value) {
+                                  return DropdownMenuItem<String>(
+                                    alignment: AlignmentDirectional.center,
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: GoogleFonts.poppins(
+                                        color: const Color(0xff97AFDE),
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (String? value) {
+                                  loginController.selectArea(value.toString());
+                                },
                               ),
-                            );
-                          }).toList(),
-                          onChanged: (String? value) {
-                            loginController.selectArea(value.toString());
-                          },
-                        ),
                       ),
                     ),
                     const SizedBox(
@@ -184,41 +189,42 @@ class SignUpServiceProviderPage extends StatelessWidget {
                     onTap: () {
                       if (loginController.category != null &&
                           loginController.subCategory != null &&
-                          loginController.choosenArea.value == "Select Area") {
+                          loginController.choosenArea.value != "Select Area") {
                         _submitForm(
                             loginController.subCategory!.subCategoryType);
                       } else {
-                        showInfoSnackbar(
-                            context, 'please select category and sub-category');
+                        showInfoSnackbar(context,
+                            'Please select category and sub-category and area');
                       }
                     },
                     child: Container(
-                        width: .7.sw,
-                        height: .12.sw,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [kButtonUpperColor, kButtonLowerColor],
-                          ),
-                          borderRadius: BorderRadius.circular(50.0),
+                      width: .7.sw,
+                      height: .12.sw,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [kButtonUpperColor, kButtonLowerColor],
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Submit",
-                              style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontSize: 19.0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const Icon(
-                              Icons.arrow_forward_ios_sharp,
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Submit",
+                            style: GoogleFonts.poppins(
                               color: Colors.white,
+                              fontSize: 19.0,
+                              fontWeight: FontWeight.w500,
                             ),
-                          ],
-                        )),
+                            textAlign: TextAlign.center,
+                          ),
+                          const Icon(
+                            Icons.arrow_forward_ios_sharp,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -226,7 +232,7 @@ class SignUpServiceProviderPage extends StatelessWidget {
                 height: 30,
               ),
             ],
-          )
+          ),
         ],
       ),
     );

@@ -694,9 +694,15 @@ class MapBasedBookingSignUpServiceProviderPage extends StatelessWidget {
                             onTap: () async {
                               if (loginController.formKey.currentState!
                                   .validate()) {
-                                await loginController
-                                    .submitFormMapBasedBooking();
-                                Get.offAllNamed('/selectLocation');
+                                if (loginController.profilePhoto.value.path ==
+                                    "") {
+                                  showErrorSnackbar(context,
+                                      'Please choose the profile picture');
+                                } else {
+                                  await loginController
+                                      .submitFormMapBasedBooking();
+                                  Get.offAllNamed('/selectLocation');
+                                }
                               } else {
                                 showErrorSnackbar(
                                     context, 'please enter valid details');

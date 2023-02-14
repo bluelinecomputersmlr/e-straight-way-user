@@ -36,7 +36,7 @@ class BusinessServices extends GetConnect {
 
       yield* geo
           .collection(collectionRef: collectionReference)
-          .within(center: center, radius: 30.0, field: "location")
+          .within(center: center, radius: 500.0, field: "location")
           .map((snapshot) {
         return snapshot
             .map((doc) =>
@@ -425,6 +425,42 @@ class BusinessServices extends GetConnect {
         "todaysCancelledBookingCount": 0,
         "customerReviewsCount": 0,
       };
+    }
+  }
+
+  Future<Map> createOrder(
+      String customerName,
+      String customerId,
+      String customerPhone,
+      String orderNote,
+      double amount,
+      String orderId) async {
+    try {
+      var customerEmail = "care@estraightwayapp.com";
+      var response = await post("https://sandbox.cashfree.com/pg/orders", {
+        "order_id": orderId,
+        "order_amount": amount,
+        "order_currency": "INR",
+        "order_note": orderNote,
+        "customer_details": {
+          "customer_id": customerId,
+          "customer_name": customerName,
+          "customer_email": customerEmail,
+          "customer_phone": customerPhone,
+        },
+      }, headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "x-api-version": "2022-09-01",
+        "x-client-id": "31304119a5c5091fa9e3a93d04140313",
+        "x-client-secret": "b509de64ceebbfa57cb9ae6bafcc5718b482fff3",
+      });
+      if (response.statusCode == 200) {
+        return {"status": "success", "data": response.body};
+      } else {
+        return {"status": "error", "message": response.bodyString};
+      }
+    } catch (e) {
+      return {"status": "error", "error": e};
     }
   }
 }

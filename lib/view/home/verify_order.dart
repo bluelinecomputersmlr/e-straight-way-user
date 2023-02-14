@@ -220,7 +220,8 @@ class VerifyOrderPage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
                 onTap: () {
-                  verifyOrderController.submitData(context);
+                  // verifyOrderController.submitData(context);
+                  verifyOrderController.pay();
                 },
                 child: Container(
                   height: 50.0,
