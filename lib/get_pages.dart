@@ -5,15 +5,20 @@ import 'package:estraightwayapp/view/auth/login_page.dart';
 import 'package:estraightwayapp/view/auth/otp_verification_page.dart';
 import 'package:estraightwayapp/view/auth/sign_up_page.dart';
 import 'package:estraightwayapp/view/auth/sign_up_service_provider.dart';
+import 'package:estraightwayapp/view/home/about_us.dart';
 import 'package:estraightwayapp/view/home/booking_successful.dart';
 import 'package:estraightwayapp/view/home/business_by_map.dart';
 import 'package:estraightwayapp/view/home/business_by_service.dart';
 import 'package:estraightwayapp/view/home/businesses_by_date_page.dart';
+import 'package:estraightwayapp/view/home/cancellation_and_refund.dart';
+import 'package:estraightwayapp/view/home/contact_us.dart';
 import 'package:estraightwayapp/view/home/course_details_page.dart';
 import 'package:estraightwayapp/view/home/home_page.dart';
 import 'package:estraightwayapp/view/home/plan_expired_page.dart';
+import 'package:estraightwayapp/view/home/privacy_policy.dart';
 import 'package:estraightwayapp/view/home/profile_page.dart';
 import 'package:estraightwayapp/view/home/sub_category_page.dart';
+import 'package:estraightwayapp/view/home/terms_conditions.dart';
 import 'package:estraightwayapp/view/home/verify_order.dart';
 import 'package:estraightwayapp/view/home/video_player_page.dart';
 import 'package:estraightwayapp/view/service_provider/add_service_page.dart';
@@ -247,6 +252,31 @@ final pages = [
   GetPage(
     name: '/addService',
     page: () => AddServicePage(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/aboutUs',
+    page: () => const AboutUs(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/privacy',
+    page: () => const PrivacyPolicy(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/terms',
+    page: () => const TermsAndConditions(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/refundPolicy',
+    page: () => const CancellationAndRefund(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/contactUs',
+    page: () => const ContactUs(),
     transition: Transition.rightToLeft,
   ),
 ];

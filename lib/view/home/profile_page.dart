@@ -153,84 +153,94 @@ class ProfilePage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        decoration: kGradientBoxDecoration,
-                        child: Padding(
-                          padding: const EdgeInsets.all(1),
-                          child: Container(
-                            width: .28.sw,
-                            height: .5.sw,
-                            decoration: const BoxDecoration(
-                              color: Color(0xffe9effd),
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed('/terms');
+                        },
+                        child: Container(
+                          decoration: kGradientBoxDecoration,
+                          child: Padding(
+                            padding: const EdgeInsets.all(1),
+                            child: Container(
+                              width: .28.sw,
+                              height: .5.sw,
+                              decoration: const BoxDecoration(
+                                color: Color(0xffe9effd),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
                               ),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Terms & Condition',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Terms & Condition',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Image.asset(
-                                  'assets/icons/term_condition_icon.png',
-                                  fit: BoxFit.fitWidth,
-                                  width: .3.sw,
-                                )
-                              ],
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Image.asset(
+                                    'assets/icons/term_condition_icon.png',
+                                    fit: BoxFit.fitWidth,
+                                    width: .3.sw,
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                      Container(
-                        decoration: kGradientBoxDecoration,
-                        child: Padding(
-                          padding: const EdgeInsets.all(1),
-                          child: Container(
-                            width: .28.sw,
-                            height: .5.sw,
-                            decoration: const BoxDecoration(
-                              color: Color(0xffe9effd),
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20)),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Privacy\nPolicy',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400,
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed('/privacy');
+                        },
+                        child: Container(
+                          decoration: kGradientBoxDecoration,
+                          child: Padding(
+                            padding: const EdgeInsets.all(1),
+                            child: Container(
+                              width: .28.sw,
+                              height: .5.sw,
+                              decoration: const BoxDecoration(
+                                color: Color(0xffe9effd),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20)),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Privacy\nPolicy',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Image.asset(
-                                    'assets/icons/privacy_policy_icon.png',
-                                    fit: BoxFit.fitWidth,
-                                    width: .3.sw,
+                                  const SizedBox(
+                                    height: 20,
                                   ),
-                                )
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Image.asset(
+                                      'assets/icons/privacy_policy_icon.png',
+                                      fit: BoxFit.fitWidth,
+                                      width: .3.sw,
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -365,6 +375,114 @@ class ProfilePage extends StatelessWidget {
                             width: 30,
                           )
                         ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.toNamed('/aboutUs');
+                    },
+                    child: Container(
+                      height: .15.sw,
+                      width: 1.sw,
+                      decoration: const BoxDecoration(
+                          color: Color(0xfff8faff),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'About Us',
+                              style: GoogleFonts.inter(
+                                fontSize: 16,
+                                color: kPrimaryColor,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: GestureDetector(
+                    onTap: () async {
+                      Get.toNamed('/refundPolicy');
+                    },
+                    child: Container(
+                      height: .15.sw,
+                      width: 1.sw,
+                      decoration: const BoxDecoration(
+                          color: Color(0xfff8faff),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Cancellation, Refund Policy',
+                              style: GoogleFonts.inter(
+                                fontSize: 16,
+                                color: kPrimaryColor,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: GestureDetector(
+                    onTap: () async {
+                      Get.toNamed('/contactUs');
+                    },
+                    child: Container(
+                      height: .15.sw,
+                      width: 1.sw,
+                      decoration: const BoxDecoration(
+                          color: Color(0xfff8faff),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Contact Us',
+                              style: GoogleFonts.inter(
+                                fontSize: 16,
+                                color: kPrimaryColor,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -153,11 +153,11 @@ class LoginService extends GetConnect {
   Future addBusiness(business) async {
     await FirebaseFirestore.instance
         .collection("Businesses")
-        .doc(business!.uid)
-        .set(business.toJson(), SetOptions(merge: true));
+        .doc(business["uid"])
+        .set(business, SetOptions(merge: true));
     await FirebaseFirestore.instance
         .collection("Businesses")
-        .doc(business.uid)
+        .doc(business["uid"])
         .update({"isApproved": false});
   }
 

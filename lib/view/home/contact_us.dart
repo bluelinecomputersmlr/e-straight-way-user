@@ -1,0 +1,52 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class ContactUs extends StatelessWidget {
+  const ContactUs({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blueAccent.shade100,
+        title: Text(
+          "Contact Us",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      body: ListView(
+        children: [
+          const SizedBox(
+            height: 10.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text(
+              "Contact Us",
+              style: GoogleFonts.inter(
+                fontSize: 22.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text(
+              "Address\n\nNo. 17-4-1-6/C-0-G57,KSRTC Bus Stand Building, C-Block, Court Road, Puttur Kasaba Village, Puttur, Dakshina Kannada, Karnataka-574201",
+              style: GoogleFonts.inter(
+                height: 1.5,
+                fontSize: 16.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
