@@ -37,7 +37,7 @@ class ContactUs extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Text(
-              "Address\n\nNo. 17-4-1-6/C-0-G57,KSRTC Bus Stand Building, C-Block, Court Road, Puttur Kasaba Village, Puttur, Dakshina Kannada, Karnataka-574201",
+              "Address\n\nNo. 17-4-1-6/C-0-G57,KSRTC Bus Stand Building, C-Block, Court Road, Puttur Kasaba Village, Puttur, Dakshina Kannada, Karnataka-574201\n\nPhone\n+91-94801 73045\n\nEmail\ncare@estraightwayapp.com",
               style: GoogleFonts.inter(
                 height: 1.5,
                 fontSize: 16.0,

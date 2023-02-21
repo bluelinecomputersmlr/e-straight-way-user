@@ -1,8 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:estraightwayapp/model/user_model.dart';
 import 'package:estraightwayapp/service/home/home_page_service.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:geocoding/geocoding.dart' as GeoCoding;
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:location/location.dart';
 
 class HomePageController extends GetxController {
