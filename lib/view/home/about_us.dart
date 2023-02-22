@@ -45,6 +45,20 @@ class AboutUs extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(
+            height: 20.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text(
+              "E Straightway app is owned and managed by MR. PUNEETH RAI CP",
+              style: GoogleFonts.inter(
+                height: 1.5,
+                fontSize: 16.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
         ],
       ),
     );
