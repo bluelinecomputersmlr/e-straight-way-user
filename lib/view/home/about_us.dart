@@ -51,7 +51,7 @@ class AboutUs extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Text(
-              "E Straightway app is owned and managed by MR. PUNEETH RAI CP",
+              "E Straightway app is owned and managed by MR. PUNEETH KUMAR C P",
               style: GoogleFonts.inter(
                 height: 1.5,
                 fontSize: 16.0,
