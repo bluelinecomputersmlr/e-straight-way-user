@@ -1,6 +1,7 @@
 import 'package:estraightwayapp/helper/send_notification.dart';
 import 'package:estraightwayapp/service/home/business_service.dart';
 import 'package:estraightwayapp/service/home/home_page_service.dart';
+import 'package:estraightwayapp/widget/loading_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cashfree_pg_sdk/api/cferrorresponse/cferrorresponse.dart';
 import 'package:flutter_cashfree_pg_sdk/api/cfpayment/cfdropcheckoutpayment.dart';
@@ -20,9 +21,11 @@ class VerifyOrderController extends GetxController {
 
   var cfPaymentGatewayService = CFPaymentGatewayService();
 
-  var orderId = const Uuid().v4();
+  var orderId = "";
   String paymentSessionId = "";
   CFEnvironment environment = CFEnvironment.SANDBOX;
+
+  late BuildContext context;
 
   @override
   void onInit() {
@@ -107,16 +110,59 @@ class VerifyOrderController extends GetxController {
     isLoading(false);
   }
 
-  void verifyPayment(String orderIdRef) {
-    print(orderIdRef);
-    print("Verify Payment");
+  void verifyPayment(String orderIdRef) async {
+    bookingData["orderIdRef"] = orderIdRef;
+    bookingData["paymentDate"] = DateTime.now();
+    var response = await BusinessServices().bookService(bookingData);
+
+    if (response["status"] == "success") {
+      sendNotification(
+          bookingData["businessId"],
+          "You have new Service Booking",
+          "${bookingData["userName"]} has booked a Service",
+          true);
+      final snackBar = SnackBar(
+        content: const Text(
+          "Order Place Successfuly!",
+        ),
+        action: SnackBarAction(
+          label: 'Okay',
+          onPressed: () {},
+        ),
+      );
+      Get.back();
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Get.offAllNamed("/bookingsuccessful");
+    } else {
+      final snackBar = SnackBar(
+        content: Text(
+          response["message"],
+        ),
+        action: SnackBarAction(
+          label: 'Okay',
+          onPressed: () {},
+        ),
+      );
+      Get.back();
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   void onError(CFErrorResponse errorResponse, String orderId) {
-    print(errorResponse.getMessage());
-    print(errorResponse.getCode());
-    print(errorResponse.getStatus());
-    print("Error while making payment");
+    final snackBar = SnackBar(
+      content: Text(
+        errorResponse.getMessage().toString(),
+      ),
+      action: SnackBarAction(
+        label: 'Okay',
+        onPressed: () {},
+      ),
+    );
+    Get.back();
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   CFSession? createSession() {
@@ -128,24 +174,38 @@ class VerifyOrderController extends GetxController {
           .build();
       return session;
     } on CFException catch (e) {
-      print(e.message);
+      final snackBar = SnackBar(
+        content: Text(
+          e.message,
+        ),
+        action: SnackBarAction(
+          label: 'Okay',
+          onPressed: () {},
+        ),
+      );
+      Get.back();
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
     return null;
   }
 
-  pay() async {
+  pay(BuildContext contextParam) async {
+    context = contextParam;
+    loadingDialogWidget(context);
     var order = await BusinessServices().createOrder(
-        bookingData["userName"],
-        bookingData["userId"],
-        bookingData["phoneNumber"],
-        "Booking a service",
-        // double.parse(bookingData["basicChargePaid"]),
-        double.parse("1"),
-        orderId);
+      bookingData["userName"],
+      bookingData["userId"],
+      bookingData["phoneNumber"],
+      "Booking a service",
+      // double.parse(bookingData["basicChargePaid"]),
+      double.parse("1"),
+      orderId,
+    );
 
     if (order["status"] == "success") {
-      print(order["data"]);
       paymentSessionId = order["data"]["payment_session_id"];
+      orderId = order["data"]["order_id"];
       try {
         var session = createSession();
         List<CFPaymentModes> components = <CFPaymentModes>[];

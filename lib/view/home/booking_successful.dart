@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class BookingSuccesfulPage extends StatelessWidget {
+  const BookingSuccesfulPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     dynamic arguments = Get.arguments;
@@ -28,7 +30,7 @@ class BookingSuccesfulPage extends StatelessWidget {
                       fontSize: 30,
                       fontWeight: FontWeight.w500)),
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             Padding(
@@ -36,21 +38,12 @@ class BookingSuccesfulPage extends StatelessWidget {
                   const EdgeInsets.symmetric(vertical: 15.0, horizontal: 30),
               child: GestureDetector(
                 onTap: () {
-                  if (arguments == "date") {
-                    Get.back();
-                    Get.back();
-                    Get.back();
-                    Get.back();
-                  } else {
-                    Get.back();
-                    Get.back();
-                    Get.back();
-                  }
+                  Get.offAllNamed("/home");
                 },
                 child: Container(
                   width: 1.sw,
                   height: .12.sw,
-                  decoration: new BoxDecoration(
+                  decoration: BoxDecoration(
                     color: kPrimaryColor,
                     borderRadius: BorderRadius.circular(10),
                   ),

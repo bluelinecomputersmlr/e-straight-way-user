@@ -221,7 +221,7 @@ class VerifyOrderPage extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   // verifyOrderController.submitData(context);
-                  verifyOrderController.pay();
+                  verifyOrderController.pay(context);
                 },
                 child: Container(
                   height: 50.0,

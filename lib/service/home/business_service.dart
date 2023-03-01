@@ -436,28 +436,20 @@ class BusinessServices extends GetConnect {
       double amount,
       String orderId) async {
     try {
-      var customerEmail = "care@estraightwayapp.com";
-      var response = await post("https://sandbox.cashfree.com/pg/orders", {
-        "order_id": orderId,
-        "order_amount": amount,
-        "order_currency": "INR",
-        "order_note": orderNote,
-        "customer_details": {
+      var response = await post(
+        "http://181.215.79.5/api/v1/createOrder",
+        {
+          "amount": amount,
           "customer_id": customerId,
           "customer_name": customerName,
-          "customer_email": customerEmail,
+          "order_note": orderNote,
           "customer_phone": customerPhone,
         },
-      }, headers: {
-        "X-Requested-With": "XMLHttpRequest",
-        "x-api-version": "2022-09-01",
-        "x-client-id": "31304119a5c5091fa9e3a93d04140313",
-        "x-client-secret": "b509de64ceebbfa57cb9ae6bafcc5718b482fff3",
-      });
+      );
       if (response.statusCode == 200) {
-        return {"status": "success", "data": response.body};
+        return {"status": "success", "data": response.body["data"]};
       } else {
-        return {"status": "error", "message": response.bodyString};
+        return {"status": "error", "message": response.body["message"]};
       }
     } catch (e) {
       return {"status": "error", "error": e};
