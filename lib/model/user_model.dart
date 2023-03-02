@@ -21,6 +21,7 @@ class UserModel {
   bool? isServiceProvider;
   bool? isServiceProviderRegistered;
   bool? lastLoggedAsUser;
+  bool? isInitialPaymentDone;
   ServiceProviderModel? serviceProviderDetails;
 
   UserModel(
@@ -32,6 +33,7 @@ class UserModel {
       this.profilePhoto,
       this.isServiceProvider,
       this.isServiceProviderRegistered,
+      this.isInitialPaymentDone,
       this.lastLoggedAsUser,
       this.serviceProviderDetails});
   Map<String, dynamic> toJson() => _$UserModelToJson(this);

@@ -31,6 +31,7 @@ import 'package:estraightwayapp/view/service_provider/home_service_provider.dart
 import 'package:estraightwayapp/view/service_provider/map_based_booking_service_provider.dart';
 import 'package:estraightwayapp/view/service_provider/my_business_page.dart';
 import 'package:estraightwayapp/view/service_provider/new_bookings.dart';
+import 'package:estraightwayapp/view/service_provider/payment_confirmation_page.dart';
 import 'package:estraightwayapp/view/service_provider/payouts_completed_page.dart';
 import 'package:estraightwayapp/view/service_provider/payouts_page.dart';
 import 'package:estraightwayapp/view/service_provider/received_bookings.dart';
@@ -277,6 +278,11 @@ final pages = [
   GetPage(
     name: '/contactUs',
     page: () => const ContactUs(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/doPayment',
+    page: () => const PaymentConfirmationPage(),
     transition: Transition.rightToLeft,
   ),
 ];

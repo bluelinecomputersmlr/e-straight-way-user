@@ -15,6 +15,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       profilePhoto: json['profilePhoto'] as String?,
       isServiceProvider: json['isServiceProvider'] as bool?,
       isServiceProviderRegistered: json['isServiceProviderRegistered'] as bool?,
+      isInitialPaymentDone: json['isInitialPaymentDone'] as bool?,
       lastLoggedAsUser: json['lastLoggedAsUser'] as bool?,
       serviceProviderDetails: json['serviceProviderDetails'] == null
           ? null
@@ -32,6 +33,7 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'isServiceProvider': instance.isServiceProvider,
       'isServiceProviderRegistered': instance.isServiceProviderRegistered,
       'lastLoggedAsUser': instance.lastLoggedAsUser,
+      'isInitialPaymentDone': instance.isInitialPaymentDone,
       'serviceProviderDetails': instance.serviceProviderDetails?.toJson(),
     };
 

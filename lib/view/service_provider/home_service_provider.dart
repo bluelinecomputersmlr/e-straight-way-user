@@ -1,6 +1,5 @@
 import 'package:estraightwayapp/constants.dart';
 import 'package:estraightwayapp/controller/home/home_service_provider_contoller.dart';
-import 'package:estraightwayapp/controller/service_provider/provider_home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';

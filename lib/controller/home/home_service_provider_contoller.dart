@@ -83,6 +83,11 @@ class HomeServiceProviderController extends GetxController {
     if (response["status"] == "success") {
       userData.value = UserModel.fromJson(response["user"]);
       dateTime = await NTP.now();
+
+      print(userData.value.isInitialPaymentDone);
+      if (userData.value.isInitialPaymentDone == null) {
+        Get.offAllNamed('/doPayment');
+      }
     } else {
       isMainError(true);
       mainErrorMessage.value = response["message"];
@@ -95,7 +100,6 @@ class HomeServiceProviderController extends GetxController {
     }
     Map<String, int> dashboardData =
         await BusinessServices().getAllDasboardData();
-    print(dashboardData);
     dashboardDataCount.value = dashboardData;
     isMainPageLoading(false);
   }
