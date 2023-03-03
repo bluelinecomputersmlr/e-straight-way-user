@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:estraightwayapp/constants.dart';
+import 'package:estraightwayapp/service/home/profile_page_service.dart';
 import 'package:flutter/material.dart';
 import 'package:estraightwayapp/controller/home/profile_page_controller.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -379,6 +381,49 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                 ),
+                (profilePageController.userData.value.lastLoggedAsUser == true)
+                    ? const SizedBox(
+                        height: 20,
+                      )
+                    : Container(),
+                (profilePageController.userData.value.lastLoggedAsUser == true)
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: GestureDetector(
+                          onTap: () async {
+                            getReferalCode(context);
+                          },
+                          child: Container(
+                            height: .15.sw,
+                            width: 1.sw,
+                            decoration: const BoxDecoration(
+                                color: Color(0xfff8faff),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Refer & Earn',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 16,
+                                      color: kPrimaryColor,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
                 const SizedBox(
                   height: 20,
                 ),
@@ -533,5 +578,25 @@ class ProfilePage extends StatelessWidget {
             ),
           )),
     );
+  }
+}
+
+void getReferalCode(BuildContext context) async {
+  var response = await ProfilePageService().getReferalCode();
+
+  if (response["status"] == "success") {
+    Share.share('Use my code and earn 20rs ${response["referCode"]}');
+  } else {
+    final snackBar = SnackBar(
+      content: Text(
+        response["message"],
+      ),
+      action: SnackBarAction(
+        label: 'Okay',
+        onPressed: () {},
+      ),
+    );
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

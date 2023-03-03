@@ -84,8 +84,8 @@ class HomeServiceProviderController extends GetxController {
       userData.value = UserModel.fromJson(response["user"]);
       dateTime = await NTP.now();
 
-      print(userData.value.isInitialPaymentDone);
-      if (userData.value.isInitialPaymentDone == null) {
+      if (userData.value.isInitialPaymentDone == null &&
+          userData.value.lastLoggedAsUser == false) {
         Get.offAllNamed('/doPayment');
       }
     } else {

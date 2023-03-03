@@ -64,6 +64,7 @@ dependencies:
   pinput: ^2.2.23
   razorpay_flutter_customui: null
   readmore: ^2.2.0
+  share_plus: ^6.3.1
   uuid: null
   video_player: ^2.4.7
 
