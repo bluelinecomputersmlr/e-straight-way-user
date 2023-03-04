@@ -23,7 +23,7 @@ class VerifyOrderController extends GetxController {
 
   var orderId = "";
   String paymentSessionId = "";
-  CFEnvironment environment = CFEnvironment.SANDBOX;
+  CFEnvironment environment = CFEnvironment.PRODUCTION;
 
   late BuildContext context;
 
