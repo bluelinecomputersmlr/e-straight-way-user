@@ -8,7 +8,10 @@
 const express = require("express");
 const admin = require("firebase-admin");
 const axios = require("axios");
-const {v4} = require('uuid');
+const { v4 } = require("uuid");
+
+//dot env config
+require("dotenv").config();
 
 // Initializing Express
 const app = express();
@@ -76,10 +79,24 @@ app.post("/api/v1/createOrder", async (req, res) => {
 
   var customer_email = "care@estraightwayapp.com";
 
+  let client_id;
+  let client_secret;
+  let gateway_baseurl;
+
+  if (process.env.NODE_ENV == "DEVELOPMENT") {
+    client_id = process.env.CLIENT_ID_DEV;
+    client_secret = process.env.CLIENT_SECRET_DEV;
+    gateway_baseurl = process.env.PAYMENT_GATEWAY_DEV_BASE_URL;
+  } else {
+    client_id = process.env.CLIENT_ID;
+    client_secret = process.env.CLIENT_SECRET;
+    gateway_baseurl = process.env.PAYMENT_GATEWAY_PROD_BASE_URL
+  }
+
   try {
     var cashfree_response = await axios({
       method: "post",
-      baseURL: "https://sandbox.cashfree.com/pg/",
+      baseURL: gateway_baseurl,
       url: "/orders",
       data: {
         order_id: orderId,
@@ -96,8 +113,8 @@ app.post("/api/v1/createOrder", async (req, res) => {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
         "x-api-version": "2022-09-01",
-        "x-client-id": "31304119a5c5091fa9e3a93d04140313",
-        "x-client-secret": "b509de64ceebbfa57cb9ae6bafcc5718b482fff3",
+        "x-client-id": client_id,
+        "x-client-secret": client_secret,
       },
     });
 

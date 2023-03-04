@@ -585,7 +585,8 @@ void getReferalCode(BuildContext context) async {
   var response = await ProfilePageService().getReferalCode();
 
   if (response["status"] == "success") {
-    Share.share('Use my code and earn 20rs ${response["referCode"]}');
+    Share.share(
+        'Inviting you to download E STRAIGHTWAY app. Please use my Referral Code ${response["referCode"]}');
   } else {
     final snackBar = SnackBar(
       content: Text(
