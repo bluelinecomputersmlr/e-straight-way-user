@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:estraightwayapp/constants.dart';
-import 'package:estraightwayapp/main.dart';
 import 'package:estraightwayapp/model/categories_model.dart';
 import 'package:estraightwayapp/model/sub_category_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';

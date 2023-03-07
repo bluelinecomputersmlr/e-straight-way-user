@@ -17,6 +17,7 @@ import 'package:estraightwayapp/view/home/home_page.dart';
 import 'package:estraightwayapp/view/home/plan_expired_page.dart';
 import 'package:estraightwayapp/view/home/privacy_policy.dart';
 import 'package:estraightwayapp/view/home/profile_page.dart';
+import 'package:estraightwayapp/view/home/refer_page.dart';
 import 'package:estraightwayapp/view/home/sub_category_page.dart';
 import 'package:estraightwayapp/view/home/terms_conditions.dart';
 import 'package:estraightwayapp/view/home/verify_order.dart';
@@ -283,6 +284,11 @@ final pages = [
   GetPage(
     name: '/doPayment',
     page: () => const PaymentConfirmationPage(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/refer',
+    page: () => ReferPage(),
     transition: Transition.rightToLeft,
   ),
 ];

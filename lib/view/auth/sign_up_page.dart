@@ -162,7 +162,7 @@ class SignUpPage extends StatelessWidget {
     //TRIGGER THE OTP
     LoginService().addUser(userName);
     //REDIRECT TO OTP VERIFICATION PAGE
-    Get.toNamed('/home');
+    Get.toNamed('/refer');
 
     controller.toggleLoading(false);
   }
