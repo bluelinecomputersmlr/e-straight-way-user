@@ -438,6 +438,7 @@ class BusinessServices extends GetConnect {
     try {
       var response = await post(
         "http://181.215.79.5/api/v1/createOrder",
+        // "http://10.0.2.2:3000/api/v1/createOrder",
         {
           "amount": amount,
           "customer_id": customerId,
@@ -452,7 +453,7 @@ class BusinessServices extends GetConnect {
         return {"status": "error", "message": response.body["message"]};
       }
     } catch (e) {
-      return {"status": "error", "error": e};
+      return {"status": "error", "message": e};
     }
   }
 }

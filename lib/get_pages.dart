@@ -6,6 +6,7 @@ import 'package:estraightwayapp/view/auth/otp_verification_page.dart';
 import 'package:estraightwayapp/view/auth/sign_up_page.dart';
 import 'package:estraightwayapp/view/auth/sign_up_service_provider.dart';
 import 'package:estraightwayapp/view/home/about_us.dart';
+import 'package:estraightwayapp/view/home/add_money.dart';
 import 'package:estraightwayapp/view/home/booking_successful.dart';
 import 'package:estraightwayapp/view/home/business_by_map.dart';
 import 'package:estraightwayapp/view/home/business_by_service.dart';
@@ -22,6 +23,7 @@ import 'package:estraightwayapp/view/home/sub_category_page.dart';
 import 'package:estraightwayapp/view/home/terms_conditions.dart';
 import 'package:estraightwayapp/view/home/verify_order.dart';
 import 'package:estraightwayapp/view/home/video_player_page.dart';
+import 'package:estraightwayapp/view/home/wallet.dart';
 import 'package:estraightwayapp/view/service_provider/add_service_page.dart';
 import 'package:estraightwayapp/view/service_provider/bank_details.dart';
 import 'package:estraightwayapp/view/service_provider/customer_reviews.dart';
@@ -289,6 +291,16 @@ final pages = [
   GetPage(
     name: '/refer',
     page: () => ReferPage(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/wallet',
+    page: () => const WalletPage(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/addMoney',
+    page: () => AddMoney(),
     transition: Transition.rightToLeft,
   ),
 ];

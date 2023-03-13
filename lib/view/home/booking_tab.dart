@@ -177,8 +177,13 @@ class BookingsTab extends StatelessWidget {
                                                           ? "Completed"
                                                           : "Accepted"
                                                       : (snapshot.data![index][
-                                                              "isUserCancelled"])
-                                                          ? "Cancelled"
+                                                                  "isUserCancelled"] !=
+                                                              null)
+                                                          ? (snapshot.data![
+                                                                      index][
+                                                                  "isUserCancelled"])
+                                                              ? "Cancelled"
+                                                              : "Pending"
                                                           : "Pending",
                                                   style: GoogleFonts.inter(
                                                     fontSize: 17.0,
@@ -527,8 +532,9 @@ class BookingsTab extends StatelessWidget {
                                               : Container(),
                                           (!snapshot.data![index][
                                                       "isServiceProviderAccepted"] &&
-                                                  !snapshot.data![index]
-                                                      ["isUserCancelled"])
+                                                  snapshot.data![index]
+                                                          ["isUserCancelled"] ==
+                                                      null)
                                               ? GestureDetector(
                                                   onTap: () {
                                                     showDialog(

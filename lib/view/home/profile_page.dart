@@ -390,6 +390,48 @@ class ProfilePage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: GestureDetector(
                         onTap: () async {
+                          Get.toNamed("/wallet");
+                        },
+                        child: Container(
+                          height: .15.sw,
+                          width: 1.sw,
+                          decoration: const BoxDecoration(
+                              color: Color(0xfff8faff),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Wallet',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    color: kPrimaryColor,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(),
+              (profilePageController.userData.value.lastLoggedAsUser == true)
+                  ? const SizedBox(
+                      height: 20,
+                    )
+                  : Container(),
+              (profilePageController.userData.value.lastLoggedAsUser == true)
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: GestureDetector(
+                        onTap: () async {
                           getReferalCode(context);
                         },
                         child: Container(
