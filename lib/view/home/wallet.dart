@@ -18,12 +18,12 @@ class WalletPage extends StatelessWidget {
             "Wallet",
             style: GoogleFonts.inter(),
           ),
-          backgroundColor: Colors.purple,
+          backgroundColor: Colors.blueAccent.shade100,
         ),
         body: (walletController.isLoading.value)
-            ? const Center(
+            ? Center(
                 child: CircularProgressIndicator(
-                  color: Colors.purple,
+                  color: Colors.blueAccent.shade100,
                 ),
               )
             : ListView(
@@ -43,7 +43,7 @@ class WalletPage extends StatelessWidget {
                     height: 20.0,
                   ),
                   Text(
-                    walletController.walletAmount.value.toString(),
+                    "₹ ${walletController.walletAmount.value.toString()}",
                     style: GoogleFonts.inter(
                       fontSize: 24.0,
                       fontWeight: FontWeight.w600,
@@ -64,7 +64,7 @@ class WalletPage extends StatelessWidget {
                         height: 50.0,
                         width: size.width,
                         decoration: BoxDecoration(
-                          color: Colors.purple,
+                          color: Colors.blueAccent.shade100,
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: Center(
@@ -182,7 +182,7 @@ class WalletPage extends StatelessWidget {
                                       style: GoogleFonts.inter(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w500,
-                                        color: Colors.purple,
+                                        color: Colors.blueAccent.shade100,
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,

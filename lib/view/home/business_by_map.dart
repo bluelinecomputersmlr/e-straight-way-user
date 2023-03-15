@@ -159,32 +159,23 @@ class _BusinessByMapState extends State<BusinessByMap> {
                 padding: const EdgeInsets.only(right: 15.0),
                 child: GestureDetector(
                   onTap: () async {
-                    if (businessController.selectedBusiness.value.uid != null) {
-                      Get.toNamed(
-                        '/verifyOrder',
-                        parameters: {
-                          "uid": businessController.selectedBusiness.value.uid
-                              .toString(),
-                          "businessImage": businessController
-                              .selectedBusiness.value.businessImage
-                              .toString(),
-                          "price": businessController
-                              .selectedBusiness.value.serviceCharge
-                              .toString(),
-                          "tokenAdvance": businessController
-                              .selectedBusiness.value.tokenAdvance
-                              .toString(),
-                          "businessName": businessController
-                              .selectedBusiness.value.businessName
-                              .toString(),
-                          "businessContactNumber": businessController
-                              .selectedBusiness.value.phoneNumber
-                              .toString(),
-                          "serviceName": "",
-                          "bookingDate": DateTime.now().toString(),
-                        },
-                      );
-                    }
+                    // if (businessController.selectedBusiness.value.uid != null) {
+                    Get.toNamed(
+                      '/verifyOrder',
+                      parameters: {
+                        "uid": "",
+                        "businessImage": businessController
+                            .selectedBusiness.value.businessImage
+                            .toString(),
+                        "price": "0",
+                        "tokenAdvance": "30",
+                        "businessName": "",
+                        "businessContactNumber": "",
+                        "serviceName": "Map",
+                        "bookingDate": DateTime.now().toString(),
+                      },
+                    );
+                    // }
                     // businessController.paymentOptions.first['amount'] = 1 * 100;
                     // if (businessController.paymentOptions.first['method'] ==
                     //     null) {

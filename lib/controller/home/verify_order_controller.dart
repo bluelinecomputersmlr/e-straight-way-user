@@ -17,6 +17,8 @@ import 'package:uuid/uuid.dart';
 class VerifyOrderController extends GetxController {
   var selectedOrder = {}.obs;
   var isLoading = false.obs;
+  var useWalletMoney = false.obs;
+
   Map<String, dynamic> bookingData = {};
 
   var cfPaymentGatewayService = CFPaymentGatewayService();
@@ -69,7 +71,12 @@ class VerifyOrderController extends GetxController {
       bookingData["isCancelled"] = false;
       bookingData["rating"] = 0;
       bookingData["isRejected"] = false;
+      bookingData["status"] = "Requested";
     }
+  }
+
+  void toggleWalletPaymentOption(bool value) {
+    useWalletMoney.value = value;
   }
 
   void submitData(BuildContext context) async {

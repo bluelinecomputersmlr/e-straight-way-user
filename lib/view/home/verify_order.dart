@@ -64,29 +64,34 @@ class VerifyOrderPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            verifyOrderController.selectedOrder["businessName"],
+                            (verifyOrderController
+                                        .selectedOrder["businessName"] ==
+                                    "")
+                                ? "Taxi Booking"
+                                : verifyOrderController
+                                    .selectedOrder["businessName"],
                             style: GoogleFonts.inter(
                               fontSize: 16,
                               color: Colors.black,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          Text(
-                            verifyOrderController.selectedOrder["serviceName"],
-                            style: GoogleFonts.inter(
-                              fontSize: 16,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Text(
-                            "Price: ${verifyOrderController.selectedOrder["price"]}",
-                            style: GoogleFonts.inter(
-                              fontSize: 16,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          )
+                          // Text(
+                          //   verifyOrderController.selectedOrder["serviceName"],
+                          //   style: GoogleFonts.inter(
+                          //     fontSize: 16,
+                          //     color: Colors.black,
+                          //     fontWeight: FontWeight.w500,
+                          //   ),
+                          // ),
+                          // Text(
+                          //   "Price: ${verifyOrderController.selectedOrder["price"]}",
+                          //   style: GoogleFonts.inter(
+                          //     fontSize: 16,
+                          //     color: Colors.black,
+                          //     fontWeight: FontWeight.w500,
+                          //   ),
+                          // )
                         ],
                       )
                     ],
@@ -96,29 +101,29 @@ class VerifyOrderPage extends StatelessWidget {
               const SizedBox(
                 height: 20.0,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Basic Service Charge",
-                      style: GoogleFonts.inter(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      verifyOrderController.selectedOrder["price"],
-                      style: GoogleFonts.inter(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // (verifyOrderController.selectedOrder["price"]) ? Padding(
+              //     padding: const EdgeInsets.symmetric(
+              //         horizontal: 20.0, vertical: 10.0),
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: [
+              //         Text(
+              //           "Basic Service Charge",
+              //           style: GoogleFonts.inter(
+              //             fontSize: 15.0,
+              //             fontWeight: FontWeight.w500,
+              //           ),
+              //         ),
+              //         Text(
+              //           verifyOrderController.selectedOrder["price"],
+              //           style: GoogleFonts.inter(
+              //             fontSize: 15.0,
+              //             fontWeight: FontWeight.w600,
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 10.0),
@@ -133,7 +138,7 @@ class VerifyOrderPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      verifyOrderController.selectedOrder["tokenAdvance"],
+                      "₹ ${verifyOrderController.selectedOrder["tokenAdvance"]}",
                       style: GoogleFonts.inter(
                         fontSize: 15.0,
                         fontWeight: FontWeight.w600,
@@ -142,6 +147,29 @@ class VerifyOrderPage extends StatelessWidget {
                   ],
                 ),
               ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(
+              //       horizontal: 20.0, vertical: 10.0),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Text(
+              //         "CGST",
+              //         style: GoogleFonts.inter(
+              //           fontSize: 15.0,
+              //           fontWeight: FontWeight.w500,
+              //         ),
+              //       ),
+              //       Text(
+              //         "9%",
+              //         style: GoogleFonts.inter(
+              //           fontSize: 15.0,
+              //           fontWeight: FontWeight.w600,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 10.0),
@@ -149,40 +177,10 @@ class VerifyOrderPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "CGST",
+                      "* Inclusive of all taxes.",
                       style: GoogleFonts.inter(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      "9%",
-                      style: GoogleFonts.inter(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "SGST",
-                      style: GoogleFonts.inter(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      "9%",
-                      style: GoogleFonts.inter(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                   ],
@@ -195,7 +193,7 @@ class VerifyOrderPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 50.0,
+                height: 20.0,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -209,7 +207,104 @@ class VerifyOrderPage extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-              )
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              Obx(
+                () => Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 10.0,
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      verifyOrderController.toggleWalletPaymentOption(
+                          !verifyOrderController.useWalletMoney.value);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: verifyOrderController.useWalletMoney.value
+                              ? Colors.blue
+                              : Colors.grey.shade400,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.20,
+                            child: Center(
+                              child: Container(
+                                height: 30.0,
+                                width: 30.0,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: verifyOrderController
+                                            .useWalletMoney.value
+                                        ? Colors.blue
+                                        : Colors.grey,
+                                  ),
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                child:
+                                    verifyOrderController.useWalletMoney.value
+                                        ? Center(
+                                            child: Container(
+                                              height: 20.0,
+                                              width: 20.0,
+                                              decoration: BoxDecoration(
+                                                color: verifyOrderController
+                                                        .useWalletMoney.value
+                                                    ? Colors.blue
+                                                    : Colors.grey,
+                                                borderRadius:
+                                                    BorderRadius.circular(40.0),
+                                              ),
+                                            ),
+                                          )
+                                        : Container(),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.60,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Pay using wallet balance",
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text(
+                                  "Balance ₹ 100",
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
           Positioned(
