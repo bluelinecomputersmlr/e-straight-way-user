@@ -14,6 +14,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import '../../service/home/business_service.dart';
+import '../../widget/snackbars.dart';
+
 class BusinessByService extends StatefulWidget {
   const BusinessByService({Key? key}) : super(key: key);
 
@@ -35,148 +38,49 @@ class _BusinessByServiceState extends State<BusinessByService> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            GestureDetector(
-                onTap: () async {
-                  var paymentOptions = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PaymentSelectionPage(
-                              0,
-                            )),
-                  );
-                  businessController.updateval(paymentOptions);
-                  setState(() {});
-
-                  if (businessController.paymentOptions.first['method'] ==
-                      'wallet') {
-                    businessController.getWalletLogo();
-                  }
-                },
-                child: Container(
-                  width: 0.3.sw,
-                  height: .15.sw,
-                  child: Obx(
-                    () => Column(
-                      children: [
-                        Visibility(
-                            visible: businessController.paymentOptions
-                                    .first['upi_app_package_name'] !=
-                                null,
-                            child: Text("Pay using")),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: businessController.paymentOptions
-                                          .first['upi_app_package_name'] ==
-                                      "com.google.android.apps.nbu.paisa.user"
-                                  ? Image.asset(
-                                      "assets/icons/googlepay.png",
-                                      width: 0.08.sw,
-                                      height: 0.075.sw,
-                                    )
-                                  : businessController.paymentOptions
-                                              .first['upi_app_package_name'] ==
-                                          "com.phonepe.app"
-                                      ? Image.asset(
-                                          "assets/icons/phonepe.png",
-                                          width: 0.08.sw,
-                                          height: 0.075.sw,
-                                        )
-                                      : businessController.paymentOptions.first[
-                                                  'upi_app_package_name'] ==
-                                              "in.org.npci.upiapp"
-                                          ? Image.asset(
-                                              "assets/icons/bhim.png",
-                                              width: 0.08.sw,
-                                              height: 0.075.sw,
-                                            )
-                                          : businessController
-                                                          .paymentOptions.first[
-                                                      'upi_app_package_name'] ==
-                                                  "net.one97.paytm"
-                                              ? Image.asset(
-                                                  "assets/icons/paytm.png",
-                                                  width: 0.08.sw,
-                                                  height: 0.075.sw,
-                                                )
-                                              : businessController.paymentOptions.first['method'] ==
-                                                          'upi' &&
-                                                      businessController
-                                                              .paymentOptions
-                                                              .first['_[flow]'] ==
-                                                          'collect'
-                                                  ? Image.asset(
-                                                      "assets/icons/bhim.png",
-                                                      width: 0.08.sw,
-                                                      height: 0.075.sw,
-                                                    )
-                                                  : businessController.paymentOptions.first['method'] == 'card'
-                                                      ? Image.asset(
-                                                          "assets/icons/creditcard.png",
-                                                          width: 0.08.sw,
-                                                          height: 0.075.sw,
-                                                        )
-                                                      : businessController.paymentOptions.first['method'] == 'netbanking'
-                                                          ? Icon(Icons.account_balance)
-                                                          : businessController.paymentOptions.first['method'] == 'wallet'
-                                                              ? businessController.walletLogo != null
-                                                                  ? Image.network(
-                                                                      businessController
-                                                                          .walletLogo!,
-                                                                      width: 0.15
-                                                                          .sw,
-                                                                      fit: BoxFit
-                                                                          .contain,
-                                                                      height:
-                                                                          0.15.sw,
-                                                                    )
-                                                                  : Icon(Icons.account_balance_wallet_rounded)
-                                                              : Text(
-                                                                  "Choose\npayment\nmethod",
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                ),
-                            ),
-                            Icon(Icons.arrow_drop_down_sharp)
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                )),
             Padding(
-              padding: const EdgeInsets.only(right: 15.0),
+              padding: const EdgeInsets.only(right: 15.0, left: 15.0),
               child: GestureDetector(
                 onTap: () async {
                   if (businessController.selectedBusiness.value.uid != null) {
-                    Get.toNamed(
-                      '/verifyOrder',
-                      parameters: {
-                        "uid": businessController.selectedBusiness.value.uid
-                            .toString(),
-                        "businessImage": businessController
-                            .selectedBusiness.value.businessImage
-                            .toString(),
-                        "price": businessController
-                            .selectedBusiness.value.serviceCharge
-                            .toString(),
-                        "tokenAdvance": businessController
-                            .selectedBusiness.value.tokenAdvance
-                            .toString(),
-                        "businessName": businessController
-                            .selectedBusiness.value.businessName
-                            .toString(),
-                        "businessContactNumber": businessController
-                            .selectedBusiness.value.phoneNumber
-                            .toString(),
-                        "serviceName": "",
-                        "bookingDate": DateTime.now().toString(),
-                      },
-                    );
+                    var bookingStatus =
+                        await BusinessServices().verifyBookings({
+                      "bookedDate": DateTime.parse(DateTime.now().toString()),
+                      "businessId": businessController
+                          .selectedBusiness.value.uid
+                          .toString(),
+                      "serviceName": "",
+                    });
+                    if (bookingStatus["status"] == "success") {
+                      Get.toNamed(
+                        '/verifyOrder',
+                        parameters: {
+                          "uid": businessController.selectedBusiness.value.uid
+                              .toString(),
+                          "businessImage": businessController
+                              .selectedBusiness.value.businessImage
+                              .toString(),
+                          "price": businessController
+                              .selectedBusiness.value.serviceCharge
+                              .toString(),
+                          "tokenAdvance": businessController
+                              .selectedBusiness.value.tokenAdvance
+                              .toString(),
+                          "businessName": businessController
+                              .selectedBusiness.value.businessName
+                              .toString(),
+                          "businessContactNumber": businessController
+                              .selectedBusiness.value.phoneNumber
+                              .toString(),
+                          "serviceName": "",
+                          "bookingDate": DateTime.now().toString(),
+                        },
+                      );
+                    } else {
+                      // ignore: use_build_context_synchronously
+                      showErrorSnackbar(context,
+                          "Service is alreday booked by you/someone else");
+                    }
                   }
                   //   businessController.paymentOptions.first['amount'] = 1 * 100;
                   //   if (businessController.paymentOptions.first['method'] ==
@@ -276,213 +180,216 @@ class _BusinessByServiceState extends State<BusinessByService> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 20.0),
-        child: Container(
-          child: CustomLoadingIndicator(
-            isBusy: businessController.isLoading.isTrue,
-            hasError: businessController.isError.isTrue,
-            child: StreamBuilder(
-              stream: businessController.getBusiness(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<BusinessModel>?> snapshot) {
-                if (snapshot.hasData) {
-                  return (snapshot.data!.isEmpty)
-                      ? Center(
-                          child: Text(
-                            "No service found",
-                            style: GoogleFonts.inter(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
+        child: Obx(
+          () => Container(
+            child: CustomLoadingIndicator(
+              isBusy: businessController.isLoading.isTrue,
+              hasError: businessController.isError.isTrue,
+              child: StreamBuilder(
+                stream: businessController.getBusiness(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<BusinessModel>?> snapshot) {
+                  if (snapshot.hasData) {
+                    return (snapshot.data!.isEmpty)
+                        ? Center(
+                            child: Text(
+                              "No service found",
+                              style: GoogleFonts.inter(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
-                        )
-                      : ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10.0, vertical: 4),
-                              child: GestureDetector(
-                                onTap: () {
-                                  businessController
-                                      .selectedBusiness(snapshot.data![index]);
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    border: Border.all(
-                                        color: businessController
-                                                    .selectedBusiness
-                                                    .value
-                                                    .uid ==
-                                                snapshot.data![index].uid
-                                            ? kPrimaryColor
-                                            : Colors.grey.withOpacity(0.5),
-                                        width: 2),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                        width: 60,
-                                        height: 60,
-                                        clipBehavior: Clip.hardEdge,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.white,
-                                          image: (snapshot.data![index]
-                                                      .businessImage !=
-                                                  null)
-                                              ? DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image:
-                                                      CachedNetworkImageProvider(
-                                                    snapshot.data![index]
-                                                        .businessImage!,
-                                                  ),
-                                                )
-                                              : null,
+                          )
+                        : ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0, vertical: 4),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    businessController
+                                        .selectBusiness(snapshot.data![index]);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      border: Border.all(
+                                          color: businessController
+                                                      .selectedBusiness
+                                                      .value
+                                                      .uid ==
+                                                  snapshot.data![index].uid
+                                              ? kPrimaryColor
+                                              : Colors.grey.withOpacity(0.5),
+                                          width: 2),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const SizedBox(
+                                          width: 10,
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      SizedBox(
-                                        width: .4.sw,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                snapshot
-                                                    .data![index].businessName!,
-                                                style: GoogleFonts.inter(
-                                                  fontSize: 15,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w400,
+                                        Container(
+                                          width: 60,
+                                          height: 60,
+                                          clipBehavior: Clip.hardEdge,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
+                                            image: (snapshot.data![index]
+                                                        .businessImage !=
+                                                    null)
+                                                ? DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image:
+                                                        CachedNetworkImageProvider(
+                                                      snapshot.data![index]
+                                                          .businessImage!,
+                                                    ),
+                                                  )
+                                                : null,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        SizedBox(
+                                          width: .4.sw,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  snapshot.data![index]
+                                                      .businessName!,
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 15,
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              child: Text(
-                                                "Experience ${snapshot.data![index].experience!} years",
-                                                style: GoogleFonts.inter(
-                                                  fontSize: 10,
-                                                  color: Colors.grey,
-                                                  fontWeight: FontWeight.w400,
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8.0),
+                                                child: Text(
+                                                  "Experience ${snapshot.data![index].experience!} years",
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 10,
+                                                    color: Colors.grey,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Container(
-                                                width: 50,
-                                                decoration: BoxDecoration(
-                                                  color: kPrimaryColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                ),
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 8.0,
-                                                      vertical: 2),
-                                                  child: Row(
-                                                    children: [
-                                                      Text(
-                                                        snapshot.data![index]
-                                                                    .rating ==
-                                                                null
-                                                            ? "0"
-                                                            : snapshot
-                                                                .data![index]
-                                                                .rating
-                                                                .toString(),
-                                                        style:
-                                                            GoogleFonts.inter(
-                                                          fontSize: 12,
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.w400,
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                  width: 50,
+                                                  decoration: BoxDecoration(
+                                                    color: kPrimaryColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50),
+                                                  ),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 8.0,
+                                                        vertical: 2),
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          snapshot.data![index]
+                                                                      .rating ==
+                                                                  null
+                                                              ? "0"
+                                                              : snapshot
+                                                                  .data![index]
+                                                                  .rating
+                                                                  .toString(),
+                                                          style:
+                                                              GoogleFonts.inter(
+                                                            fontSize: 12,
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                          ),
                                                         ),
-                                                      ),
-                                                      const Icon(
-                                                        Icons.star,
-                                                        size: 15,
-                                                        color:
-                                                            Color(0xffFFC700),
-                                                      )
-                                                    ],
+                                                        const Icon(
+                                                          Icons.star,
+                                                          size: 15,
+                                                          color:
+                                                              Color(0xffFFC700),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Container(
+                                          width: .25.sw,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8.0),
+                                                child: Text(
+                                                  "Basic Service charge",
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 10,
+                                                    color: Colors.grey,
+                                                    fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
                                               ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                        width: .25.sw,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              child: Text(
-                                                "Basic Service charge",
-                                                style: GoogleFonts.inter(
-                                                  fontSize: 10,
-                                                  color: Colors.grey,
-                                                  fontWeight: FontWeight.w400,
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  formatCurrency.format(snapshot
+                                                      .data![index]
+                                                      .serviceCharge!),
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 15,
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                formatCurrency.format(snapshot
-                                                    .data![index]
-                                                    .serviceCharge!),
-                                                style: GoogleFonts.inter(
-                                                  fontSize: 15,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          });
-                } else if (snapshot.hasError) {
-                  return Container();
-                } else {
-                  return Container(
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
+                              );
+                            });
+                  } else if (snapshot.hasError) {
+                    return Container();
+                  } else {
+                    return Container(
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              ),
             ),
           ),
         ),

@@ -57,6 +57,46 @@ class BusinessServices extends GetConnect {
   //   }
   // }
 
+  Future<Map> verifyBookings(Map<String, dynamic> orderData) async {
+    try {
+      var endDate = DateTime(
+        orderData["bookedDate"].year,
+        orderData["bookedDate"].month,
+        orderData["bookedDate"].day,
+        23,
+        59,
+        59,
+      );
+
+      var startDate = DateTime(
+        orderData["bookedDate"].year,
+        orderData["bookedDate"].month,
+        orderData["bookedDate"].day,
+        00,
+        00,
+        00,
+      );
+
+      var response = await FirebaseFirestore.instance
+          .collection("Bookings")
+          .where("bookedDate", isLessThanOrEqualTo: endDate)
+          .where("bookedDate", isGreaterThanOrEqualTo: startDate)
+          .where("businessId", isEqualTo: orderData["businessId"])
+          .where("serviceName", isEqualTo: orderData["serviceName"])
+          .where("isCompleted", isEqualTo: false)
+          .get();
+
+      if (response.size > 0) {
+        return {"status": "error", "message": "Service is already booked!"};
+      } else {
+        return {"status": "success"};
+      }
+    } catch (e) {
+      print(e);
+      return {"status": "error", "message": "Some error occoured"};
+    }
+  }
+
   Future<Map> bookService(Map<String, dynamic> orderData) async {
     try {
       var endDate = DateTime(
@@ -437,8 +477,8 @@ class BusinessServices extends GetConnect {
       String orderId) async {
     try {
       var response = await post(
-        "http://181.215.79.5/api/v1/createOrder",
-        // "http://10.0.2.2:3000/api/v1/createOrder",
+        // "http://181.215.79.5/api/v1/createOrder",
+        "http://10.0.2.2:3000/api/v1/createOrder",
         {
           "amount": amount,
           "customer_id": customerId,

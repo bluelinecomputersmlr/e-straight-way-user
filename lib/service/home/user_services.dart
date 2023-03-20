@@ -71,6 +71,7 @@ class UserServices {
       var refererData = await FirebaseFirestore.instance
           .collection("transactions")
           .where("userId", isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+          .orderBy("createdDate", descending: true)
           .get();
 
       if (refererData.size > 0) {

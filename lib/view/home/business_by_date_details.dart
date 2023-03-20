@@ -19,6 +19,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
 
 import '../../controller/home/business_details_controller.dart';
+import '../../service/home/business_service.dart';
+import '../../widget/snackbars.dart';
 
 class BusinessesByDateDetailsPage extends StatefulWidget {
   const BusinessesByDateDetailsPage({Key? key}) : super(key: key);
@@ -718,56 +720,51 @@ class _BusinessesByDateDetailsPageState
                 padding: const EdgeInsets.only(right: 15.0),
                 child: GestureDetector(
                   onTap: () async {
-                    // businessController.paymentOptions.first['amount'] = 1 * 100;
-                    // if (businessController.paymentOptions.first['method'] ==
-                    //     null) {
-                    //   businessController.paymentOptions = await Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => PaymentSelectionPage(
-                    //               1 * 100,
-                    //             )),
-                    //   );
-                    //   // Get.toNamed('/bookingsuccessful', arguments: ["date"]);
-                    // } else {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => PaymentInitiationPage(
-                    //             double.parse(businessController
-                    //                 .paymentOptions.first['amount']
-                    //                 .toString()),
-                    //             '',
-                    //             businessController.paymentOptions.first)),
-                    //   );
-                    // }
                     var bookingDate = businessController.currentDate2.value;
-                    Get.toNamed(
-                      '/verifyOrder',
-                      parameters: {
-                        "uid": businessController.business.uid.toString(),
-                        "businessImage": businessController
-                            .business.businessImage
-                            .toString(),
-                        "price": businessController
-                            .business
-                            .addedServices![businessController
-                                .selectedBusinessIndex
-                                .value]['addedServicePrice']
-                            .toString(),
-                        "tokenAdvance":
-                            businessController.business.tokenAdvance.toString(),
-                        "businessName":
-                            businessController.business.businessName.toString(),
-                        "businessContactNumber":
-                            businessController.business.phoneNumber.toString(),
-                        "serviceName": businessController
-                                    .business.addedServices![
-                                businessController.selectedBusinessIndex.value]
-                            ['addedServiceName'],
-                        "bookingDate": bookingDate.toString(),
-                      },
-                    );
+                    var bookingStatus =
+                        await BusinessServices().verifyBookings({
+                      "bookedDate": DateTime.parse(bookingDate.toString()),
+                      "businessId": businessController.business.uid.toString(),
+                      "serviceName": businessController.business.addedServices![
+                              businessController.selectedBusinessIndex.value]
+                          ['addedServiceName']
+                    });
+
+                    if (bookingStatus["status"] == "success") {
+                      Get.toNamed(
+                        '/verifyOrder',
+                        parameters: {
+                          "uid": businessController.business.uid.toString(),
+                          "businessImage": businessController
+                              .business.businessImage
+                              .toString(),
+                          "price": businessController
+                              .business
+                              .addedServices![businessController
+                                  .selectedBusinessIndex
+                                  .value]['addedServicePrice']
+                              .toString(),
+                          "tokenAdvance": businessController
+                              .business.tokenAdvance
+                              .toString(),
+                          "businessName": businessController
+                              .business.businessName
+                              .toString(),
+                          "businessContactNumber": businessController
+                              .business.phoneNumber
+                              .toString(),
+                          "serviceName":
+                              businessController.business.addedServices![
+                                  businessController.selectedBusinessIndex
+                                      .value]['addedServiceName'],
+                          "bookingDate": bookingDate.toString(),
+                        },
+                      );
+                    } else {
+                      // ignore: use_build_context_synchronously
+                      showErrorSnackbar(context,
+                          "Service is alreday booked by you/someone else");
+                    }
                   },
                   child: Container(
                     width: .65.sw,

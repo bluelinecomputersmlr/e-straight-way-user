@@ -75,7 +75,7 @@ class BusinessController extends GetxController {
 
   selectBusiness(selectBusiness) {
     selectedBusiness.value = selectBusiness;
-    selectedBusiness.update((val) {});
+    // selectedBusiness.update((val) {});
   }
 
   void getWalletLogo() async {

@@ -1,7 +1,11 @@
+import 'package:estraightwayapp/controller/home/wallet_controller.dart';
 import 'package:estraightwayapp/helper/send_notification.dart';
 import 'package:estraightwayapp/service/home/business_service.dart';
 import 'package:estraightwayapp/service/home/home_page_service.dart';
+import 'package:estraightwayapp/service/home/user_services.dart';
+import 'package:estraightwayapp/service/home/wallet_service.dart';
 import 'package:estraightwayapp/widget/loading_modal.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cashfree_pg_sdk/api/cferrorresponse/cferrorresponse.dart';
 import 'package:flutter_cashfree_pg_sdk/api/cfpayment/cfdropcheckoutpayment.dart';
@@ -14,6 +18,8 @@ import 'package:flutter_cashfree_pg_sdk/utils/cfexceptions.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../widget/snackbars.dart';
+
 class VerifyOrderController extends GetxController {
   var selectedOrder = {}.obs;
   var isLoading = false.obs;
@@ -25,7 +31,7 @@ class VerifyOrderController extends GetxController {
 
   var orderId = "";
   String paymentSessionId = "";
-  CFEnvironment environment = CFEnvironment.PRODUCTION;
+  CFEnvironment environment = CFEnvironment.SANDBOX;
 
   late BuildContext context;
 
@@ -117,7 +123,82 @@ class VerifyOrderController extends GetxController {
     isLoading(false);
   }
 
+  void payUsingWallet(BuildContext contextParam) async {
+    context = contextParam;
+    //Verify order is done for this service or not
+    var orderStatus = await BusinessServices().verifyBookings(bookingData);
+
+    if (orderStatus["status"] == "success") {
+      bookingData["isWalletPayment"] = false;
+      bookingData["orderIdRef"] = "";
+      bookingData["paymentDate"] = DateTime.now();
+      var response = await BusinessServices().bookService(bookingData);
+
+      if (response["status"] == "success") {
+        ///Deduct money from wallet
+        var walletController = Get.put(WalletController());
+        var walletAmount = walletController.walletAmount.value;
+        var bookingAmount = bookingData["basicChargePaid"];
+        var remainingWalletBalance = int.parse(walletAmount.toString()) -
+            int.parse(bookingAmount.toString());
+        var walletUpdateStatus = await UserServices().updateUserData(
+            FirebaseAuth.instance.currentUser!.uid,
+            {"wallet": remainingWalletBalance});
+
+        if (walletUpdateStatus["status"] == "success") {
+          var transactionId = const Uuid().v4();
+          var transactionData = {
+            "amount": int.parse(bookingAmount.toString()),
+            "fromUserId": "",
+            "message": "Wallet",
+            "type": "Debit",
+            "createdDate": DateTime.now(),
+            "id": transactionId,
+            "userId": FirebaseAuth.instance.currentUser?.uid,
+          };
+          var transactionCreationStatus = await WalletService()
+              .createTransactions(transactionId, transactionData);
+        }
+        sendNotification(
+            bookingData["businessId"],
+            "You have new Service Booking",
+            "${bookingData["userName"]} has booked a Service",
+            true);
+        final snackBar = SnackBar(
+          content: const Text(
+            "Order Place Successfuly!",
+          ),
+          action: SnackBarAction(
+            label: 'Okay',
+            onPressed: () {},
+          ),
+        );
+        Get.back();
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        Get.offAllNamed("/bookingsuccessful");
+      } else {
+        final snackBar = SnackBar(
+          content: Text(
+            response["message"],
+          ),
+          action: SnackBarAction(
+            label: 'Okay',
+            onPressed: () {},
+          ),
+        );
+        Get.back();
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    } else {
+      // ignore: use_build_context_synchronously
+      showErrorSnackbar(context, orderStatus["message"]);
+    }
+  }
+
   void verifyPayment(String orderIdRef) async {
+    bookingData["isWalletPayment"] = false;
     bookingData["orderIdRef"] = orderIdRef;
     bookingData["paymentDate"] = DateTime.now();
     var response = await BusinessServices().bookService(bookingData);

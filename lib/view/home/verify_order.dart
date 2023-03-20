@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:estraightwayapp/controller/home/verify_order_controller.dart';
+import 'package:estraightwayapp/controller/home/wallet_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +11,7 @@ class VerifyOrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var verifyOrderController = Get.put(VerifyOrderController());
+    var walletController = Get.put(WalletController());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueAccent.shade100,
@@ -219,8 +221,12 @@ class VerifyOrderPage extends StatelessWidget {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      verifyOrderController.toggleWalletPaymentOption(
-                          !verifyOrderController.useWalletMoney.value);
+                      if (int.parse(walletController.walletAmount.toString()) >
+                          int.parse(verifyOrderController
+                              .bookingData["basicChargePaid"])) {
+                        verifyOrderController.toggleWalletPaymentOption(
+                            !verifyOrderController.useWalletMoney.value);
+                      }
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width,
@@ -290,7 +296,7 @@ class VerifyOrderPage extends StatelessWidget {
                                   height: 10.0,
                                 ),
                                 Text(
-                                  "Balance ₹ 100",
+                                  "Balance ₹ ${walletController.walletAmount.toString()}",
                                   style: GoogleFonts.inter(
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.w500,
@@ -316,7 +322,11 @@ class VerifyOrderPage extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   // verifyOrderController.submitData(context);
-                  verifyOrderController.pay(context);
+                  if (verifyOrderController.useWalletMoney.value) {
+                    verifyOrderController.payUsingWallet(context);
+                  } else {
+                    verifyOrderController.pay(context);
+                  }
                 },
                 child: Container(
                   height: 50.0,

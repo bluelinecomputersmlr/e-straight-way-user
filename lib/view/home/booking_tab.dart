@@ -80,12 +80,29 @@ class BookingsTab extends StatelessWidget {
                                                 borderRadius:
                                                     BorderRadius.circular(
                                                         size.width * 0.40),
-                                                child: Image.network(
-                                                  snapshot.data![index]
-                                                      ["businessImage"],
-                                                  height: size.width * 0.30,
-                                                  width: size.width * 0.30,
-                                                ),
+                                                child: (snapshot.data![index][
+                                                                "businessImage"] ==
+                                                            "null" ||
+                                                        snapshot.data![index][
+                                                                "businessImage"] ==
+                                                            "" ||
+                                                        snapshot.data![index][
+                                                                "businessImage"] ==
+                                                            null)
+                                                    ? SizedBox(
+                                                        height:
+                                                            size.width * 0.30,
+                                                        width:
+                                                            size.width * 0.30,
+                                                      )
+                                                    : Image.network(
+                                                        snapshot.data![index]
+                                                            ["businessImage"],
+                                                        height:
+                                                            size.width * 0.30,
+                                                        width:
+                                                            size.width * 0.30,
+                                                      ),
                                               ),
                                               Column(
                                                 children: [
