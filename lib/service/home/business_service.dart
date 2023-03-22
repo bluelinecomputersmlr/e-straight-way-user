@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:estraightwayapp/controller/home/home_controller.dart';
+import 'package:estraightwayapp/controller/home/home_service_provider_contoller.dart';
 import 'package:estraightwayapp/model/business_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:get/get.dart';
+import 'package:location/location.dart';
 
 class BusinessServices extends GetConnect {
   Stream<List<BusinessModel>?> getBusiness(
@@ -21,8 +23,6 @@ class BusinessServices extends GetConnect {
 
       var homePageController = Get.put(HomePageController());
 
-      print(id);
-
       final geo = GeoFlutterFire();
       var collectionReference = FirebaseFirestore.instance
           .collection('Businesses')
@@ -36,7 +36,7 @@ class BusinessServices extends GetConnect {
 
       yield* geo
           .collection(collectionRef: collectionReference)
-          .within(center: center, radius: 500.0, field: "location")
+          .within(center: center, radius: 10.0, field: "location")
           .map((snapshot) {
         return snapshot
             .map((doc) =>
@@ -191,17 +191,68 @@ class BusinessServices extends GetConnect {
 
       var businessId =
           response.data()!["serviceProviderDetails"]["businessUID"];
-      yield* FirebaseFirestore.instance
-          .collection("Bookings")
-          .where("businessId", isEqualTo: businessId)
-          .where("isServiceProviderAccepted", isEqualTo: false)
-          .where("isOrderCompleted", isEqualTo: false)
-          .where("isRejected", isEqualTo: false)
-          .orderBy("bookedDate")
-          .snapshots()
-          .map((snapshot) {
-        return snapshot.docs.map((doc) => doc.data()).toList();
-      });
+
+      var businessType =
+          response.data()!["serviceProviderDetails"]["businessType"];
+
+      if (businessType != "map") {
+        yield* FirebaseFirestore.instance
+            .collection("Bookings")
+            .where("businessId", isEqualTo: businessId)
+            .where("isServiceProviderAccepted", isEqualTo: false)
+            .where("isOrderCompleted", isEqualTo: false)
+            .where("isRejected", isEqualTo: false)
+            .orderBy("bookedDate")
+            .snapshots()
+            .map((snapshot) {
+          return snapshot.docs.map((doc) => doc.data()).toList();
+        });
+      } else {
+        Location location = Location();
+
+        bool serviceEnabled = false;
+        PermissionStatus _permissionGranted;
+        LocationData _locationData;
+
+        if (!serviceEnabled) {
+          serviceEnabled = await location.requestService();
+          if (!serviceEnabled) {
+            yield null;
+          }
+        }
+
+        _permissionGranted = await location.hasPermission();
+        if (_permissionGranted == PermissionStatus.denied) {
+          _permissionGranted = await location.requestPermission();
+          if (_permissionGranted != PermissionStatus.granted) {
+            yield null;
+          }
+        }
+
+        _locationData = await location.getLocation();
+
+        final geo = GeoFlutterFire();
+
+        GeoFirePoint center = geo.point(
+            latitude: _locationData.latitude!,
+            longitude: _locationData.longitude!);
+
+        var collectionReference = FirebaseFirestore.instance
+            .collection("Bookings")
+            .where("serviceName", isEqualTo: "Map")
+            .where("businessId", isEqualTo: "")
+            .where("isServiceProviderAccepted", isEqualTo: false)
+            .where("isOrderCompleted", isEqualTo: false)
+            .where("isRejected", isEqualTo: false);
+        // .orderBy("bookedDate");
+
+        yield* geo
+            .collection(collectionRef: collectionReference)
+            .within(center: center, radius: 10.0, field: "location")
+            .map((snapshot) {
+          return snapshot.map((doc) => doc.data()).toList();
+        });
+      }
     } catch (e) {
       yield null;
     }
@@ -383,6 +434,9 @@ class BusinessServices extends GetConnect {
       var businessId =
           response.data()!["serviceProviderDetails"]["businessUID"];
 
+      var businessType =
+          response.data()!["serviceProviderDetails"]["businessType"];
+
       var endDate = DateTime(
         DateTime.now().year,
         DateTime.now().month,
@@ -408,7 +462,10 @@ class BusinessServices extends GetConnect {
           .orderBy("bookedDate")
           .get();
 
-      var newBooking = await FirebaseFirestore.instance
+      QuerySnapshot<Map<String, dynamic>> newBooking;
+
+      // if (businessType != "map") {
+      newBooking = await FirebaseFirestore.instance
           .collection("Bookings")
           .where("businessId", isEqualTo: businessId)
           .where("isServiceProviderAccepted", isEqualTo: false)
@@ -416,6 +473,54 @@ class BusinessServices extends GetConnect {
           .where("isRejected", isEqualTo: false)
           .orderBy("bookedDate")
           .get();
+      // }
+      // else {
+      // Location location = Location();
+
+      // bool serviceEnabled = false;
+      // PermissionStatus _permissionGranted;
+      // LocationData _locationData;
+
+      // if (!serviceEnabled) {
+      //   serviceEnabled = await location.requestService();
+      //   if (!serviceEnabled) {}
+      // }
+
+      // _permissionGranted = await location.hasPermission();
+      // if (_permissionGranted == PermissionStatus.denied) {
+      //   _permissionGranted = await location.requestPermission();
+      //   if (_permissionGranted != PermissionStatus.granted) {}
+      // }
+
+      // _locationData = await location.getLocation();
+
+      // final geo = GeoFlutterFire();
+
+      // GeoFirePoint center = geo.point(
+      //     latitude: _locationData.latitude!,
+      //     longitude: _locationData.longitude!);
+
+      // var collectionReference = FirebaseFirestore.instance
+      //     .collection("Bookings")
+      //     .where("serviceName", isEqualTo: "Map")
+      //     .where("businessId", isEqualTo: "")
+      //     .where("isServiceProviderAccepted", isEqualTo: false)
+      //     .where("isOrderCompleted", isEqualTo: false)
+      //     .where("isRejected", isEqualTo: false);
+      // .orderBy("bookedDate");
+
+      // newBooking =await geo
+      //     .collection(collectionRef: collectionReference)
+      //     .within(center: center, radius: 500.0, field: "location").;
+      // newBooking = await FirebaseFirestore.instance
+      //     .collection("Bookings")
+      //     .where("serviceName", isEqualTo: "Map")
+      //     .where("businessId", isEqualTo: "")
+      //     .where("isServiceProviderAccepted", isEqualTo: false)
+      //     .where("isOrderCompleted", isEqualTo: false)
+      //     .where("isRejected", isEqualTo: false)
+      //     .get();
+      // }
 
       var todaysConfirmedBooking = await FirebaseFirestore.instance
           .collection("Bookings")
@@ -477,8 +582,8 @@ class BusinessServices extends GetConnect {
       String orderId) async {
     try {
       var response = await post(
-        // "http://181.215.79.5/api/v1/createOrder",
-        "http://10.0.2.2:3000/api/v1/createOrder",
+        "http://181.215.79.5/api/v1/createOrder",
+        // "http://10.0.2.2:3000/api/v1/createOrder",
         {
           "amount": amount,
           "customer_id": customerId,

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:estraightwayapp/view/home/booking_tab.dart';
 import 'package:estraightwayapp/view/home/search_bar.dart';
+import 'package:estraightwayapp/view/home/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:estraightwayapp/constants.dart';
 import 'package:estraightwayapp/controller/home/home_controller.dart';
@@ -557,7 +558,7 @@ class _HomePageState extends State<HomePage> {
                                               .categories.length,
                                           shrinkWrap: true,
                                           physics:
-                                              NeverScrollableScrollPhysics(),
+                                              const NeverScrollableScrollPhysics(),
                                           gridDelegate:
                                               const SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 4,
@@ -630,9 +631,11 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                 )
-              : (homePageController.currentTabIndex.value == 2)
-                  ? BookingsTab()
-                  : Container(),
+              : (homePageController.currentTabIndex.value == 1)
+                  ? const WalletPage()
+                  : (homePageController.currentTabIndex.value == 2)
+                      ? BookingsTab()
+                      : Container(),
         ),
       ),
     );

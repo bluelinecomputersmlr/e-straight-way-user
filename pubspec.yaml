@@ -65,6 +65,7 @@ dependencies:
   razorpay_flutter_customui: null
   readmore: ^2.2.0
   share_plus: ^6.3.1
+  url_launcher: ^6.1.10
   uuid: null
   video_player: ^2.4.7
 

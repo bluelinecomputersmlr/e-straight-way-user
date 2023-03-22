@@ -1,3 +1,4 @@
+import 'package:estraightwayapp/controller/home/home_service_provider_contoller.dart';
 import 'package:estraightwayapp/controller/service_provider/new_booking_controller.dart';
 import 'package:estraightwayapp/helper/send_notification.dart';
 import 'package:estraightwayapp/service/home/business_service.dart';
@@ -12,6 +13,7 @@ class NewBookings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var newBookingsController = Get.put(NewBookingController());
+    var homePageController = Get.put(HomeServiceProviderController());
 
     var size = MediaQuery.of(context).size;
 
@@ -155,11 +157,33 @@ class NewBookings extends StatelessWidget {
                                 GestureDetector(
                                   onTap: () async {
                                     var bookingId = snapshot.data![index]["id"];
-                                    var data = {
-                                      "isServiceProviderAccepted": true,
-                                      "acceptedDate": DateTime.now(),
-                                    };
-
+                                    Map<String, dynamic> data = {};
+                                    if (homePageController
+                                            .userData
+                                            .value
+                                            .serviceProviderDetails!
+                                            .businessType ==
+                                        "map") {
+                                      data = {
+                                        "businessId": homePageController
+                                            .userData
+                                            .value
+                                            .serviceProviderDetails!
+                                            .businessUID,
+                                        "businessContactNumber":
+                                            homePageController
+                                                .userData.value.phoneNumber,
+                                        "isServiceProviderAccepted": true,
+                                        "acceptedDate": DateTime.now(),
+                                        "status": "Approved",
+                                      };
+                                    } else {
+                                      data = {
+                                        "isServiceProviderAccepted": true,
+                                        "acceptedDate": DateTime.now(),
+                                        "status": "Approved",
+                                      };
+                                    }
                                     await BusinessServices()
                                         .updateBookingsData(bookingId, data);
 
@@ -188,38 +212,49 @@ class NewBookings extends StatelessWidget {
                                 const SizedBox(
                                   height: 20.0,
                                 ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    var bookingId = snapshot.data![index]["id"];
-                                    var data = {
-                                      "isServiceProviderAccepted": false,
-                                      "isRejected": true,
-                                      "rejectedDate": DateTime.now(),
-                                    };
-                                    await BusinessServices()
-                                        .updateBookingsData(bookingId, data);
-                                    sendNotification(
-                                      snapshot.data![index]["userId"],
-                                      "Your booking request got rejected",
-                                      "${snapshot.data![index]["businessName"]} rejected your booking",
-                                      false,
-                                    );
-                                  },
-                                  child: Container(
-                                    height: 40.0,
-                                    decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "Cancel Request",
-                                        style: GoogleFonts.inter(
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                (homePageController
+                                            .userData
+                                            .value
+                                            .serviceProviderDetails!
+                                            .businessType !=
+                                        "map")
+                                    ? GestureDetector(
+                                        onTap: () async {
+                                          var bookingId =
+                                              snapshot.data![index]["id"];
+                                          var data = {
+                                            "isServiceProviderAccepted": false,
+                                            "isRejected": true,
+                                            "rejectedDate": DateTime.now(),
+                                            "status": "Rejected",
+                                          };
+                                          await BusinessServices()
+                                              .updateBookingsData(
+                                                  bookingId, data);
+                                          sendNotification(
+                                            snapshot.data![index]["userId"],
+                                            "Your booking request got rejected",
+                                            "${snapshot.data![index]["businessName"]} rejected your booking",
+                                            false,
+                                          );
+                                        },
+                                        child: Container(
+                                          height: 40.0,
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "Cancel Request",
+                                              style: GoogleFonts.inter(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
                                 const SizedBox(
                                   height: 30.0,
                                 ),

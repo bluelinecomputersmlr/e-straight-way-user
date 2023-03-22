@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BookingsTab extends StatelessWidget {
   const BookingsTab({super.key});
@@ -123,18 +124,31 @@ class BookingsTab extends StatelessWidget {
                                                   const SizedBox(
                                                     height: 10.0,
                                                   ),
-                                                  SizedBox(
-                                                    width: size.width * 0.50,
-                                                    child: Text(
-                                                      snapshot.data![index][
-                                                          "businessContactNumber"],
-                                                      style: GoogleFonts.inter(
-                                                        fontSize: 17.0,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      Uri phoneno = Uri.parse(
+                                                          'tel:${snapshot.data![index]["businessContactNumber"]}');
+                                                      if (await launchUrl(
+                                                          phoneno)) {
+                                                        //dialer opened
+                                                      } else {
+                                                        //dailer is not opened
+                                                      }
+                                                    },
+                                                    child: SizedBox(
+                                                      width: size.width * 0.50,
+                                                      child: Text(
+                                                        snapshot.data![index][
+                                                            "businessContactNumber"],
+                                                        style:
+                                                            GoogleFonts.inter(
+                                                          fontSize: 17.0,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                       ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
                                                     ),
                                                   ),
                                                   const SizedBox(
@@ -243,9 +257,9 @@ class BookingsTab extends StatelessWidget {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               SizedBox(
-                                                width: size.width * 0.40,
+                                                width: size.width * 0.80,
                                                 child: Text(
-                                                  "Advance: ₹${snapshot.data![index]["basicChargePaid"]}",
+                                                  "Token Advance: ₹${snapshot.data![index]["basicChargePaid"]}",
                                                   style: GoogleFonts.inter(
                                                     fontSize: 17.0,
                                                     fontWeight: FontWeight.w600,
@@ -254,18 +268,18 @@ class BookingsTab extends StatelessWidget {
                                                       TextOverflow.ellipsis,
                                                 ),
                                               ),
-                                              SizedBox(
-                                                width: size.width * 0.40,
-                                                child: Text(
-                                                  "Price: ₹${snapshot.data![index]["price"]}",
-                                                  style: GoogleFonts.inter(
-                                                    fontSize: 17.0,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
+                                              // SizedBox(
+                                              //   width: size.width * 0.40,
+                                              //   child: Text(
+                                              //     "Price: ₹${snapshot.data![index]["price"]}",
+                                              //     style: GoogleFonts.inter(
+                                              //       fontSize: 17.0,
+                                              //       fontWeight: FontWeight.w600,
+                                              //     ),
+                                              //     overflow:
+                                              //         TextOverflow.ellipsis,
+                                              //   ),
+                                              // ),
                                             ],
                                           ),
                                           const SizedBox(

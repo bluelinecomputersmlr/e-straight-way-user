@@ -272,10 +272,18 @@ class HomeServiceProviderPage extends StatelessWidget {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                homePageController
-                                                    .dashboardDataCount[
-                                                        "newBookingCount"]
-                                                    .toString(),
+                                                (homePageController
+                                                            .userData
+                                                            .value
+                                                            .serviceProviderDetails!
+                                                            .businessType
+                                                            .toString() ==
+                                                        "Map")
+                                                    ? ""
+                                                    : homePageController
+                                                        .dashboardDataCount[
+                                                            "newBookingCount"]
+                                                        .toString(),
                                                 style: GoogleFonts.inter(
                                                   fontSize: 18.0,
                                                   color: Colors.black,

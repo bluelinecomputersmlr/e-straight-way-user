@@ -15,7 +15,10 @@ import 'package:flutter_cashfree_pg_sdk/api/cfsession/cfsession.dart';
 import 'package:flutter_cashfree_pg_sdk/api/cftheme/cftheme.dart';
 import 'package:flutter_cashfree_pg_sdk/utils/cfenums.dart';
 import 'package:flutter_cashfree_pg_sdk/utils/cfexceptions.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../widget/snackbars.dart';
@@ -31,7 +34,7 @@ class VerifyOrderController extends GetxController {
 
   var orderId = "";
   String paymentSessionId = "";
-  CFEnvironment environment = CFEnvironment.SANDBOX;
+  CFEnvironment environment = CFEnvironment.PRODUCTION;
 
   late BuildContext context;
 
@@ -40,6 +43,33 @@ class VerifyOrderController extends GetxController {
     loadData();
     cfPaymentGatewayService.setCallback(verifyPayment, onError);
     super.onInit();
+  }
+
+  Future<LatLng?> getLocation() async {
+    Location location = Location();
+
+    bool serviceEnabled = false;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return null;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return null;
+      }
+    }
+
+    _locationData = await location.getLocation();
+
+    return LatLng(_locationData.latitude!, _locationData.longitude!);
   }
 
   void loadData() async {
@@ -56,6 +86,16 @@ class VerifyOrderController extends GetxController {
     var userData = await HomePageService().getUserData();
 
     if (userData["status"] == "success") {
+      final geo = GeoFlutterFire();
+
+      LatLng? locationData = await getLocation();
+
+      if (locationData == null) {
+        return;
+      }
+
+      GeoFirePoint location = geo.point(
+          latitude: locationData.latitude, longitude: locationData.longitude);
       bookingData["businessId"] = selectedOrder["uid"];
       bookingData["businessName"] = selectedOrder["businessName"];
       bookingData["businessImage"] = selectedOrder["businessImage"];
@@ -78,6 +118,7 @@ class VerifyOrderController extends GetxController {
       bookingData["rating"] = 0;
       bookingData["isRejected"] = false;
       bookingData["status"] = "Requested";
+      bookingData["location"] = location.data;
     }
   }
 
