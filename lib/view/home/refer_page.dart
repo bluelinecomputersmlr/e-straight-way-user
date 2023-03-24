@@ -1,9 +1,13 @@
 import 'package:estraightwayapp/service/home/user_services.dart';
 import 'package:estraightwayapp/widget/loading_modal.dart';
 import 'package:estraightwayapp/widget/snackbars.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../service/home/wallet_service.dart';
 
 class ReferPage extends StatelessWidget {
   ReferPage({super.key});
@@ -129,20 +133,26 @@ void _handleSubmit(BuildContext context, String referalCode) async {
 
   if (referalResponse["status"] == "success") {
     var userId = referalResponse["data"][0]["uid"];
-    var walletAmount = referalResponse["data"][0]["wallet"];
-    Map<String, int> data;
+    var userName = referalResponse["data"][0]["userName"];
 
-    if (walletAmount != null) {
-      data = {
-        "wallet": int.parse(walletAmount) + 20,
-      };
-    } else {
-      data = {
-        "wallet": 20,
-      };
-    }
+    // var walletStatus = await UserServices().updateUserData(userId, data);
 
-    var walletStatus = await UserServices().updateUserData(userId, data);
+    var transactionId = const Uuid().v4();
+
+    var transactionData = {
+      "amount": 20,
+      "fromUserId": FirebaseAuth.instance.currentUser?.uid,
+      "fromUserName": userName,
+      "message": "Refer",
+      "type": "Debit",
+      "createdDate": DateTime.now(),
+      "id": transactionId,
+      "userId": userId,
+      "addedToWallet": false
+    };
+
+    var walletStatus = await WalletService()
+        .createTransactions(transactionId, transactionData);
 
     if (walletStatus["status"] == "success") {
       Get.back();
@@ -150,7 +160,7 @@ void _handleSubmit(BuildContext context, String referalCode) async {
     } else {
       Get.back();
       // ignore: use_build_context_synchronously
-      showErrorSnackbar(context, "Unable to aply the referal code");
+      showErrorSnackbar(context, "Unable to apply the referal code");
     }
   } else {
     Get.back();
