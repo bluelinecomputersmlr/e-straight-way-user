@@ -39,8 +39,9 @@ class ProfilePageService extends GetConnect {
           };
         } else {
           var userName = userData.data()!["userName"];
+          var referalInitial = getFirstThreeChar(userName);
           var referalCode =
-              userName + (Random.secure().nextInt(200) + 100).toString();
+              referalInitial + (Random.secure().nextInt(200) + 100).toString();
           var data = {"referCode": referalCode};
           var updateResponse = await PaymentConfirmService()
               .updateServiceProviderPaymentStatus(data);
@@ -64,5 +65,18 @@ class ProfilePageService extends GetConnect {
 
   logoutUser() {
     return FirebaseAuth.instance.signOut();
+  }
+
+  String getFirstThreeChar(String value) {
+    String firstThreeChar = "";
+    var valArray = value.split("");
+
+    for (var val in valArray) {
+      if (firstThreeChar.length < 3) {
+        firstThreeChar = firstThreeChar + val;
+      }
+    }
+
+    return firstThreeChar;
   }
 }

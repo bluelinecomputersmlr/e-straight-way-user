@@ -627,7 +627,7 @@ void getReferalCode(BuildContext context) async {
 
   if (response["status"] == "success") {
     Share.share(
-        'Inviting you to download E STRAIGHTWAY app. Please use my Referral Code ${response["referCode"]}');
+        'Inviting you to download E STRAIGHTWAY app. Please use my Referral Code ${response["referCode"]}\n https://play.google.com/store/apps/details?id=com.estraightway.estraightwayapp');
   } else {
     final snackBar = SnackBar(
       content: Text(
