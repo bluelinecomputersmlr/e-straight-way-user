@@ -144,7 +144,7 @@ void _handleSubmit(BuildContext context, String referalCode) async {
       "fromUserId": FirebaseAuth.instance.currentUser?.uid,
       "fromUserName": userName,
       "message": "Refer",
-      "type": "Debit",
+      "type": "Refer",
       "createdDate": DateTime.now(),
       "id": transactionId,
       "userId": userId,

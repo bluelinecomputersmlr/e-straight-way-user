@@ -104,6 +104,9 @@ class AddMoney extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        Get.toNamed("/refer");
+      }),
     );
   }
 }

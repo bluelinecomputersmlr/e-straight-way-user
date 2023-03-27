@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:estraightwayapp/controller/home/home_controller.dart';
 import 'package:estraightwayapp/controller/home/home_service_provider_contoller.dart';
 import 'package:estraightwayapp/model/business_model.dart';
+import 'package:estraightwayapp/service/home/user_services.dart';
+import 'package:estraightwayapp/service/home/wallet_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:get/get.dart';
@@ -77,17 +79,21 @@ class BusinessServices extends GetConnect {
         00,
       );
 
-      var response = await FirebaseFirestore.instance
-          .collection("Bookings")
-          .where("bookedDate", isLessThanOrEqualTo: endDate)
-          .where("bookedDate", isGreaterThanOrEqualTo: startDate)
-          .where("businessId", isEqualTo: orderData["businessId"])
-          .where("serviceName", isEqualTo: orderData["serviceName"])
-          .where("isCompleted", isEqualTo: false)
-          .get();
+      if (orderData["serviceName"] != "Map") {
+        var response = await FirebaseFirestore.instance
+            .collection("Bookings")
+            .where("bookedDate", isLessThanOrEqualTo: endDate)
+            .where("bookedDate", isGreaterThanOrEqualTo: startDate)
+            .where("businessId", isEqualTo: orderData["businessId"])
+            .where("serviceName", isEqualTo: orderData["serviceName"])
+            .where("isCompleted", isEqualTo: false)
+            .get();
 
-      if (response.size > 0) {
-        return {"status": "error", "message": "Service is already booked!"};
+        if (response.size > 0) {
+          return {"status": "error", "message": "Service is already booked!"};
+        } else {
+          return {"status": "success"};
+        }
       } else {
         return {"status": "success"};
       }
@@ -117,17 +123,19 @@ class BusinessServices extends GetConnect {
         00,
       );
 
-      var response = await FirebaseFirestore.instance
-          .collection("Bookings")
-          .where("bookedDate", isLessThanOrEqualTo: endDate)
-          .where("bookedDate", isGreaterThanOrEqualTo: startDate)
-          .where("businessId", isEqualTo: orderData["businessId"])
-          .where("serviceName", isEqualTo: orderData["serviceName"])
-          .where("isCompleted", isEqualTo: false)
-          .get();
+      if (orderData["serviceName"] != "Map") {
+        var response = await FirebaseFirestore.instance
+            .collection("Bookings")
+            .where("bookedDate", isLessThanOrEqualTo: endDate)
+            .where("bookedDate", isGreaterThanOrEqualTo: startDate)
+            .where("businessId", isEqualTo: orderData["businessId"])
+            .where("serviceName", isEqualTo: orderData["serviceName"])
+            .where("isCompleted", isEqualTo: false)
+            .get();
 
-      if (response.size > 0) {
-        return {"status": "error", "message": "Service is already booked!"};
+        if (response.size > 0) {
+          return {"status": "error", "message": "Service is already booked!"};
+        }
       }
       await FirebaseFirestore.instance
           .collection("Bookings")
@@ -597,6 +605,56 @@ class BusinessServices extends GetConnect {
       } else {
         return {"status": "error", "message": response.body["message"]};
       }
+    } catch (e) {
+      return {"status": "error", "message": e};
+    }
+  }
+
+  Future<Map> depositReferEarnToWallet(String fromUserId) async {
+    try {
+      var inviteTransactions = await FirebaseFirestore.instance
+          .collection("transactions")
+          .where("fromUserId", isEqualTo: fromUserId)
+          .where("addedToWallet", isEqualTo: false)
+          .get();
+
+      if (inviteTransactions.size > 0) {
+        var data = inviteTransactions.docs.toList();
+
+        var responseData = [];
+
+        for (var doc in data) {
+          responseData.add(doc.data());
+        }
+
+        var transactionId = responseData[0]["id"];
+        var toUserId = responseData[0]["userId"];
+        var updateData = {"addedToWallet": true};
+
+        var userDataResponse =
+            await UserServices().getUserData(userId: toUserId);
+
+        var walletAmount = userDataResponse["data"][0]["wallet"];
+        Map<String, int> walletdata;
+
+        if (walletAmount != null) {
+          walletdata = {
+            "wallet": walletAmount + 20,
+          };
+        } else {
+          walletdata = {
+            "wallet": 20,
+          };
+        }
+        await UserServices().updateUserData(toUserId, walletdata);
+
+        await FirebaseFirestore.instance
+            .collection("transactions")
+            .doc(transactionId)
+            .update(updateData);
+      }
+
+      return {"status": "success"};
     } catch (e) {
       return {"status": "error", "message": e};
     }

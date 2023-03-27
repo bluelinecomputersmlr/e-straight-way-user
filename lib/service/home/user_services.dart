@@ -41,11 +41,14 @@ class UserServices {
     }
   }
 
-  Future<Map> getUserData() async {
+  Future<Map> getUserData({String userId = ""}) async {
     try {
+      if (userId == "") {
+        userId = FirebaseAuth.instance.currentUser!.uid;
+      }
       var refererData = await FirebaseFirestore.instance
           .collection("straightWayUsers")
-          .where("uid", isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+          .where("uid", isEqualTo: userId)
           .get();
 
       if (refererData.size > 0) {

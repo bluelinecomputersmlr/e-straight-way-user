@@ -200,6 +200,8 @@ class VerifyOrderController extends GetxController {
           var transactionCreationStatus = await WalletService()
               .createTransactions(transactionId, transactionData);
         }
+        await BusinessServices()
+            .depositReferEarnToWallet(FirebaseAuth.instance.currentUser!.uid);
         sendNotification(
             bookingData["businessId"],
             "You have new Service Booking",
