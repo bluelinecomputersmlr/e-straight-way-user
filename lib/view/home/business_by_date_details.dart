@@ -585,7 +585,8 @@ class _BusinessesByDateDetailsPageState
                   return Colors.white;
                 }),
                 side: MaterialStateBorderSide.resolveWith(
-                  (states) => BorderSide(width: 1.0, color: kPrimaryColor),
+                  (states) =>
+                      const BorderSide(width: 1.0, color: kPrimaryColor),
                 ),
               ),
               Text(
@@ -599,125 +600,11 @@ class _BusinessesByDateDetailsPageState
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              GestureDetector(
-                onTap: () async {
-                  var paymentOptions = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PaymentSelectionPage(
-                              0,
-                            )),
-                  );
-                  businessController.updateval(paymentOptions);
-                  setState(() {});
-
-                  if (businessController.paymentOptions.first['method'] ==
-                      'wallet') {
-                    businessController.getWalletLogo();
-                  }
-                },
-                child: Container(
-                  width: 0.3.sw,
-                  height: .15.sw,
-                  child: Obx(
-                    () => Column(
-                      children: [
-                        Visibility(
-                            visible: businessController.paymentOptions
-                                    .first['upi_app_package_name'] !=
-                                null,
-                            child: Text("Pay using")),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: businessController.paymentOptions
-                                          .first['upi_app_package_name'] ==
-                                      "com.google.android.apps.nbu.paisa.user"
-                                  ? Image.asset(
-                                      "assets/icons/googlepay.png",
-                                      width: 0.08.sw,
-                                      height: 0.075.sw,
-                                    )
-                                  : businessController.paymentOptions
-                                              .first['upi_app_package_name'] ==
-                                          "com.phonepe.app"
-                                      ? Image.asset(
-                                          "assets/icons/phonepe.png",
-                                          width: 0.08.sw,
-                                          height: 0.075.sw,
-                                        )
-                                      : businessController.paymentOptions.first[
-                                                  'upi_app_package_name'] ==
-                                              "in.org.npci.upiapp"
-                                          ? Image.asset(
-                                              "assets/icons/bhim.png",
-                                              width: 0.08.sw,
-                                              height: 0.075.sw,
-                                            )
-                                          : businessController
-                                                          .paymentOptions.first[
-                                                      'upi_app_package_name'] ==
-                                                  "net.one97.paytm"
-                                              ? Image.asset(
-                                                  "assets/icons/paytm.png",
-                                                  width: 0.08.sw,
-                                                  height: 0.075.sw,
-                                                )
-                                              : businessController.paymentOptions.first['method'] ==
-                                                          'upi' &&
-                                                      businessController
-                                                              .paymentOptions
-                                                              .first['_[flow]'] ==
-                                                          'collect'
-                                                  ? Image.asset(
-                                                      "assets/icons/bhim.png",
-                                                      width: 0.08.sw,
-                                                      height: 0.075.sw,
-                                                    )
-                                                  : businessController.paymentOptions.first['method'] == 'card'
-                                                      ? Image.asset(
-                                                          "assets/icons/creditcard.png",
-                                                          width: 0.08.sw,
-                                                          height: 0.075.sw,
-                                                        )
-                                                      : businessController.paymentOptions.first['method'] == 'netbanking'
-                                                          ? Icon(Icons.account_balance)
-                                                          : businessController.paymentOptions.first['method'] == 'wallet'
-                                                              ? businessController.walletLogo != null
-                                                                  ? Image.network(
-                                                                      businessController
-                                                                          .walletLogo!,
-                                                                      width: 0.15
-                                                                          .sw,
-                                                                      fit: BoxFit
-                                                                          .contain,
-                                                                      height:
-                                                                          0.15.sw,
-                                                                    )
-                                                                  : const Icon(Icons.account_balance_wallet_rounded)
-                                                              : const Text(
-                                                                  "Choose\npayment\nmethod",
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                ),
-                            ),
-                            const Icon(Icons.arrow_drop_down_sharp)
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
               Padding(
-                padding: const EdgeInsets.only(right: 15.0),
+                padding: const EdgeInsets.only(right: 15.0, left: 15.0),
                 child: GestureDetector(
                   onTap: () async {
                     var bookingDate = businessController.currentDate2.value;

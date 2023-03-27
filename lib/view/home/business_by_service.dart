@@ -4,8 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:estraightwayapp/constants.dart';
 import 'package:estraightwayapp/controller/home/business_controller.dart';
 import 'package:estraightwayapp/model/business_model.dart';
-import 'package:estraightwayapp/payment/paymentInitiationPage.dart';
-import 'package:estraightwayapp/payment/payment_methods.dart';
 import 'package:estraightwayapp/widget/angle_clipper.dart';
 import 'package:estraightwayapp/widget/custom_loading_indicator.dart';
 import 'package:flutter/material.dart';
@@ -30,158 +28,158 @@ class _BusinessByServiceState extends State<BusinessByService> {
     final businessController = Get.put(BusinessController());
     NumberFormat formatCurrency = NumberFormat.simpleCurrency(
         locale: Platform.localeName, name: 'INR', decimalDigits: 0);
-    return Scaffold(
-      backgroundColor: Colors.white,
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 15.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-              child: GestureDetector(
-                onTap: () async {
-                  if (businessController.selectedBusiness.value.uid != null) {
-                    var bookingStatus =
-                        await BusinessServices().verifyBookings({
-                      "bookedDate": DateTime.parse(DateTime.now().toString()),
-                      "businessId": businessController
-                          .selectedBusiness.value.uid
-                          .toString(),
-                      "serviceName": "",
-                    });
-                    if (bookingStatus["status"] == "success") {
-                      Get.toNamed(
-                        '/verifyOrder',
-                        parameters: {
-                          "uid": businessController.selectedBusiness.value.uid
-                              .toString(),
-                          "businessImage": businessController
-                              .selectedBusiness.value.businessImage
-                              .toString(),
-                          "price": businessController
-                              .selectedBusiness.value.serviceCharge
-                              .toString(),
-                          "tokenAdvance": businessController
-                              .selectedBusiness.value.tokenAdvance
-                              .toString(),
-                          "businessName": businessController
-                              .selectedBusiness.value.businessName
-                              .toString(),
-                          "businessContactNumber": businessController
-                              .selectedBusiness.value.phoneNumber
-                              .toString(),
-                          "serviceName": "",
-                          "bookingDate": DateTime.now().toString(),
-                        },
-                      );
-                    } else {
-                      // ignore: use_build_context_synchronously
-                      showErrorSnackbar(context,
-                          "Service is alreday booked by you/someone else");
+    return Obx(
+      () => Scaffold(
+        backgroundColor: Colors.white,
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(bottom: 15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 15.0, left: 15.0),
+                child: GestureDetector(
+                  onTap: () async {
+                    if (businessController.selectedBusiness.value.uid != null) {
+                      var bookingStatus =
+                          await BusinessServices().verifyBookings({
+                        "bookedDate": DateTime.parse(DateTime.now().toString()),
+                        "businessId": businessController
+                            .selectedBusiness.value.uid
+                            .toString(),
+                        "serviceName": "",
+                      });
+                      if (bookingStatus["status"] == "success") {
+                        Get.toNamed(
+                          '/verifyOrder',
+                          parameters: {
+                            "uid": businessController.selectedBusiness.value.uid
+                                .toString(),
+                            "businessImage": businessController
+                                .selectedBusiness.value.businessImage
+                                .toString(),
+                            "price": businessController
+                                .selectedBusiness.value.serviceCharge
+                                .toString(),
+                            "tokenAdvance": businessController
+                                .selectedBusiness.value.tokenAdvance
+                                .toString(),
+                            "businessName": businessController
+                                .selectedBusiness.value.businessName
+                                .toString(),
+                            "businessContactNumber": businessController
+                                .selectedBusiness.value.phoneNumber
+                                .toString(),
+                            "serviceName": "",
+                            "bookingDate": DateTime.now().toString(),
+                          },
+                        );
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        showErrorSnackbar(context,
+                            "Service is alreday booked by you/someone else");
+                      }
                     }
-                  }
-                  //   businessController.paymentOptions.first['amount'] = 1 * 100;
-                  //   if (businessController.paymentOptions.first['method'] ==
-                  //       null) {
-                  //     businessController.paymentOptions = await Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) => PaymentSelectionPage(
-                  //                 1 * 100,
-                  //               )),
-                  //     );
-                  //     // Get.toNamed('/bookingsuccessful', arguments: ["date"]);
-                  //   } else {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) => PaymentInitiationPage(
-                  //               double.parse(businessController
-                  //                   .paymentOptions.first['amount']
-                  //                   .toString()),
-                  //               '',
-                  //               businessController.paymentOptions.first)),
-                  //     );
-                  //   }
-                },
-                child: Container(
-                  width: .65.sw,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: kPrimaryColor,
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Book Now",
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
+                    //   businessController.paymentOptions.first['amount'] = 1 * 100;
+                    //   if (businessController.paymentOptions.first['method'] ==
+                    //       null) {
+                    //     businessController.paymentOptions = await Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) => PaymentSelectionPage(
+                    //                 1 * 100,
+                    //               )),
+                    //     );
+                    //     // Get.toNamed('/bookingsuccessful', arguments: ["date"]);
+                    //   } else {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) => PaymentInitiationPage(
+                    //               double.parse(businessController
+                    //                   .paymentOptions.first['amount']
+                    //                   .toString()),
+                    //               '',
+                    //               businessController.paymentOptions.first)),
+                    //     );
+                    //   }
+                  },
+                  child: Container(
+                    width: .65.sw,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: kPrimaryColor,
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Book Now",
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(.2.sw),
-        child: Stack(
-          children: [
-            Hero(
-              tag: businessController.subCategory.uid!,
-              child: ClipPath(
-                clipper: CustomShapeClipper(),
-                child: Container(
-                  height: 1.sw,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      colorFilter: const ColorFilter.mode(
-                          Colors.black26, BlendMode.darken),
-                      image: CachedNetworkImageProvider(
-                          businessController.subCategory.subCategoryImage!),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(.2.sw),
+          child: Stack(
+            children: [
+              Hero(
+                tag: businessController.subCategory.uid!,
+                child: ClipPath(
+                  clipper: CustomShapeClipper(),
+                  child: Container(
+                    height: 1.sw,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        colorFilter: const ColorFilter.mode(
+                            Colors.black26, BlendMode.darken),
+                        image: CachedNetworkImageProvider(
+                            businessController.subCategory.subCategoryImage!),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back,
-                  size: 30,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Get.back();
-                },
-              ),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                businessController.subCategory.subCategoryName!,
-                style: GoogleFonts.inter(
-                  fontSize: 24,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Get.back();
+                  },
                 ),
               ),
-            ),
-          ],
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  businessController.subCategory.subCategoryName!,
+                  style: GoogleFonts.inter(
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 20.0),
-        child: Obx(
-          () => Container(
+        body: Padding(
+          padding: const EdgeInsets.only(top: 20.0),
+          child: Container(
             child: CustomLoadingIndicator(
               isBusy: businessController.isLoading.isTrue,
               hasError: businessController.isError.isTrue,
