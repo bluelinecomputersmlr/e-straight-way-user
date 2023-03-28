@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
+import 'package:uuid/uuid.dart';
 
 class BusinessServices extends GetConnect {
   Stream<List<BusinessModel>?> getBusiness(
@@ -653,6 +654,45 @@ class BusinessServices extends GetConnect {
             .doc(transactionId)
             .update(updateData);
       }
+
+      return {"status": "success"};
+    } catch (e) {
+      return {"status": "error", "message": e};
+    }
+  }
+
+  Future<Map> refundMoney(String userId, int amount) async {
+    try {
+      var transactionId = const Uuid().v4();
+
+      var userDataResponse = await UserServices().getUserData(userId: userId);
+
+      var walletAmount = userDataResponse["data"][0]["wallet"];
+
+      Map<String, int> walletdata;
+
+      if (walletAmount != null) {
+        walletdata = {
+          "wallet": walletAmount + amount,
+        };
+      } else {
+        walletdata = {
+          "wallet": amount,
+        };
+      }
+      await UserServices().updateUserData(userId, walletdata);
+
+      var transactionData = {
+        "amount": amount,
+        "fromUserId": "",
+        "message": "Refund",
+        "type": "Credit",
+        "createdDate": DateTime.now(),
+        "id": transactionId,
+        "userId": userId,
+      };
+
+      await WalletService().createTransactions(transactionId, transactionData);
 
       return {"status": "success"};
     } catch (e) {

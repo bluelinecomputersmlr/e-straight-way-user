@@ -621,6 +621,17 @@ class BookingsTab extends StatelessWidget {
                                                                 if (cancelStatus[
                                                                         "status"] ==
                                                                     "success") {
+                                                                  await BusinessServices().refundMoney(
+                                                                      snapshot.data![
+                                                                              index]
+                                                                          [
+                                                                          "userId"],
+                                                                      int.parse(snapshot
+                                                                          .data![
+                                                                              index]
+                                                                              [
+                                                                              "basicChargePaid"]
+                                                                          .toString()));
                                                                   final snackBar =
                                                                       SnackBar(
                                                                     content:

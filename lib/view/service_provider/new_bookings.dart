@@ -231,6 +231,14 @@ class NewBookings extends StatelessWidget {
                                           await BusinessServices()
                                               .updateBookingsData(
                                                   bookingId, data);
+                                          await BusinessServices().refundMoney(
+                                            snapshot.data![index]["userId"],
+                                            int.parse(
+                                              snapshot.data![index]
+                                                      ["basicChargePaid"]
+                                                  .toString(),
+                                            ),
+                                          );
                                           sendNotification(
                                             snapshot.data![index]["userId"],
                                             "Your booking request got rejected",
