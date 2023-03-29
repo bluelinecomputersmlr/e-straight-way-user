@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:estraightwayapp/constants.dart';
 import 'package:estraightwayapp/service/home/profile_page_service.dart';
+import 'package:estraightwayapp/service/home/user_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:estraightwayapp/controller/home/profile_page_controller.dart';
 import 'package:get/get.dart';
@@ -347,6 +349,95 @@ class ProfilePage extends StatelessWidget {
                       ),
                     )
                   : Container()),
+              (profilePageController.userData.value.lastLoggedAsUser == true)
+                  ? (profilePageController
+                              .userData.value.isServiceProviderRegistered ==
+                          true)
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: GestureDetector(
+                            onTap: () async {
+                              var data = {"lastLoggedAsUser": false};
+
+                              await UserServices().updateUserData(
+                                  FirebaseAuth.instance.currentUser!.uid, data);
+
+                              Get.offAllNamed("/homeServiceProviderPage");
+                            },
+                            child: Container(
+                              height: .15.sw,
+                              width: 1.sw,
+                              decoration: const BoxDecoration(
+                                  color: Color(0xfff8faff),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Switch to Service Provider',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 16,
+                                        color: kPrimaryColor,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container()
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: GestureDetector(
+                        onTap: () async {
+                          var data = {"lastLoggedAsUser": true};
+
+                          await UserServices().updateUserData(
+                              FirebaseAuth.instance.currentUser!.uid, data);
+
+                          Get.offAllNamed("/home");
+                        },
+                        child: Container(
+                          height: .15.sw,
+                          width: 1.sw,
+                          decoration: const BoxDecoration(
+                              color: Color(0xfff8faff),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Switch to User',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    color: kPrimaryColor,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+              const SizedBox(
+                height: 20,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Container(
