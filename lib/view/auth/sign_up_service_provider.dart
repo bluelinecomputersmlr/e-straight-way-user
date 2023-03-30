@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pinput/pinput.dart';
 
 class SignUpServiceProviderPage extends StatelessWidget {
   SignUpServiceProviderPage({Key? key}) : super(key: key);
@@ -125,50 +126,66 @@ class SignUpServiceProviderPage extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    Obx(
-                      () => Container(
-                        height: 50.0,
-                        width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25.0),
-                          color: const Color(0xffDEE8FF),
-                        ),
-                        padding: const EdgeInsets.all(10.0),
-                        child: (loginController.isMainPageLoading.value)
-                            ? Text(
-                                "Loading...",
-                                style: GoogleFonts.inter(),
-                              )
-                            : DropdownButton<String>(
-                                focusColor: Colors.white,
-                                value: loginController.choosenArea.toString(),
-                                style: GoogleFonts.poppins(
-                                  color: const Color(0xff97AFDE),
-                                  fontSize: 16.0,
-                                ),
-                                iconEnabledColor: Colors.black,
-                                underline: Container(),
-                                items: loginController.areas
-                                    .map<DropdownMenuItem<String>>((value) {
-                                  return DropdownMenuItem<String>(
-                                    alignment: AlignmentDirectional.center,
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                      style: GoogleFonts.poppins(
-                                        color: const Color(0xff97AFDE),
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (String? value) {
-                                  loginController.selectArea(value.toString());
-                                },
-                              ),
-                      ),
+                    MyTextFormField(
+                      controller: loginController.pincodeController,
+                      keyboardtype: TextInputType.number,
+                      maxText: 6,
+                      heading: "Pincode",
+                      hintText: "574225",
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Enter Pincode";
+                        } else if (value.length < 6) {
+                          return "Enter proper pincode";
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
+                    // Obx(
+                    //   () => Container(
+                    //     height: 50.0,
+                    //     width: MediaQuery.of(context).size.width,
+                    //     margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(25.0),
+                    //       color: const Color(0xffDEE8FF),
+                    //     ),
+                    //     padding: const EdgeInsets.all(10.0),
+                    //     child: (loginController.isMainPageLoading.value)
+                    //         ? Text(
+                    //             "Loading...",
+                    //             style: GoogleFonts.inter(),
+                    //           )
+                    //         : DropdownButton<String>(
+                    //             focusColor: Colors.white,
+                    //             value: loginController.choosenArea.toString(),
+                    //             style: GoogleFonts.poppins(
+                    //               color: const Color(0xff97AFDE),
+                    //               fontSize: 16.0,
+                    //             ),
+                    //             iconEnabledColor: Colors.black,
+                    //             underline: Container(),
+                    //             items: loginController.areas
+                    //                 .map<DropdownMenuItem<String>>((value) {
+                    //               return DropdownMenuItem<String>(
+                    //                 alignment: AlignmentDirectional.center,
+                    //                 value: value,
+                    //                 child: Text(
+                    //                   value,
+                    //                   style: GoogleFonts.poppins(
+                    //                     color: const Color(0xff97AFDE),
+                    //                     fontSize: 16.0,
+                    //                   ),
+                    //                 ),
+                    //               );
+                    //             }).toList(),
+                    //             onChanged: (String? value) {
+                    //               loginController.selectArea(value.toString());
+                    //             },
+                    //           ),
+                    //   ),
+                    // ),
                     const SizedBox(
                       height: 150,
                     ),
@@ -189,12 +206,12 @@ class SignUpServiceProviderPage extends StatelessWidget {
                     onTap: () {
                       if (loginController.category != null &&
                           loginController.subCategory != null &&
-                          loginController.choosenArea.value != "Select Area") {
+                          loginController.pincodeController.length == 6) {
                         _submitForm(
                             loginController.subCategory!.subCategoryType);
                       } else {
                         showInfoSnackbar(context,
-                            'Please select category and sub-category and area');
+                            'Please select category and sub-category and pincode');
                       }
                     },
                     child: Container(

@@ -87,6 +87,16 @@ class HomeServiceProviderController extends GetxController {
       if (userData.value.isInitialPaymentDone == null &&
           userData.value.lastLoggedAsUser == false) {
         Get.offAllNamed('/doPayment');
+        return;
+      }
+
+      var businessResponse = await HomePageService().getBusinessData(
+          userData.value.serviceProviderDetails!.businessUID.toString());
+
+      if (businessResponse["status"] == "success") {
+        if (businessResponse["data"]["isApproved"] == false) {
+          Get.offAllNamed("/wait");
+        }
       }
     } else {
       isMainError(true);

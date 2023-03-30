@@ -26,6 +26,27 @@ class HomePageService extends GetConnect {
     }
   }
 
+  Future<Map> getBusinessData(String businesId) async {
+    try {
+      var response = await FirebaseFirestore.instance
+          .collection("Businesses")
+          .doc(businesId)
+          .get();
+
+      if (response.data() != null) {
+        return {"status": "success", "data": response.data()};
+      } else {
+        return {
+          "status": "error",
+          "message": "Some error occurred",
+          "phone": FirebaseAuth.instance.currentUser!.phoneNumber
+        };
+      }
+    } catch (e) {
+      return {"status": "error", "message": "Some error occurred"};
+    }
+  }
+
   Future<Map> getAreaData() async {
     try {
       var response = await FirebaseFirestore.instance.collection("Areas").get();

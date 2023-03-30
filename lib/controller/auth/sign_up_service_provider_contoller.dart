@@ -25,6 +25,7 @@ class SignUpServiceProviderController extends GetxController {
   int i = 0;
   RxList categories = [].obs;
   final userNameController = TextEditingController();
+  final pincodeController = TextEditingController();
   final categoryController = TextEditingController();
   CategoryModel? category;
   SubCategoryModel? subCategory;
@@ -228,7 +229,7 @@ class SignUpServiceProviderController extends GetxController {
       bankName: '',
     );
     var businessJSON = business!.toJson();
-    businessJSON["area"] = choosenArea.value;
+    businessJSON["pinCode"] = pincodeController.value;
     await LoginService()
         .addUserServiceProvider(userNameController.text, serviceProvider);
     await LoginService().addBusiness(businessJSON).whenComplete(() async {
@@ -270,7 +271,7 @@ class SignUpServiceProviderController extends GetxController {
       bankName: '',
     );
     var businessJSON = business!.toJson();
-    businessJSON["area"] = choosenArea.value;
+    businessJSON["pinCode"] = pincodeController.value;
     await LoginService()
         .addUserServiceProvider(userNameController.text, serviceProvider);
     await LoginService().addBusiness(businessJSON).whenComplete(() async {
@@ -320,7 +321,7 @@ class SignUpServiceProviderController extends GetxController {
     );
     var businessJSON = business!.toJson();
     businessJSON["gstRegisteredStatus"] = isGstRegistered.value;
-    businessJSON["area"] = choosenArea.value;
+    businessJSON["pinCode"] = pincodeController.value;
     await LoginService()
         .addUserServiceProvider(userNameController.text, serviceProvider);
     await LoginService().addBusiness(businessJSON).whenComplete(() async {
