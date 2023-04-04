@@ -151,14 +151,18 @@ class LoginService extends GetConnect {
   }
 
   Future addBusiness(business) async {
-    await FirebaseFirestore.instance
-        .collection("Businesses")
-        .doc(business["uid"])
-        .set(business, SetOptions(merge: true));
-    await FirebaseFirestore.instance
-        .collection("Businesses")
-        .doc(business["uid"])
-        .update({"isApproved": false});
+    try {
+      await FirebaseFirestore.instance
+          .collection("Businesses")
+          .doc(business["uid"])
+          .set(business);
+      await FirebaseFirestore.instance
+          .collection("Businesses")
+          .doc(business["uid"])
+          .update({"isApproved": false});
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future addBusinessSlot(

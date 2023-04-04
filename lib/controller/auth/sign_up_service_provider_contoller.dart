@@ -229,7 +229,7 @@ class SignUpServiceProviderController extends GetxController {
       bankName: '',
     );
     var businessJSON = business!.toJson();
-    businessJSON["pinCode"] = pincodeController.value;
+    businessJSON["pinCode"] = pincodeController.text;
     await LoginService()
         .addUserServiceProvider(userNameController.text, serviceProvider);
     await LoginService().addBusiness(businessJSON).whenComplete(() async {
@@ -271,7 +271,7 @@ class SignUpServiceProviderController extends GetxController {
       bankName: '',
     );
     var businessJSON = business!.toJson();
-    businessJSON["pinCode"] = pincodeController.value;
+    businessJSON["pinCode"] = pincodeController.text;
     await LoginService()
         .addUserServiceProvider(userNameController.text, serviceProvider);
     await LoginService().addBusiness(businessJSON).whenComplete(() async {
@@ -321,7 +321,7 @@ class SignUpServiceProviderController extends GetxController {
     );
     var businessJSON = business!.toJson();
     businessJSON["gstRegisteredStatus"] = isGstRegistered.value;
-    businessJSON["pinCode"] = pincodeController.value;
+    businessJSON["pinCode"] = pincodeController.text;
     await LoginService()
         .addUserServiceProvider(userNameController.text, serviceProvider);
     await LoginService().addBusiness(businessJSON).whenComplete(() async {

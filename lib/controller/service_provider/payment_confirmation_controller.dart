@@ -108,7 +108,7 @@ class PaymentConfirmationController extends GetxController {
       homePageController.userData.value.uid.toString(),
       homePageController.userData.value.phoneNumber.toString(),
       "Service Provider one time payment",
-      double.parse("20"),
+      double.parse("1"),
       orderId,
     );
 
