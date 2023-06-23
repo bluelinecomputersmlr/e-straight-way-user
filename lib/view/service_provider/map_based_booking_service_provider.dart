@@ -671,6 +671,20 @@ class MapBasedBookingSignUpServiceProviderPage extends StatelessWidget {
                                     .setGstRegistered(value.toString());
                               },
                             ),
+                            if (loginController.isGstRegistered.value == "Registered Under GST")
+                              MyTextFormField(
+                                controller: loginController.gstController,
+                                keyboardtype: TextInputType.name,
+                                maxText: 30,
+                                heading: "Gst number",
+                                hintText: "xxxxxxxxxxxxxxxx",
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Enter Your Gst number";
+                                  }
+                                  return null;
+                                },
+                              ),
                             RadioListTile(
                               title: Text(
                                 "Unregistered",

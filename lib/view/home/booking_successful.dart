@@ -1,4 +1,11 @@
+import 'dart:developer';
+
 import 'package:estraightwayapp/constants.dart';
+import 'package:estraightwayapp/controller/home/business_controller.dart';
+import 'package:estraightwayapp/model/business_model.dart';
+import 'package:estraightwayapp/notification_service.dart';
+import 'package:estraightwayapp/service/home/business_service.dart';
+import 'package:estraightwayapp/service/service_provider/shared_preference_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,8 +13,20 @@ import 'package:get/get.dart';
 
 import 'package:lottie/lottie.dart';
 
-class BookingSuccesfulPage extends StatelessWidget {
+class BookingSuccesfulPage extends StatefulWidget {
   const BookingSuccesfulPage({super.key});
+
+  @override
+  State<BookingSuccesfulPage> createState() => _BookingSuccesfulPageState();
+}
+
+class _BookingSuccesfulPageState extends State<BookingSuccesfulPage> {
+
+  @override
+  void initState() {
+    sendNotifications();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,5 +81,16 @@ class BookingSuccesfulPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> sendNotifications() async {
+    var response = BusinessServices().getBusiness(await getPrefStringValue('subCategoryUID') ?? '', '');
+    response.forEach((element) {
+      for (BusinessModel elements in element ?? []) {
+        if (elements.businessFcmToken != null && elements.businessFcmToken!.isNotEmpty) {
+          NotificationService.instance.sendNotification(elements.businessFcmToken, "Your have a new Service request");
+        }
+      }
+    });
   }
 }

@@ -248,41 +248,44 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(
-                      decoration: kGradientBoxDecoration,
-                      child: Padding(
-                        padding: const EdgeInsets.all(1),
-                        child: Container(
-                          width: .28.sw,
-                          height: .5.sw,
-                          decoration: const BoxDecoration(
-                            color: Color(0xffe9effd),
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20)),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Help Desk',
-                                style: GoogleFonts.inter(
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400,
+                    InkWell(
+                      onTap: () async => Get.toNamed('/helpdesk'),
+                      child: Container(
+                        decoration: kGradientBoxDecoration,
+                        child: Padding(
+                          padding: const EdgeInsets.all(1),
+                          child: Container(
+                            width: .28.sw,
+                            height: .5.sw,
+                            decoration: const BoxDecoration(
+                              color: Color(0xffe9effd),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20)),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Help Desk',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Image.asset(
-                                'assets/icons/help_desk_icon.png',
-                                fit: BoxFit.fitWidth,
-                                width: .3.sw,
-                              )
-                            ],
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Image.asset(
+                                  'assets/icons/help_desk_icon.png',
+                                  fit: BoxFit.fitWidth,
+                                  width: .3.sw,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -350,59 +353,53 @@ class ProfilePage extends StatelessWidget {
                     )
                   : Container()),
               (profilePageController.userData.value.lastLoggedAsUser == true)
-                  ? (profilePageController
-                              .userData.value.isServiceProviderRegistered ==
-                          true)
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: GestureDetector(
-                            onTap: () async {
-                              var data = {"lastLoggedAsUser": false};
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: GestureDetector(
+                        onTap: () async {
+                          var data = {"lastLoggedAsUser": false};
 
-                              await UserServices().updateUserData(
-                                  FirebaseAuth.instance.currentUser!.uid, data);
+                          await UserServices().updateUserData(FirebaseAuth.instance.currentUser!.uid, data);
 
-                              Get.offAllNamed("/homeServiceProviderPage");
-                            },
-                            child: Container(
-                              height: .15.sw,
-                              width: 1.sw,
-                              decoration: const BoxDecoration(
-                                  color: Color(0xfff8faff),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20))),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Switch to Service Provider',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 16,
-                                        color: kPrimaryColor,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
+                          Get.offAllNamed(
+                            profilePageController.userData.value.isServiceProviderRegistered == false
+                                ? 'signUpServiceProvider'
+                                : "/homeServiceProviderPage",
+                          );
+                        },
+                        child: Container(
+                          height: .15.sw,
+                          width: 1.sw,
+                          decoration: const BoxDecoration(
+                              color: Color(0xfff8faff), borderRadius: BorderRadius.all(Radius.circular(20))),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Switch to Service Provider',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    color: kPrimaryColor,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                              ),
+                              ],
                             ),
                           ),
-                        )
-                      : Container()
+                        ),
+                      ),
+                    )
                   : Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: GestureDetector(
                         onTap: () async {
                           var data = {"lastLoggedAsUser": true};
 
-                          await UserServices().updateUserData(
-                              FirebaseAuth.instance.currentUser!.uid, data);
+                          await UserServices().updateUserData(FirebaseAuth.instance.currentUser!.uid, data);
 
                           Get.offAllNamed("/home");
                         },
@@ -410,12 +407,9 @@ class ProfilePage extends StatelessWidget {
                           height: .15.sw,
                           width: 1.sw,
                           decoration: const BoxDecoration(
-                              color: Color(0xfff8faff),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
+                              color: Color(0xfff8faff), borderRadius: BorderRadius.all(Radius.circular(20))),
                           child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,

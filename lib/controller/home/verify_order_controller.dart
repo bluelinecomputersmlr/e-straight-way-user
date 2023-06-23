@@ -72,7 +72,8 @@ class VerifyOrderController extends GetxController {
     return LatLng(_locationData.latitude!, _locationData.longitude!);
   }
 
-  void loadData() async {
+  Future<void> loadData() async {
+    print('Loaddata --> ');
     selectedOrder["uid"] = Get.parameters["uid"];
     selectedOrder["businessImage"] = Get.parameters["businessImage"];
     selectedOrder["price"] = Get.parameters["price"];
@@ -81,7 +82,7 @@ class VerifyOrderController extends GetxController {
     selectedOrder["bookingDate"] = Get.parameters["bookingDate"];
     selectedOrder["businessContactNumber"] =
         Get.parameters["businessContactNumber"];
-    selectedOrder["tokenAdvance"] = Get.parameters["tokenAdvance"];
+    selectedOrder["tokenAdvance"] = Get.parameters["tokenAdvance"] ?? 0;
 
     var userData = await HomePageService().getUserData();
 
@@ -120,6 +121,7 @@ class VerifyOrderController extends GetxController {
       bookingData["status"] = "Requested";
       bookingData["location"] = location.data;
     }
+    refresh();
   }
 
   void toggleWalletPaymentOption(bool value) {
@@ -131,14 +133,14 @@ class VerifyOrderController extends GetxController {
     var response = await BusinessServices().bookService(bookingData);
 
     if (response["status"] == "success") {
-      sendNotification(
+     /* sendNotification(
           bookingData["businessId"],
           "You have new Service Booking",
           "${bookingData["userName"]} has booked a Service",
-          true);
+          true);*/
       final snackBar = SnackBar(
         content: const Text(
-          "Order Place Successfuly!",
+          "Order Place Successfully!",
         ),
         action: SnackBarAction(
           label: 'Okay',
@@ -247,11 +249,11 @@ class VerifyOrderController extends GetxController {
     var response = await BusinessServices().bookService(bookingData);
 
     if (response["status"] == "success") {
-      sendNotification(
+    /*  sendNotification(
           bookingData["businessId"],
           "You have new Service Booking",
           "${bookingData["userName"]} has booked a Service",
-          true);
+          true);*/
       final snackBar = SnackBar(
         content: const Text(
           "Order Place Successfuly!",
@@ -324,6 +326,7 @@ class VerifyOrderController extends GetxController {
   pay(BuildContext contextParam) async {
     context = contextParam;
     loadingDialogWidget(context);
+    print('bookingData --> $bookingData');
     var order = await BusinessServices().createOrder(
       bookingData["userName"],
       bookingData["userId"],
@@ -356,6 +359,10 @@ class VerifyOrderController extends GetxController {
             .build();
 
         cfPaymentGatewayService.doPayment(cfDropCheckoutPayment);
+
+        /// ----------- Jemin -----------
+        // var response = await BusinessServices().bookService(bookingData);
+
       } on CFException catch (e) {
         print(e.message);
       }

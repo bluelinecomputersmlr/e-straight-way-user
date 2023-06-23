@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:estraightwayapp/controller/service_provider/select_location_controller.dart';
 import 'package:estraightwayapp/service/service_provider/location_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -95,8 +97,9 @@ void updateLocation(
   controller.toggleLoading(true);
   var response = await LocationService().updateBusinessLocation(
       FirebaseAuth.instance.currentUser!.uid, controller.position.value);
-
+log("----data--- $response");
   if (response["status"] == "success") {
+log("----data--- $response");
     Get.toNamed("/homeServiceProviderPage");
   } else {
     final snackBar = SnackBar(

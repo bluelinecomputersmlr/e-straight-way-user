@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:estraightwayapp/controller/home/home_service_provider_contoller.dart';
 import 'package:estraightwayapp/controller/service_provider/new_booking_controller.dart';
 import 'package:estraightwayapp/helper/send_notification.dart';
@@ -163,7 +165,7 @@ class NewBookings extends StatelessWidget {
                                             .value
                                             .serviceProviderDetails!
                                             .businessType ==
-                                        "map") {
+                                        "maps") {
                                       data = {
                                         "businessId": homePageController
                                             .userData
@@ -173,6 +175,9 @@ class NewBookings extends StatelessWidget {
                                         "businessContactNumber":
                                             homePageController
                                                 .userData.value.phoneNumber,
+                                        "businessImage": homePageController
+                                                .businessResponse['data']
+                                            ['businessImage'],
                                         "isServiceProviderAccepted": true,
                                         "acceptedDate": DateTime.now(),
                                         "status": "Approved",
@@ -212,32 +217,20 @@ class NewBookings extends StatelessWidget {
                                 const SizedBox(
                                   height: 20.0,
                                 ),
-                                (homePageController
-                                            .userData
-                                            .value
-                                            .serviceProviderDetails!
-                                            .businessType !=
-                                        "map")
+                                (homePageController.userData.value.serviceProviderDetails!.businessType != "map")
                                     ? GestureDetector(
                                         onTap: () async {
-                                          var bookingId =
-                                              snapshot.data![index]["id"];
+                                          String bookingId = snapshot.data![index]["id"];
                                           var data = {
                                             "isServiceProviderAccepted": false,
                                             "isRejected": true,
                                             "rejectedDate": DateTime.now(),
                                             "status": "Rejected",
                                           };
-                                          await BusinessServices()
-                                              .updateBookingsData(
-                                                  bookingId, data);
+                                          await BusinessServices().updateBookingsData(bookingId, data);
                                           await BusinessServices().refundMoney(
                                             snapshot.data![index]["userId"],
-                                            int.parse(
-                                              snapshot.data![index]
-                                                      ["basicChargePaid"]
-                                                  .toString(),
-                                            ),
+                                            int.parse(snapshot.data![index]["basicChargePaid"].toString()),
                                           );
                                           sendNotification(
                                             snapshot.data![index]["userId"],
@@ -250,14 +243,12 @@ class NewBookings extends StatelessWidget {
                                           height: 40.0,
                                           decoration: BoxDecoration(
                                             color: Colors.red,
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
+                                            borderRadius: BorderRadius.circular(20.0),
                                           ),
                                           child: Center(
                                             child: Text(
                                               "Cancel Request",
-                                              style: GoogleFonts.inter(
-                                                  color: Colors.white),
+                                              style: GoogleFonts.inter(color: Colors.white),
                                             ),
                                           ),
                                         ),

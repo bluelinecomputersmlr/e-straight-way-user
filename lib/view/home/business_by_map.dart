@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../payment/paymentInitiationPage.dart';
+import 'booking_successful.dart';
 
 class BusinessByMap extends StatefulWidget {
   const BusinessByMap({Key? key}) : super(key: key);
@@ -24,12 +25,20 @@ class BusinessByMap extends StatefulWidget {
 }
 
 class _BusinessByMapState extends State<BusinessByMap> {
+
+  @override
+  void initState() {
+    final businessController = Get.put(BusinessController());
+    businessController.getLocationAndCreateMap();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final businessController = Get.put(BusinessController());
 
-    NumberFormat formatCurrency = NumberFormat.simpleCurrency(
-        locale: Platform.localeName, name: 'INR', decimalDigits: 0);
+
+    NumberFormat formatCurrency = NumberFormat.simpleCurrency(locale: Platform.localeName, name: 'INR', decimalDigits: 0);
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: Padding(
@@ -127,7 +136,7 @@ class _BusinessByMapState extends State<BusinessByMap> {
                                                                 .paymentOptions
                                                                 .first['method'] ==
                                                             'netbanking'
-                                                        ? Icon(Icons.account_balance)
+                                                        ? const Icon(Icons.account_balance)
                                                         : businessController.paymentOptions.first['method'] == 'wallet'
                                                             ? businessController.walletLogo != null
                                                                 ? Image.network(
@@ -140,8 +149,8 @@ class _BusinessByMapState extends State<BusinessByMap> {
                                                                     height:
                                                                         0.15.sw,
                                                                   )
-                                                                : Icon(Icons.account_balance_wallet_rounded)
-                                                            : Text(
+                                                                : const Icon(Icons.account_balance_wallet_rounded)
+                                                            : const Text(
                                                                 "Choose\npayment\nmethod",
                                                                 textAlign:
                                                                     TextAlign
@@ -160,6 +169,8 @@ class _BusinessByMapState extends State<BusinessByMap> {
                 child: GestureDetector(
                   onTap: () async {
                     // if (businessController.selectedBusiness.value.uid != null) {
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => BookingSuccesfulPage(),));
+                    /// ==== jemin =======
                     Get.toNamed(
                       '/verifyOrder',
                       parameters: {
@@ -175,6 +186,7 @@ class _BusinessByMapState extends State<BusinessByMap> {
                         "bookingDate": DateTime.now().toString(),
                       },
                     );
+                     /// ====
                     // }
                     // businessController.paymentOptions.first['amount'] = 1 * 100;
                     // if (businessController.paymentOptions.first['method'] ==
@@ -228,45 +240,34 @@ class _BusinessByMapState extends State<BusinessByMap> {
         preferredSize: Size.fromHeight(.7.sw),
         child: Stack(
           children: [
-            Obx(
-              () => StreamBuilder(
-                  stream: businessController.getBusiness(),
-                  builder:
-                      (context, AsyncSnapshot<List<BusinessModel>?> snapshot) {
-                    return GoogleMap(
-                      mapType: MapType.terrain,
-                      initialCameraPosition: CameraPosition(
-                        target:
-                            businessController.initalMapCameraPosition.value,
-                        zoom: 14.4746,
-                      ),
-                      onMapCreated: (GoogleMapController controller) {
-                        businessController.mapController.complete(controller);
-                      },
-                      markers: (snapshot.hasData)
-                          ? snapshot.data!
-                              .map(
-                                (e) => (e.location != null)
-                                    ? Marker(
-                                        markerId: MarkerId(
-                                          '${e.location!["geopoint"].latitude}-${e.location!["geopoint"].longitude}',
-                                        ),
-                                        position: LatLng(
-                                          e.location!["geopoint"].latitude,
-                                          e.location!["geopoint"].longitude,
-                                        ),
-                                      )
-                                    : Marker(
-                                        markerId: MarkerId(const Uuid().v4()),
-                                      ),
-                              )
-                              .toSet()
-                          : {},
-                      myLocationButtonEnabled: true,
-                      myLocationEnabled: true,
-                      zoomControlsEnabled: false,
-                    );
-                  }),
+            StreamBuilder(
+              stream: businessController.getBusiness(),
+              builder: (context, AsyncSnapshot<List<BusinessModel>?> snapshot) {
+                return GoogleMap(
+                  mapType: MapType.terrain,
+                  initialCameraPosition: CameraPosition(
+                    target: businessController.initalMapCameraPosition!.value,
+                    zoom: 14.4746,
+                  ),
+                  onMapCreated: (GoogleMapController controller) {
+                    businessController.mapController.complete(controller);
+                  },
+                  markers: (snapshot.hasData)
+                      ? snapshot.data!
+                          .map(
+                            (e) => (e.location != null && e.phoneNumber.toString() != businessController.phoneNumber.toString())
+                                ? Marker(
+                                    markerId: MarkerId('${e.location!["geopoint"].latitude}-${e.location!["geopoint"].longitude}'),
+                                    position: LatLng(e.location!["geopoint"].latitude, e.location!["geopoint"].longitude),
+                                  )
+                                : Marker(markerId: MarkerId(const Uuid().v4())),
+                          ).toSet()
+                      : {},
+                  myLocationButtonEnabled: true,
+                  myLocationEnabled: true,
+                  zoomControlsEnabled: false,
+                );
+              },
             ),
             ClipPath(
               clipper: CustomShapeClipper(),
@@ -313,222 +314,186 @@ class _BusinessByMapState extends State<BusinessByMap> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 20.0),
-        child: Container(
-          child: CustomLoadingIndicator(
-            isBusy: businessController.isLoading.isTrue,
-            hasError: businessController.isError.isTrue,
-            child: StreamBuilder(
-              stream: businessController.getBusiness(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<BusinessModel>?> snapshot) {
-                if (snapshot.hasData) {
-                  print("**********************************");
-                  print(snapshot.data!.toList());
-                  return (snapshot.data!.isEmpty)
-                      ? Center(
-                          child: Text(
-                            "No service found",
-                            style: GoogleFonts.inter(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                            ),
+        child: CustomLoadingIndicator(
+          isBusy: businessController.isLoading.isTrue,
+          hasError: businessController.isError.isTrue,
+          child: StreamBuilder(
+            stream: businessController.getBusiness(),
+            builder: (BuildContext context,
+                AsyncSnapshot<List<BusinessModel>?> snapshot) {
+              if (snapshot.hasData) {
+                print("**********************************");
+                print(snapshot.data!.toList());
+                return (snapshot.data!.isEmpty)
+                    ? Center(
+                        child: Text(
+                          "No service found",
+                          style: GoogleFonts.inter(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
                           ),
-                        )
-                      : ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            print(snapshot.data);
-                            return Obx(
-                              () => Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0, vertical: 4),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    businessController.selectedBusiness(
-                                        snapshot.data![index]);
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        border: Border.all(
-                                            color: businessController
-                                                        .selectedBusiness
-                                                        .value
-                                                        .uid ==
-                                                    snapshot.data![index].uid
-                                                ? kPrimaryColor
-                                                : Colors.grey.withOpacity(0.5),
-                                            width: 2)),
-                                    child: Row(
-                                      children: [
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Container(
-                                          width: 60,
-                                          height: 60,
-                                          clipBehavior: Clip.hardEdge,
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          print(snapshot.data);
+                          return (snapshot.data![index].phoneNumber.toString() == businessController.phoneNumber.toString())
+                              ? Container()
+                              : Obx(
+                                  () {
+                                    print("==>${businessController.phoneNumber.toString()}");
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          // businessController.selectedBusiness(
+                                          //     snapshot.data![index]);
+                                        },
+                                        child: Container(
                                           decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.white,
-                                            image: (snapshot.data![index]
-                                                        .businessImage !=
-                                                    null)
-                                                ? DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    image:
-                                                        CachedNetworkImageProvider(
-                                                      snapshot.data![index]
-                                                          .businessImage!,
-                                                    ),
-                                                  )
-                                                : null,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        SizedBox(
-                                          width: .4.sw,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                              borderRadius: BorderRadius.circular(15),
+                                              border: Border.all(
+                                                  color: businessController.selectedBusiness.value.uid ==
+                                                          snapshot.data![index].uid
+                                                      ? kPrimaryColor
+                                                      : Colors.grey.withOpacity(0.5),
+                                                  width: 2)),
+                                          child: Row(
                                             children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  snapshot.data![index]
-                                                      .businessName!,
-                                                  style: GoogleFonts.inter(
-                                                    fontSize: 15,
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
+                                              const SizedBox(
+                                                width: 10,
                                               ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  "Experience ${snapshot.data![index].experience!} years",
-                                                  style: GoogleFonts.inter(
-                                                    fontSize: 12,
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Container(
-                                                    width: 50,
-                                                    decoration: BoxDecoration(
-                                                      color: kPrimaryColor,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                    ),
-                                                    child: Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 8.0,
-                                                          vertical: 2),
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                            snapshot
-                                                                        .data![
-                                                                            index]
-                                                                        .rating ==
-                                                                    null
-                                                                ? "0"
-                                                                : snapshot
-                                                                    .data![
-                                                                        index]
-                                                                    .rating
-                                                                    .toString(),
-                                                            style: GoogleFonts
-                                                                .inter(
-                                                              fontSize: 12,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                            ),
+                                              Container(
+                                                width: 60,
+                                                height: 60,
+                                                clipBehavior: Clip.hardEdge,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.white,
+                                                  image: (snapshot.data![index].businessImage != null)
+                                                      ? DecorationImage(
+                                                          fit: BoxFit.cover,
+                                                          image: CachedNetworkImageProvider(
+                                                            snapshot.data![index].businessImage!,
                                                           ),
-                                                          const Icon(
-                                                            Icons.star,
-                                                            size: 15,
-                                                            color: Color(
-                                                                0xffFFC700),
-                                                          )
-                                                        ],
+                                                        )
+                                                      : null,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              SizedBox(
+                                                width: .4.sw,
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Text(
+                                                        snapshot.data![index].businessName!,
+                                                        style: GoogleFonts.inter(
+                                                          fontSize: 15,
+                                                          color: Colors.black,
+                                                          fontWeight: FontWeight.w400,
+                                                        ),
                                                       ),
-                                                    )),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Text(
+                                                        "Experience ${snapshot.data![index].experience!} years",
+                                                        style: GoogleFonts.inter(
+                                                          fontSize: 12,
+                                                          color: Colors.black,
+                                                          fontWeight: FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Container(
+                                                        width: snapshot.data![index].rating == null ? 42 : 50,
+                                                        decoration: BoxDecoration(
+                                                          color: kPrimaryColor,
+                                                          borderRadius: BorderRadius.circular(50),
+                                                        ),
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
+                                                          child: Row(
+                                                            children: [
+                                                              Text(
+                                                                snapshot.data![index].rating == null
+                                                                    ? "0"
+                                                                    : snapshot.data![index].rating.toString(),
+                                                                style: GoogleFonts.inter(
+                                                                  fontSize: 12,
+                                                                  color: Colors.white,
+                                                                  fontWeight: FontWeight.w400,
+                                                                ),
+                                                              ),
+                                                              const SizedBox(width: 3),
+                                                              const Icon(Icons.star, size: 15, color: Color(0xffFFC700)),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Container(
+                                                width: .25.sw,
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                                      child: Text(
+                                                        "Basic Service charge",
+                                                        style: GoogleFonts.inter(
+                                                          fontSize: 10,
+                                                          color: Colors.grey,
+                                                          fontWeight: FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Text(
+                                                        formatCurrency.format(snapshot.data![index].serviceCharge!),
+                                                        style: GoogleFonts.inter(
+                                                          fontSize: 15,
+                                                          color: Colors.black,
+                                                          fontWeight: FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               )
                                             ],
                                           ),
                                         ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Container(
-                                          width: .25.sw,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
-                                                child: Text(
-                                                  "Basic Service charge",
-                                                  style: GoogleFonts.inter(
-                                                    fontSize: 10,
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  formatCurrency.format(snapshot
-                                                      .data![index]
-                                                      .serviceCharge!),
-                                                  style: GoogleFonts.inter(
-                                                    fontSize: 15,
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          });
-                } else if (snapshot.hasError) {
-                  return Container();
-                } else {
-                  return Container(
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
-            ),
+                                      ),
+                                    );
+                                  },
+                                );
+                        });
+              } else if (snapshot.hasError) {
+                return Container();
+              } else {
+                return Container(
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(),
+                );
+              }
+            },
           ),
         ),
       ),

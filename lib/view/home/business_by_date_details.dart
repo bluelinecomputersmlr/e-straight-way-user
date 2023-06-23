@@ -572,33 +572,33 @@ class _BusinessesByDateDetailsPageState
               );
             },
           ),
-          Row(
-            children: [
-              Checkbox(
-                value: true,
-                onChanged: (val) {},
-                checkColor: kPrimaryColor,
-                fillColor: MaterialStateProperty.resolveWith((Set states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return Colors.white;
-                  }
-                  return Colors.white;
-                }),
-                side: MaterialStateBorderSide.resolveWith(
-                  (states) =>
-                      const BorderSide(width: 1.0, color: kPrimaryColor),
-                ),
-              ),
-              Text(
-                "I agree, to all the Terms & Conditions",
-                style: GoogleFonts.inter(
-                  fontSize: 14,
-                  color: kPrimaryColor,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     Checkbox(
+          //       value: true,
+          //       onChanged: (val) {},
+          //       checkColor: kPrimaryColor,
+          //       fillColor: MaterialStateProperty.resolveWith((Set states) {
+          //         if (states.contains(MaterialState.disabled)) {
+          //           return Colors.white;
+          //         }
+          //         return Colors.white;
+          //       }),
+          //       side: MaterialStateBorderSide.resolveWith(
+          //         (states) =>
+          //             const BorderSide(width: 1.0, color: kPrimaryColor),
+          //       ),
+          //     ),
+          //     Text(
+          //       "I agree, to all the Terms & Conditions",
+          //       style: GoogleFonts.inter(
+          //         fontSize: 14,
+          //         color: kPrimaryColor,
+          //         fontWeight: FontWeight.w400,
+          //       ),
+          //     ),
+          //   ],
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,

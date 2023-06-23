@@ -48,7 +48,7 @@ class DirectBookingSignUpServiceProviderPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Lottie.asset('assets/icons/loader1.json',
                         width: 1.sw, height: .6.sw),
                     Text(
@@ -199,6 +199,7 @@ class DirectBookingSignUpServiceProviderPage extends StatelessWidget {
                           Container(
                             width: .55.sw,
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 MyTextFormField(
                                   controller:
@@ -316,7 +317,7 @@ class DirectBookingSignUpServiceProviderPage extends StatelessWidget {
                         isPassword: true,
                         validator: (String? value) {
                           String pattern = r"[0-9]{9,18}";
-                          RegExp regExp = new RegExp(pattern);
+                          RegExp regExp = RegExp(pattern);
                           if (value!.isEmpty) {
                             return 'Enter Your Account Number';
                           } else if (!regExp.hasMatch(value)) {
@@ -337,7 +338,7 @@ class DirectBookingSignUpServiceProviderPage extends StatelessWidget {
                         hintText: "IFDC00001111",
                         validator: (String? value) {
                           const pattern = r"^[A-Z]{4}0[A-Z0-9]{6}$";
-                          RegExp regExp = new RegExp(pattern);
+                          RegExp regExp = RegExp(pattern);
                           if (value!.isEmpty) {
                             return 'Enter IFSC Code';
                           } else if (!regExp.hasMatch(value)) {
@@ -349,7 +350,7 @@ class DirectBookingSignUpServiceProviderPage extends StatelessWidget {
                       MyTextFormField(
                         controller: loginController.upiIdController,
                         keyboardtype: TextInputType.name,
-                        maxText: 15,
+                        maxText: 30,
                         heading: "Upi ID",
                         hintText: "xxxx@xbank",
                         validator: (value) {
@@ -449,6 +450,16 @@ class DirectBookingSignUpServiceProviderPage extends StatelessWidget {
                           ),
                         ),
                       ),
+                      if (loginController.aadharPhoto.value.path.isNotEmpty) ...[
+                        Container(
+                          padding: const EdgeInsets.only(left: 16),
+                          alignment: Alignment.centerLeft,
+                          child: Image.file(
+                            loginController.aadharPhoto.value,
+                            height: 80,
+                          ),
+                        )
+                      ],
                       Obx(
                         () => Column(
                           children: [
@@ -463,10 +474,23 @@ class DirectBookingSignUpServiceProviderPage extends StatelessWidget {
                               value: "Registered Under GST",
                               groupValue: loginController.isGstRegistered.value,
                               onChanged: (value) {
-                                loginController
-                                    .setGstRegistered(value.toString());
+                                loginController.setGstRegistered(value.toString());
                               },
                             ),
+                            if (loginController.isGstRegistered.value == "Registered Under GST")
+                              MyTextFormField(
+                                controller: loginController.gstController,
+                                keyboardtype: TextInputType.name,
+                                maxText: 30,
+                                heading: "Gst number",
+                                hintText: "xxxxxxxxxxxxxxxx",
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Enter Your Gst number";
+                                  }
+                                  return null;
+                                },
+                              ),
                             RadioListTile(
                               title: Text(
                                 "Unregistered",

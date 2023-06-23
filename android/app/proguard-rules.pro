@@ -6,6 +6,10 @@
  -keep class io.flutter.** { *; }
  -keep class io.flutter.plugins.** { *; }
  -keep class com.google.firebase.** { *; }
+ -keep class androidx.media.** { *; }
+ -keep class com.google.android.exoplayer2.** { *; }
+ -keep class com.google.android.gms.** { *; }
+ -keep class com.google.android.material.** { *; }
  -dontwarn io.flutter.embedding.**
  -ignorewarnings
 

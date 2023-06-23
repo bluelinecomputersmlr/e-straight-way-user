@@ -1,11 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:estraightwayapp/model/business_model.dart';
 import 'package:estraightwayapp/model/sub_category_model.dart';
+import 'package:estraightwayapp/notification_service.dart';
 import 'package:estraightwayapp/service/home/business_service.dart';
+import 'package:estraightwayapp/service/location_service.dart';
+import 'package:estraightwayapp/service/service_provider/shared_preference_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -36,8 +41,7 @@ class BusinessController extends GetxController {
     }
   ].obs;
 
-  Rx<LatLng> initalMapCameraPosition =
-      LatLng(37.42796133580664, -122.085749655962).obs;
+  Rx<LatLng>? initalMapCameraPosition;
 
   final Completer<GoogleMapController> mapController =
       Completer<GoogleMapController>();
@@ -45,6 +49,7 @@ class BusinessController extends GetxController {
   late Razorpay _razorpay;
 
   String? walletLogo;
+  String ? phoneNumber = '';
 
   @override
   void onInit() {
@@ -52,22 +57,26 @@ class BusinessController extends GetxController {
     _razorpay.initilizeSDK('rzp_test_HjmiukVH13l5u3');
     notifyChildrens();
     getLocationAndCreateMap();
+    phoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber!.toString();
     super.onInit();
   }
 
-  Stream<List<BusinessModel>?> getBusiness() {
+  Stream<List<BusinessModel>?>? getBusiness() {
     isLoading(true);
     var id = Get.parameters["subCategoryUID"];
+    var pinCode = Get.parameters["pinCode"];
 
     // JUST FOR BACKUP
     subCategoryUID.value = id.toString();
 
     // REQUESTING FOR DATA
-    var response = BusinessServices()
-        .getBusiness(subCategoryUID.value, subCategory.subCategoryType);
+    var response = BusinessServices().getBusiness(subCategoryUID.value, subCategory.subCategoryType);
+    // BusinessServices().getBusinessRadius(subCategoryUID.value, subCategory.subCategoryType);
 
     // VERIFYING RESPONSE
     //   selectedBusiness.value = response.first;
+    setPrefStringValue('subCategoryUID', subCategoryUID.value);
+    getLocationAndCreateMap();
     selectedBusiness.update((val) {});
     isLoading(false);
     return response;
@@ -90,63 +99,37 @@ class BusinessController extends GetxController {
 
   // All about google maps
 
-  void getLocationAndCreateMap() async {
+  Future<void> getLocationAndCreateMap() async {
     Location location = Location();
 
-    bool serviceEnabled = false;
-    PermissionStatus permissionGranted;
-    LocationData locationData;
-
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        return;
-      }
+    bool isPermissionGranted = await SagarLocationService.instance.checkLocationPermission();
+    print('getLocationAndCreateMap isPermissionGranted --> $isPermissionGranted');
+    if (!isPermissionGranted) {
+      await getLocationAndCreateMap();
     }
+    Position currentPosition = await SagarLocationService.instance.getCurrentLocation();
+    print('getLocationAndCreateMap position --> ${currentPosition.toJson()}');
 
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
+    var longitude = currentPosition.longitude;
+    var latitude = currentPosition.latitude;
 
-    locationData = await location.getLocation();
-
-    var longitude = locationData.longitude!;
-    var latitude = locationData.latitude!;
-
-    initalMapCameraPosition.value = LatLng(
-      latitude,
-      longitude,
-    );
-
+    initalMapCameraPosition = LatLng(latitude, longitude).obs;
+    log('getLocationAndCreateMap Initial --> $initalMapCameraPosition');
     final GoogleMapController controller = await mapController.future;
     controller.moveCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: LatLng(
-            latitude,
-            longitude,
-          ),
-          zoom: 14.4746,
-        ),
-      ),
+      CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(latitude, longitude), zoom: 14.4746)),
     );
 
-    location.onLocationChanged.listen((newLoc) {
-      longitude = newLoc.longitude!;
-      latitude = newLoc.latitude!;
+    location.onLocationChanged.listen(
+      (newLoc) {
+        longitude = newLoc.longitude ?? 0;
+        latitude = newLoc.latitude ?? 0;
 
-      controller.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: LatLng(newLoc.latitude!, newLoc.longitude!),
-            zoom: 13.4746,
-          ),
-        ),
-      );
-    });
+        controller.animateCamera(
+          CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(newLoc.latitude!, newLoc.longitude!), zoom: 13.4746)),
+        );
+      },
+    );
+    refresh();
   }
 }

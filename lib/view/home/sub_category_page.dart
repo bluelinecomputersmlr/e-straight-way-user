@@ -28,7 +28,7 @@ class SubCategoryPage extends StatelessWidget {
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
+                          colorFilter: const ColorFilter.mode(
                               Colors.black26, BlendMode.darken),
                           image: CachedNetworkImageProvider(
                               subCategoryController.category.photoUrl!))),
@@ -90,18 +90,13 @@ class SubCategoryPage extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () {
                           if (snapshot.data![index].subCategoryType == "date") {
-                            Get.toNamed(
-                                '/businessByDate?subCategoryUID=${snapshot.data![index].uid}',
+                            Get.toNamed('/businessByDate?subCategoryUID=${snapshot.data![index].uid}',
                                 arguments: snapshot.data![index]);
-                          } else if (snapshot.data![index].subCategoryType ==
-                              "service") {
-                            Get.toNamed(
-                                '/businessByService?subCategoryUID=${snapshot.data![index].uid}',
+                          } else if (snapshot.data![index].subCategoryType == "service") {
+                            Get.toNamed('/businessByService?subCategoryUID=${snapshot.data![index].uid}',
                                 arguments: snapshot.data![index]);
-                          } else if (snapshot.data![index].subCategoryType ==
-                              "map") {
-                            Get.toNamed(
-                                '/businessByMap?subCategoryUID=${snapshot.data![index].uid}',
+                          } else if (snapshot.data![index].subCategoryType == "maps") {
+                            Get.toNamed('/businessByMap?subCategoryUID=${snapshot.data![index].uid}',
                                 arguments: snapshot.data![index]);
                           }
                         },
@@ -133,7 +128,7 @@ class SubCategoryPage extends StatelessWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    snapshot.data![index].subCategoryName!,
+                                    snapshot.data![index].subCategoryName ?? '',
                                     style: GoogleFonts.inter(
                                       fontSize: 14,
                                       color: Colors.black,

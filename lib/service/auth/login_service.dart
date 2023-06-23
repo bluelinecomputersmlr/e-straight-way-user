@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,11 +14,11 @@ import 'package:get/get.dart';
 class LoginService extends GetConnect {
   Future loginUser() async {
     try {
+      print('Uid --> ${FirebaseAuth.instance.currentUser!.uid}');
       var response = await FirebaseFirestore.instance
           .collection("straightWayUsers")
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get();
-
       if (response.data() != null) {
         updateToken();
         return {"status": "success", "user": response.data()};
@@ -84,6 +85,7 @@ class LoginService extends GetConnect {
         codeAutoRetrievalTimeout: (String verificationId) {},
       );
     } catch (e) {
+      log('error 1 :: $e');
       return {"status": "error", "message": "Some unknown error occurred"};
     }
   }
@@ -98,9 +100,12 @@ class LoginService extends GetConnect {
       if (credentials.user != null) {
         return {"status": "success", "credentials": credentials};
       }
+
       return {"status": "error", "message": "Some unknown error occurred"};
     } on FirebaseAuthException catch (e) {
-      return {"status": "error", "message": "Some unknown error occurred"};
+      log('error 2 :: $e');
+
+      // return {"status": "error", "message": "Some unknown error occurred"};
     }
   }
 
@@ -141,28 +146,20 @@ class LoginService extends GetConnect {
   }
 
   updateUser([bool? isServiceProvider]) {
-    FirebaseFirestore.instance
-        .collection("straightWayUsers")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .set({
-      'lastOpenDate': Timestamp.now(),
-      'lastLoggedAsUser': isServiceProvider == true ? false : true
-    }, SetOptions(merge: true));
+    FirebaseFirestore.instance.collection("straightWayUsers").doc(FirebaseAuth.instance.currentUser!.uid).set(
+        {'lastOpenDate': Timestamp.now(), 'lastLoggedAsUser': isServiceProvider == true ? false : true},
+        SetOptions(merge: true));
   }
 
   Future addBusiness(business) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection("Businesses")
-          .doc(business["uid"])
-          .set(business);
-      await FirebaseFirestore.instance
-          .collection("Businesses")
-          .doc(business["uid"])
-          .update({"isApproved": false});
-    } catch (e) {
-      print(e);
-    }
+    await FirebaseFirestore.instance
+        .collection("Businesses")
+        .doc(business["uid"])
+        .set(business, SetOptions(merge: true));
+    await FirebaseFirestore.instance
+        .collection("Businesses")
+        .doc(business["uid"])
+        .update({"isApproved": false});
   }
 
   Future addBusinessSlot(

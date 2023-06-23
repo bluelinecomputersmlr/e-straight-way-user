@@ -14,6 +14,104 @@
       },
       "oauth_client": [
         {
+          "client_id": "588813054756-0ntoap2bp7koksje3krcaldjei90h4b2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.estraightway.estraightwayapp",
+            "certificate_hash": "8857307c070ded7d98940dc36a44b5150b497abe"
+          }
+        },
+        {
+          "client_id": "588813054756-2b3dqcmeolpj4hvad4hd0htbc3b7h3c3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.estraightway.estraightwayapp",
+            "certificate_hash": "f536473df7b876dc9f00ae4b7666eeb6fde243af"
+          }
+        },
+        {
+          "client_id": "588813054756-78jnos87ual37n3dqn7a6nhkqst45a2h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.estraightway.estraightwayapp",
+            "certificate_hash": "041918618d08735b92ade1f0d6351eaa7ab11bf9"
+          }
+        },
+        {
+          "client_id": "588813054756-amu3ino4lt45b7bi7t2g8tv87f10vc49.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.estraightway.estraightwayapp",
+            "certificate_hash": "43ca2570b627c608ce77660e2ccdb1e5927092f7"
+          }
+        },
+        {
+          "client_id": "588813054756-dij13lkgrns4d4gafhdalk6st0j992hr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.estraightway.estraightwayapp",
+            "certificate_hash": "97822dd60516ba4c237752a97a50a657f4e07859"
+          }
+        },
+        {
+          "client_id": "588813054756-6kdalf80la4ta00g5582ss746l1no9ut.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-8BN-8UP0frkeUxmn5HKqxu8Ec_wwwho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "588813054756-6kdalf80la4ta00g5582ss746l1no9ut.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588813054756:android:03be090abb76249f3f39b1",
+        "android_client_info": {
+          "package_name": "com.example.estraightwayadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "588813054756-6kdalf80la4ta00g5582ss746l1no9ut.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-8BN-8UP0frkeUxmn5HKqxu8Ec_wwwho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "588813054756-6kdalf80la4ta00g5582ss746l1no9ut.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588813054756:android:276aabc91543bc663f39b1",
+        "android_client_info": {
+          "package_name": "com.example.estraightwaysubadmin"
+        }
+      },
+      "oauth_client": [
+        {
           "client_id": "588813054756-6kdalf80la4ta00g5582ss746l1no9ut.apps.googleusercontent.com",
           "client_type": 3
         }

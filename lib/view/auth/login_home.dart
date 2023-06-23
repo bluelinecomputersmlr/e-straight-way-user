@@ -4,11 +4,16 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../controller/home/home_controller.dart';
+
 class LoginHomePage extends StatelessWidget {
   const LoginHomePage({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
+    var homePageController = Get.put(HomePageController());
+
     return Scaffold(
       body: Stack(
         children: [

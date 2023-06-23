@@ -89,14 +89,13 @@ class AddMoneyController extends GetxController {
   }
 
 //Starting payment gateway
-  pay(BuildContext contextParam, Map transData, Map walData,
-      Map userDataParam) async {
+  pay(BuildContext contextParam, Map transData, Map walData, Map userDataParam) async {
     context = contextParam;
     transactionData = transData;
     walletData = walData;
     userData = userDataParam;
 
-    var order = await BusinessServices().createOrder(
+    Map order = await BusinessServices().createOrder(
       userDataParam["userName"],
       userDataParam["userId"],
       userDataParam["phoneNumber"],
@@ -107,14 +106,14 @@ class AddMoneyController extends GetxController {
       orderId,
     );
 
+    print('Order response --> $order');
     if (order["status"] == "success") {
       paymentSessionId = order["data"]["payment_session_id"];
       orderId = order["data"]["order_id"];
       try {
         var session = createSession();
         List<CFPaymentModes> components = <CFPaymentModes>[];
-        var paymentComponent =
-            CFPaymentComponentBuilder().setComponents(components).build();
+        var paymentComponent = CFPaymentComponentBuilder().setComponents(components).build();
 
         var theme = CFThemeBuilder()
             .setNavigationBarBackgroundColorColor("#5B8CFB")

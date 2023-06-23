@@ -54,6 +54,8 @@ ServiceProviderModel _$ServiceProviderModelFromJson(
       ifscCode: json['ifscCode'] as String?,
       aadharDocument: json['aadharDocument'] as String?,
       drivingLicenceDocument: json['drivingLicenceDocument'] as String?,
+      gstNumber: json['gstNumber'] as String?,
+      isInitialPaymentDone: json['isInitialPaymentDone'] as bool?,
       vehicleRegistrationDocument:
           json['vehicleRegistrationDocument'] as String?,
     );
@@ -74,5 +76,7 @@ Map<String, dynamic> _$ServiceProviderModelToJson(
       'ifscCode': instance.ifscCode,
       'aadharDocument': instance.aadharDocument,
       'drivingLicenceDocument': instance.drivingLicenceDocument,
+      'gstNumber': instance.gstNumber,
       'vehicleRegistrationDocument': instance.vehicleRegistrationDocument,
+      'isInitialPaymentDone': instance.isInitialPaymentDone,
     };

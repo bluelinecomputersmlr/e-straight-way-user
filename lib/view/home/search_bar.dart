@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SearchBar extends SearchDelegate {
+class SearchBar1 extends SearchDelegate {
   final homePageController = Get.put(HomePageController());
-  SearchBar()
+  SearchBar1()
       : super(
           searchFieldLabel: "Search Service",
           searchFieldStyle: GoogleFonts.inter(
@@ -127,15 +127,21 @@ class SearchBar extends SearchDelegate {
                       onTap: () {
                         if (subCategoryList[index].subCategoryType == "date") {
                           Get.toNamed(
-                              '/businessByDate?subCategoryUID=${subCategoryList[index].uid}',
-                              arguments: subCategoryList[index]);
+                            '/businessByDate?subCategoryUID=${subCategoryList[index].uid}',
+                            arguments: subCategoryList[index],
+                          );
                         } else if (subCategoryList[index].subCategoryType ==
                             "service") {
                           Get.toNamed(
-                              '/businessByService?subCategoryUID=${subCategoryList[index].uid}',
-                              arguments: subCategoryList[index]);
+                            '/businessByService?subCategoryUID=${subCategoryList[index].uid}',
+                            arguments: subCategoryList[index],
+                          );
                         } else if (subCategoryList[index].subCategoryType ==
-                            "map") {
+                                "map" ||
+                            subCategoryList[index].subCategoryType == "maps" ||
+                            subCategoryList[index]
+                                .subCategoryType
+                                .contains('map')) {
                           Get.toNamed(
                               '/businessByMap?subCategoryUID=${subCategoryList[index].uid}',
                               arguments: subCategoryList[index]);
@@ -236,7 +242,9 @@ class SearchBar extends SearchDelegate {
                 Get.toNamed(
                     '/businessByService?subCategoryUID=${subCategoryList[index].uid}',
                     arguments: subCategoryList[index]);
-              } else if (subCategoryList[index].subCategoryType == "map") {
+              } else if (subCategoryList[index].subCategoryType == "map" ||
+                  subCategoryList[index].subCategoryType == "maps" ||
+                  subCategoryList[index].subCategoryType.contains('map')) {
                 Get.toNamed(
                     '/businessByMap?subCategoryUID=${subCategoryList[index].uid}',
                     arguments: subCategoryList[index]);

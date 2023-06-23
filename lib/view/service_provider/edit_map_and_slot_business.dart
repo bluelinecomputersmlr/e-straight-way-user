@@ -251,7 +251,7 @@ Future<void> submitBusinesData(
 
   var data = {
     "experience": yearOfExp,
-    "serviceCharge": int.parse(basicServiceCharge),
+    "serviceCharge": int.parse(basicServiceCharge.split('.').first),
   };
 
   var updateStatus =

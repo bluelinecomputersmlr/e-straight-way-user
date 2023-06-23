@@ -1,9 +1,11 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:estraightwayapp/constants.dart';
 import 'package:estraightwayapp/controller/home/business_controller.dart';
 import 'package:estraightwayapp/model/business_model.dart';
+import 'package:estraightwayapp/view/auth/booking_service.dart';
 import 'package:estraightwayapp/widget/angle_clipper.dart';
 import 'package:estraightwayapp/widget/custom_loading_indicator.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +35,8 @@ class _BusinessByServiceState extends State<BusinessByService> {
         backgroundColor: Colors.white,
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.only(bottom: 15.0),
+
+
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -50,6 +54,7 @@ class _BusinessByServiceState extends State<BusinessByService> {
                             .toString(),
                         "serviceName": "",
                       });
+                      log('bookingStatus :: $bookingStatus');
                       if (bookingStatus["status"] == "success") {
                         Get.toNamed(
                           '/verifyOrder',
@@ -62,9 +67,10 @@ class _BusinessByServiceState extends State<BusinessByService> {
                             "price": businessController
                                 .selectedBusiness.value.serviceCharge
                                 .toString(),
-                            "tokenAdvance": businessController
+                            "tokenAdvance":  businessController
+                                .selectedBusiness.value.tokenAdvance != null ? businessController
                                 .selectedBusiness.value.tokenAdvance
-                                .toString(),
+                                .toString() : '0',
                             "businessName": businessController
                                 .selectedBusiness.value.businessName
                                 .toString(),
@@ -78,7 +84,7 @@ class _BusinessByServiceState extends State<BusinessByService> {
                       } else {
                         // ignore: use_build_context_synchronously
                         showErrorSnackbar(context,
-                            "Service is alreday booked by you/someone else");
+                            "Service is already booked by you/someone else");
                       }
                     }
                     //   businessController.paymentOptions.first['amount'] = 1 * 100;
@@ -207,6 +213,7 @@ class _BusinessByServiceState extends State<BusinessByService> {
                                     horizontal: 10.0, vertical: 4),
                                 child: GestureDetector(
                                   onTap: () {
+                                    log('subCategory selected');
                                     businessController
                                         .selectBusiness(snapshot.data![index]);
                                   },
@@ -285,45 +292,36 @@ class _BusinessByServiceState extends State<BusinessByService> {
                                                 ),
                                               ),
                                               Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
+                                                padding: const EdgeInsets.all(8.0),
                                                 child: Container(
                                                   width: 50,
                                                   decoration: BoxDecoration(
                                                     color: kPrimaryColor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            50),
+                                                    borderRadius: BorderRadius.circular(50),
                                                   ),
                                                   child: Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 8.0,
-                                                        vertical: 2),
+                                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
                                                     child: Row(
                                                       children: [
-                                                        Text(
-                                                          snapshot.data![index]
-                                                                      .rating ==
-                                                                  null
-                                                              ? "0"
-                                                              : snapshot
-                                                                  .data![index]
-                                                                  .rating
-                                                                  .toString(),
-                                                          style:
-                                                              GoogleFonts.inter(
-                                                            fontSize: 12,
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                          ),
+                                                        FutureBuilder<String>(
+                                                          future: BookingService.getBusinessRattingData(snapshot.data![index].uid ?? ""),
+                                                          builder: (context, snapshots) {
+                                                            return Text(
+                                                              snapshot.data![index].rating == null
+                                                                  ? snapshots.data ?? '0'
+                                                                  : snapshot.data![index].rating.toString(),
+                                                              style: GoogleFonts.inter(
+                                                                fontSize: 12,
+                                                                color: Colors.white,
+                                                                fontWeight: FontWeight.w400,
+                                                              ),
+                                                            );
+                                                          },
                                                         ),
                                                         const Icon(
                                                           Icons.star,
                                                           size: 15,
-                                                          color:
-                                                              Color(0xffFFC700),
+                                                          color: Color(0xffFFC700),
                                                         )
                                                       ],
                                                     ),
@@ -360,6 +358,7 @@ class _BusinessByServiceState extends State<BusinessByService> {
                                                     const EdgeInsets.all(8.0),
                                                 child: Text(
                                                   formatCurrency.format(snapshot
+
                                                       .data![index]
                                                       .serviceCharge!),
                                                   style: GoogleFonts.inter(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:estraightwayapp/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:estraightwayapp/constants.dart';
@@ -139,12 +141,12 @@ class OtpVerificationPage extends StatelessWidget {
                     onCompleted: (pin) {
                       // SUBMIT THE FORM
                       // ONLY IF THE OTP IS REACHED CRITERIA
-                      if (_otpController.text.length == 6) {
-                        _submitForm(
-                            _otpController.text, loginController, context);
-                      } else {
-                        showInfoSnackbar(context, "Enter correct otp");
-                      }
+                      // if (_otpController.text.length == 6) {
+                      //   _submitForm(
+                      //       _otpController.text, loginController, context);
+                      // } else {
+                      //   showInfoSnackbar(context, "Enter correct otp");
+                      // }
                     },
                     onChanged: (value) {
                       debugPrint('onChanged: $value');
@@ -226,7 +228,7 @@ class OtpVerificationPage extends StatelessWidget {
                   // SUBMIT THE FORM
                   // ONLY IF THE OTP IS REACHED CRITERIA
                   if (_otpController.text.length == 6) {
-                    // _submitForm(_otpController.text, loginController, context);
+                    _submitForm(_otpController.text, loginController, context);
                   } else {
                     showInfoSnackbar(context, "Enter correct otp");
                   }
@@ -267,16 +269,14 @@ class OtpVerificationPage extends StatelessWidget {
   }
 }
 
-void _submitForm(
-    String otp, LoginController controller, BuildContext context) async {
+void _submitForm(String otp, LoginController controller, BuildContext context) async {
   controller.toggleLoading(true);
 
   // VERIFY OTP
   // IF OTP IS PROPER
   // SAVE DATA TO THE STORAGE (JWT)
   // MOVE TO HOME PAGE
-  var response =
-      await LoginService().submitOtp(controller.verificationCode.value, otp);
+  var response = await LoginService().submitOtp(controller.verificationCode.value, otp);
   if (response["status"] == "success") {
     var response = await LoginService().loginUser();
     if (response["status"] == "success") {

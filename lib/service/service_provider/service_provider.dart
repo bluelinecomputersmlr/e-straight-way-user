@@ -1,24 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:estraightwayapp/notification_service.dart';
 
-class ServiceProviderService {
-  Future<Map> getBusiness(String uid) async {
+class SubServiceProviderService {
+  Future<void> getSubAdmin(String pincode) async {
     try {
-      var response = await FirebaseFirestore.instance
-          .collection("Businesses")
-          .where('uid', isEqualTo: uid)
-          .get();
+      var response = await FirebaseFirestore.instance.collection("subadmin").get();
       var data = response.docs.toList();
 
-      var responseData = [];
 
       for (var doc in data) {
-        responseData.add(doc.data());
+        if (doc['pinCode'].first == pincode) {
+          NotificationService.instance.sendNotification(doc['fcmToken'], "Your have a new Service request");
+        }
       }
-      return {"status": "success", "data": responseData};
     } catch (e) {
       print(e);
-
-      return {"status": "error"};
     }
   }
 }

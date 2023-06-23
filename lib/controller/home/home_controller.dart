@@ -1,9 +1,18 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:estraightwayapp/model/user_model.dart';
+import 'package:estraightwayapp/notification_service.dart';
 import 'package:estraightwayapp/service/home/home_page_service.dart';
+import 'package:estraightwayapp/service/location_service.dart';
+import 'package:estraightwayapp/view/auth/admin_service.dart';
+import 'package:estraightwayapp/view/auth/booking_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:geocoding/geocoding.dart' as GeoCoding;
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:location/location.dart';
@@ -27,78 +36,60 @@ class HomePageController extends GetxController {
 
   var currentPlace = "".obs;
 
-  var currentTabIndex = 0.obs;
+  // @override
+  // void onInit() {
+  //   getLocation();
+  //
+  //   getUserData();
+  //   getBanners();
+  //   getCategories();
+  //   notifyChildrens();
+  //   getSubCategories();
+  //   super.onInit();
+  // }
 
-  @override
-  void onInit() {
-    getUserData();
-    getBanners();
-    getCategories();
-    notifyChildrens();
-    getLocation();
-    getSubCategories();
-    super.onInit();
-  }
-
-  void toggleTabIndex(int index) {
-    currentTabIndex.value = index;
-  }
-
-  void getLocation() async {
+  Future<void> getLocation() async {
     Location location = Location();
 
-    bool serviceEnabled = false;
-    PermissionStatus _permissionGranted;
-    LocationData _locationData;
+    bool isPermissionGranted = await SagarLocationService.instance.checkLocationPermission();
+    print('Current Home isPermissionGranted --> $isPermissionGranted');
+    if (!isPermissionGranted) return;
+    Position currentPosition = await SagarLocationService.instance.getCurrentLocation();
+    print('Current Home position --> ${currentPosition.toJson()}');
 
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        return;
-      }
-    }
+    longitude.value = currentPosition.longitude;
+    latitude.value = currentPosition.latitude;
 
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
-
-    _locationData = await location.getLocation();
-
-    longitude.value = _locationData.longitude!;
-    latitude.value = _locationData.latitude!;
-
-    List<GeoCoding.Placemark> placemarks =
-        await GeoCoding.placemarkFromCoordinates(
-            _locationData.latitude!, _locationData.longitude!);
+    List<GeoCoding.Placemark> placemarks = await GeoCoding.placemarkFromCoordinates(currentPosition.latitude, currentPosition.longitude);
 
     currentPlace.value =
         "${placemarks[0].toString().split(",")[9].split(":")[1]} ${placemarks[0].toString().split(",")[8].split(":")[1]} ${placemarks[0].toString().split(",")[7].split(":")[1]}";
+    update();
 
     location.onLocationChanged.listen((newLoc) async {
       longitude.value = newLoc.longitude!;
       latitude.value = newLoc.latitude!;
-      List<GeoCoding.Placemark> placemarks =
-          await GeoCoding.placemarkFromCoordinates(
-              newLoc.latitude!, newLoc.longitude!);
+      List<GeoCoding.Placemark> placeMarks = await GeoCoding.placemarkFromCoordinates(newLoc.latitude!, newLoc.longitude!);
       currentPlace.value =
-          "${placemarks[0].toString().split(",")[9].split(":")[1]} ${placemarks[0].toString().split(",")[8].split(":")[1]} ${placemarks[0].toString().split(",")[7].split(":")[1]}";
+          "${placeMarks[0].toString().split(",")[9].split(":")[1]} ${placeMarks[0].toString().split(",")[8].split(":")[1]} ${placeMarks[0].toString().split(",")[7].split(":")[1]}";
+      update();
     });
   }
 
-  void getUserData() async {
+  Future<void> getUserData() async {
     isMainPageLoading(true);
     var response = await HomePageService().getUserData();
+    log('Users data --> $response');
     if (response["status"] == "success") {
+      log('User data --> $response');
       userData.value = UserModel.fromJson(response["user"]);
+      log('User data value --> ${userData.value.toJson()}');
     } else {
       isMainError(true);
       mainErrorMessage.value = response["message"];
     }
     isMainPageLoading(false);
+    update();
   }
 
   void updateIndex(index) {
@@ -118,14 +109,13 @@ class HomePageController extends GetxController {
       categories.obs.update((val) {});
     });
     isMainPageLoading(false);
+    update();
   }
 
   void getSubCategories() async {
     isMainPageLoading(true);
-    subCategories.value =
-        await HomePageService().getSubCategories().whenComplete(() {
-      subCategories.obs.update((val) {});
-    });
+    subCategories.value = await HomePageService().getSubCategories().whenComplete(() => subCategories.obs.update((val) {}));
     isMainPageLoading(false);
+    update();
   }
 }

@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:estraightwayapp/controller/home/home_service_provider_contoller.dart';
+import 'package:estraightwayapp/view/auth/booking_service.dart';
 import 'package:estraightwayapp/view/home/booking_tab.dart';
 import 'package:estraightwayapp/view/home/search_bar.dart';
 import 'package:estraightwayapp/view/home/wallet.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:estraightwayapp/constants.dart';
 import 'package:estraightwayapp/controller/home/home_controller.dart';
@@ -14,14 +19,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:location/location.dart';
 
+import '../../controller/home/profile_page_controller.dart';
+import '../../service/home/user_services.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePage> createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
+  final profilePageController = Get.put(ProfilePageController());
+  final homePageServiceController = Get.put(HomeServiceProviderController());
+  int currentTabIndex = 0;
+
   @override
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((_) async {
@@ -77,7 +89,10 @@ class _HomePageState extends State<HomePage> {
                           height: 20.0,
                         ),
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
+                            final homePageController =
+                                Get.find<HomePageController>();
+                            await homePageController.getLocation();
                             Get.back();
                           },
                           child: Container(
@@ -108,17 +123,45 @@ class _HomePageState extends State<HomePage> {
               );
             });
       }
+      Future.delayed(
+        const Duration(microseconds: 200),
+        () => homePageServiceController.setLocation(),
+      );
     });
+    Future.delayed(
+      const Duration(microseconds: 200),
+      () {
+        final homePageController = Get.find<HomePageController>();
+        homePageController.getLocation();
+        homePageController.getUserData();
+        homePageController.getBanners();
+        homePageController.getCategories();
+        homePageController.getSubCategories();
+      },
+    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final homePageController = Get.put(HomePageController());
+    print('Current screen --> $runtimeType');
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
         backgroundColor: kMainBackgroundColor,
+        floatingActionButton: FutureBuilder<bool>(
+          future: BookingService.getBookingData(),
+          builder: (context, snapshot) {
+            return snapshot.hasData && !snapshot.data!
+                ? const SizedBox()
+                : FloatingActionButton(
+                    onPressed: () => BookingService.sendSosCall(),
+                    backgroundColor: kCategorySelectedColor,
+                    child: const Text('SOS'),
+                  );
+          },
+        ),
         bottomNavigationBar: CurvedNavigationBar(
           animationDuration: const Duration(milliseconds: 100),
           height: 55,
@@ -134,26 +177,24 @@ class _HomePageState extends State<HomePage> {
             if (index == 3) {
               Get.toNamed('/profile');
             } else {
-              homePageController.toggleTabIndex(index);
+              final homePageController = Get.find<HomePageController>();
+              toggleTabIndex(index);
             }
             //Handle button tap
           },
         ),
-        body: Obx(
-          () => (homePageController.currentTabIndex.value == 0)
+        body: Obx(() {
+          return (currentTabIndex == 0)
               ? SafeArea(
                   child: (homePageController.isMainPageLoading.value)
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
+                      ? const Center(child: CircularProgressIndicator())
                       : (homePageController.isMainError.value)
                           ? Center(
                               child: Text(
                                 homePageController.mainErrorMessage.value,
                                 style: GoogleFonts.inter(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w500),
                               ),
                             )
                           : ListView(
@@ -266,12 +307,13 @@ class _HomePageState extends State<HomePage> {
 
                                 //DESCRIPTION TEXT
                                 Padding(
-                                  padding: const EdgeInsets.all(20.0),
+                                  padding: const EdgeInsets.only(
+                                      top: 20.0, right: 20.0, left: 20.0),
                                   child: GestureDetector(
                                     onTap: () {
                                       showSearch(
                                         context: context,
-                                        delegate: SearchBar(),
+                                        delegate: SearchBar1(),
                                       );
                                     },
                                     child: Container(
@@ -311,135 +353,117 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
 
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Column(
-                                        children: [
-                                          Container(
-                                            width: .28.sw,
-                                            height: .25.sw,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(10)),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.2),
-                                                    spreadRadius: 3,
-                                                    blurRadius: 5,
-                                                    offset: const Offset(0,
-                                                        3), // changes position of shadow
-                                                  ),
-                                                ]),
-                                            child: CachedNetworkImage(
-                                                imageUrl:
-                                                    'https://firebasestorage.googleapis.com/v0/b/e-straightway.appspot.com/o/intro_images%2F5385957.png?alt=media&token=e6e0c7a4-b9b6-4622-b94b-8d8c2c72df4a',
-                                                fit: BoxFit.fill),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10),
-                                            child: Text(
-                                              'Efficient',
-                                              style: GoogleFonts.inter(
-                                                fontSize: 16,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w300,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          Container(
-                                            width: .28.sw,
-                                            height: .25.sw,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(10)),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.2),
-                                                    spreadRadius: 3,
-                                                    blurRadius: 5,
-                                                    offset: const Offset(0,
-                                                        3), // changes position of shadow
-                                                  ),
-                                                ]),
-                                            child: CachedNetworkImage(
-                                                imageUrl:
-                                                    'https://firebasestorage.googleapis.com/v0/b/e-straightway.appspot.com/o/intro_images%2FHand%20of%20cartoon%20person%20holding%20cell%20phone%20with%20map%20application.png?alt=media&token=1122fd4f-d7c5-45c8-b231-b4a3441f629b',
-                                                fit: BoxFit.fill),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10),
-                                            child: Text(
-                                              'Simple',
-                                              style: GoogleFonts.inter(
-                                                fontSize: 16,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w300,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          Container(
-                                            width: .28.sw,
-                                            height: .25.sw,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(10)),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.2),
-                                                    spreadRadius: 3,
-                                                    blurRadius: 5,
-                                                    offset: const Offset(0,
-                                                        3), // changes position of shadow
-                                                  ),
-                                                ]),
-                                            child: CachedNetworkImage(
-                                                imageUrl:
-                                                    'https://firebasestorage.googleapis.com/v0/b/e-straightway.appspot.com/o/intro_images%2Fbest-quality-guarantee-assurance-concept.png?alt=media&token=77551c4c-f9a2-421b-8883-bf29d715ed9b',
-                                                fit: BoxFit.fill),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10),
-                                            child: Text(
-                                              'Rich Experience',
-                                              style: GoogleFonts.inter(
-                                                fontSize: 16,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w300,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                // Padding(
+                                //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                //   child: Row(
+                                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //     crossAxisAlignment: CrossAxisAlignment.center,
+                                //     children: [
+                                //       Column(
+                                //         children: [
+                                //           Container(
+                                //             width: .28.sw,
+                                //             height: .25.sw,
+                                //             decoration: BoxDecoration(
+                                //                 color: Colors.white,
+                                //                 borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                //                 boxShadow: [
+                                //                   BoxShadow(
+                                //                     color: Colors.grey.withOpacity(0.2),
+                                //                     spreadRadius: 3,
+                                //                     blurRadius: 5,
+                                //                     offset: const Offset(0, 3), // changes position of shadow
+                                //                   ),
+                                //                 ]),
+                                //             child: CachedNetworkImage(
+                                //                 imageUrl:
+                                //                     'https://firebasestorage.googleapis.com/v0/b/e-straightway.appspot.com/o/intro_images%2F5385957.png?alt=media&token=e6e0c7a4-b9b6-4622-b94b-8d8c2c72df4a',
+                                //                 fit: BoxFit.fill),
+                                //           ),
+                                //           Padding(
+                                //             padding: const EdgeInsets.symmetric(vertical: 10),
+                                //             child: Text(
+                                //               'Efficient',
+                                //               style: GoogleFonts.inter(
+                                //                 fontSize: 16,
+                                //                 color: Colors.black,
+                                //                 fontWeight: FontWeight.w300,
+                                //               ),
+                                //             ),
+                                //           ),
+                                //         ],
+                                //       ),
+                                //       Column(
+                                //         children: [
+                                //           Container(
+                                //             width: .28.sw,
+                                //             height: .25.sw,
+                                //             decoration: BoxDecoration(
+                                //                 color: Colors.white,
+                                //                 borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                //                 boxShadow: [
+                                //                   BoxShadow(
+                                //                     color: Colors.grey.withOpacity(0.2),
+                                //                     spreadRadius: 3,
+                                //                     blurRadius: 5,
+                                //                     offset: const Offset(0, 3), // changes position of shadow
+                                //                   ),
+                                //                 ]),
+                                //             child: CachedNetworkImage(
+                                //                 imageUrl:
+                                //                     'https://firebasestorage.googleapis.com/v0/b/e-straightway.appspot.com/o/intro_images%2FHand%20of%20cartoon%20person%20holding%20cell%20phone%20with%20map%20application.png?alt=media&token=1122fd4f-d7c5-45c8-b231-b4a3441f629b',
+                                //                 fit: BoxFit.fill),
+                                //           ),
+                                //           Padding(
+                                //             padding: const EdgeInsets.symmetric(vertical: 10),
+                                //             child: Text(
+                                //               'Simple',
+                                //               style: GoogleFonts.inter(
+                                //                 fontSize: 16,
+                                //                 color: Colors.black,
+                                //                 fontWeight: FontWeight.w300,
+                                //               ),
+                                //             ),
+                                //           ),
+                                //         ],
+                                //       ),
+                                //       Column(
+                                //         children: [
+                                //           Container(
+                                //             width: .28.sw,
+                                //             height: .25.sw,
+                                //             decoration: BoxDecoration(
+                                //                 color: Colors.white,
+                                //                 borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                //                 boxShadow: [
+                                //                   BoxShadow(
+                                //                     color: Colors.grey.withOpacity(0.2),
+                                //                     spreadRadius: 3,
+                                //                     blurRadius: 5,
+                                //                     offset: const Offset(0, 3), // changes position of shadow
+                                //                   ),
+                                //                 ]),
+                                //             child: CachedNetworkImage(
+                                //                 imageUrl:
+                                //                     'https://firebasestorage.googleapis.com/v0/b/e-straightway.appspot.com/o/intro_images%2Fbest-quality-guarantee-assurance-concept.png?alt=media&token=77551c4c-f9a2-421b-8883-bf29d715ed9b',
+                                //                 fit: BoxFit.fill),
+                                //           ),
+                                //           Padding(
+                                //             padding: const EdgeInsets.symmetric(vertical: 10),
+                                //             child: Text(
+                                //               'Rich Experience',
+                                //               style: GoogleFonts.inter(
+                                //                 fontSize: 16,
+                                //                 color: Colors.black,
+                                //                 fontWeight: FontWeight.w300,
+                                //               ),
+                                //             ),
+                                //           ),
+                                //         ],
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
 
                                 homePageController.banners!.isNotEmpty
                                     ? Padding(
@@ -628,16 +652,80 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 15.0,
                                 ),
+                                (profilePageController.userData.value
+                                                .lastLoggedAsUser ==
+                                            true ||
+                                        profilePageController.userData.value
+                                                .isServiceProviderRegistered ==
+                                            true)
+                                    ? Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15.0),
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            var data = {
+                                              "lastLoggedAsUser": false
+                                            };
+
+                                            await UserServices().updateUserData(
+                                                FirebaseAuth
+                                                    .instance.currentUser!.uid,
+                                                data);
+                                            await Future.delayed(
+                                                const Duration(seconds: 5));
+                                            Get.offAllNamed(
+                                                "/homeServiceProviderPage");
+                                          },
+                                          child: Container(
+                                            height: .15.sw,
+                                            width: 1.sw,
+                                            decoration: const BoxDecoration(
+                                                color: Color(0xfff8faff),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20))),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    'Switch to Service Provider',
+                                                    style: GoogleFonts.inter(
+                                                      fontSize: 16,
+                                                      color: kPrimaryColor,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container()
                               ],
                             ),
                 )
-              : (homePageController.currentTabIndex.value == 1)
+              : (currentTabIndex == 1)
                   ? const WalletPage()
-                  : (homePageController.currentTabIndex.value == 2)
-                      ? BookingsTab()
-                      : Container(),
-        ),
+                  : (currentTabIndex == 2)
+                      ? const BookingsTab()
+                      : Container();
+        }),
       ),
     );
+  }
+
+  void toggleTabIndex(int index) {
+    currentTabIndex = index;
+    setState(() {});
   }
 }

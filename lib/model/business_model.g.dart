@@ -18,6 +18,7 @@ BusinessModel _$BusinessModelFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String?,
       gmapsLink: json['gmapsLink'] as String?,
       phoneNumber: json['phoneNumber'] as String?,
+      userUid: json['userUid'] as String?,
       serviceCharge: (json['serviceCharge'] as num?)?.toDouble(),
       creationTime: firestoreTimestampFromJson(json['creationTime']),
       rating: (json['rating'] as num?)?.toDouble(),
@@ -31,6 +32,8 @@ BusinessModel _$BusinessModelFromJson(Map<String, dynamic> json) =>
           ?.map((e) => e as Map<String, dynamic>)
           .toList(),
       location: json['location'] as Map<String, dynamic>?,
+      businessFcmToken: json['businessFcmToken'] as String?,
+      isInitialPaymentDone: json['isInitialPaymentDone'] as bool?,
     )..tokenAdvance = (json['tokenAdvance'] as num?)?.toDouble();
 
 Map<String, dynamic> _$BusinessModelToJson(BusinessModel instance) =>
@@ -55,6 +58,9 @@ Map<String, dynamic> _$BusinessModelToJson(BusinessModel instance) =>
       'vehicleRegistrationNo': instance.vehicleRegistrationNo,
       'addedServices': instance.addedServices,
       'location': instance.location,
+      'businessFcmToken': instance.businessFcmToken,
+      'userUid': instance.userUid,
+      'isInitialPaymentDone': instance.isInitialPaymentDone,
     };
 
 AddedServiceModelList _$AddedServiceModelListFromJson(

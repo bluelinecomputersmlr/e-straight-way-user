@@ -11,9 +11,8 @@ class BookingsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var bookingController = Get.put(BookingsController());
-
-    var size = MediaQuery.of(context).size;
+    BookingsController bookingController = Get.put(BookingsController());
+    Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Obx(
         () => ListView(
@@ -22,28 +21,18 @@ class BookingsTab extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               child: Text(
                 "Bookings",
-                style: GoogleFonts.inter(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: GoogleFonts.inter(fontSize: 22.0, fontWeight: FontWeight.w700),
               ),
             ),
-            const SizedBox(
-              height: 30.0,
-            ),
+            const SizedBox(height: 30.0),
             (bookingController.isLoading.value)
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
+                ? const Center(child: CircularProgressIndicator())
                 : (bookingController.bookingsData.isNotEmpty)
                     ? StreamBuilder(
                         stream: bookingController.getBookingsStream(),
-                        builder:
-                            (context, AsyncSnapshot<List<dynamic>?> snapshot) {
+                        builder: (context, AsyncSnapshot<List<dynamic>?> snapshot) {
                           return (!snapshot.hasData)
-                              ? const Center(
-                                  child: CircularProgressIndicator(),
-                                )
+                              ? const Center(child: CircularProgressIndicator())
                               : ListView.builder(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
@@ -55,54 +44,35 @@ class BookingsTab extends StatelessWidget {
                                       padding: const EdgeInsets.all(10.0),
                                       decoration: BoxDecoration(
                                         color: Colors.white,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(10)),
+                                        borderRadius: const BorderRadius.all(Radius.circular(10)),
                                         boxShadow: [
                                           BoxShadow(
                                             color: Colors.grey.withOpacity(0.2),
                                             spreadRadius: 3,
                                             blurRadius: 5,
-                                            offset: const Offset(
-                                              0,
-                                              3,
-                                            ), // changes position of shadow
+                                            offset: const Offset(0, 3), // changes position of shadow
                                           ),
                                         ],
                                       ),
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        size.width * 0.40),
-                                                child: (snapshot.data![index][
-                                                                "businessImage"] ==
-                                                            "null" ||
-                                                        snapshot.data![index][
-                                                                "businessImage"] ==
-                                                            "" ||
-                                                        snapshot.data![index][
-                                                                "businessImage"] ==
-                                                            null)
+                                                borderRadius: BorderRadius.circular(size.width * 0.40),
+                                                child: (snapshot.data![index]["businessImage"] == "null" ||
+                                                        snapshot.data![index]["businessImage"] == "" ||
+                                                        snapshot.data![index]["businessImage"] == null)
                                                     ? SizedBox(
-                                                        height:
-                                                            size.width * 0.30,
-                                                        width:
-                                                            size.width * 0.30,
+                                                        height: size.width * 0.30,
+                                                        width: size.width * 0.30,
                                                       )
                                                     : Image.network(
-                                                        snapshot.data![index]
-                                                            ["businessImage"],
-                                                        height:
-                                                            size.width * 0.30,
-                                                        width:
-                                                            size.width * 0.30,
+                                                        snapshot.data![index]["businessImage"],
+                                                        height: size.width * 0.30,
+                                                        width: size.width * 0.30,
                                                       ),
                                               ),
                                               Column(
@@ -110,15 +80,12 @@ class BookingsTab extends StatelessWidget {
                                                   SizedBox(
                                                     width: size.width * 0.50,
                                                     child: Text(
-                                                      snapshot.data![index]
-                                                          ["businessName"],
+                                                      snapshot.data![index]["businessName"],
                                                       style: GoogleFonts.inter(
                                                         fontSize: 17.0,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                                        fontWeight: FontWeight.w600,
                                                       ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                      overflow: TextOverflow.ellipsis,
                                                     ),
                                                   ),
                                                   const SizedBox(
@@ -128,8 +95,7 @@ class BookingsTab extends StatelessWidget {
                                                     onTap: () async {
                                                       Uri phoneno = Uri.parse(
                                                           'tel:${snapshot.data![index]["businessContactNumber"]}');
-                                                      if (await launchUrl(
-                                                          phoneno)) {
+                                                      if (await launchUrl(phoneno)) {
                                                         //dialer opened
                                                       } else {
                                                         //dailer is not opened
@@ -138,16 +104,12 @@ class BookingsTab extends StatelessWidget {
                                                     child: SizedBox(
                                                       width: size.width * 0.50,
                                                       child: Text(
-                                                        snapshot.data![index][
-                                                            "businessContactNumber"],
-                                                        style:
-                                                            GoogleFonts.inter(
+                                                        snapshot.data![index]["businessContactNumber"],
+                                                        style: GoogleFonts.inter(
                                                           fontSize: 17.0,
-                                                          fontWeight:
-                                                              FontWeight.w600,
+                                                          fontWeight: FontWeight.w600,
                                                         ),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
+                                                        overflow: TextOverflow.ellipsis,
                                                       ),
                                                     ),
                                                   ),
@@ -159,17 +121,12 @@ class BookingsTab extends StatelessWidget {
                                                     child: Text(
                                                       DateFormat('dd/MM/yyyy')
                                                           .add_jm()
-                                                          .format(snapshot
-                                                              .data![index]
-                                                                  ["bookedDate"]
-                                                              .toDate()),
+                                                          .format(snapshot.data![index]["bookedDate"].toDate()),
                                                       style: GoogleFonts.inter(
                                                         fontSize: 16.0,
-                                                        fontWeight:
-                                                            FontWeight.w400,
+                                                        fontWeight: FontWeight.w400,
                                                       ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                      overflow: TextOverflow.ellipsis,
                                                     ),
                                                   ),
                                                 ],
@@ -179,82 +136,52 @@ class BookingsTab extends StatelessWidget {
                                           const SizedBox(
                                             height: 20.0,
                                           ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Container(
-                                                width: size.width * 0.40,
-                                                padding:
-                                                    const EdgeInsets.all(5.0),
-                                                decoration: BoxDecoration(
-                                                    color: (snapshot
-                                                                .data![index][
-                                                            "isServiceProviderAccepted"])
-                                                        ? (snapshot.data![index]
-                                                                [
-                                                                "isOrderCompleted"])
+                                          if (snapshot.data![index]['status'] != 'Rejected') ...[
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Container(
+                                                  width: size.width * 0.40,
+                                                  padding: const EdgeInsets.all(5.0),
+                                                  decoration: BoxDecoration(
+                                                    color: (snapshot.data![index]["isServiceProviderAccepted"])
+                                                        ? (snapshot.data![index]["isOrderCompleted"])
                                                             ? Colors.green
                                                             : Colors.blue
                                                         : Colors.red,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20.0)),
-                                                child: Text(
-                                                  (snapshot.data![index][
-                                                          "isServiceProviderAccepted"])
-                                                      ? (snapshot.data![index][
-                                                              "isOrderCompleted"])
-                                                          ? "Completed"
-                                                          : "Accepted"
-                                                      : (snapshot.data![index][
-                                                                  "isUserCancelled"] !=
-                                                              null)
-                                                          ? (snapshot.data![
-                                                                      index][
-                                                                  "isUserCancelled"])
-                                                              ? "Cancelled"
-                                                              : "Pending"
-                                                          : "Pending",
-                                                  style: GoogleFonts.inter(
-                                                    fontSize: 17.0,
-                                                    fontWeight: FontWeight.w600,
+                                                    borderRadius: BorderRadius.circular(20.0),
                                                   ),
-                                                  textAlign: TextAlign.center,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                  child: Text(
+                                                    (snapshot.data![index]["isServiceProviderAccepted"])
+                                                        ? (snapshot.data![index]["isOrderCompleted"])
+                                                            ? "Completed"
+                                                            : "Accepted"
+                                                        : (snapshot.data![index]["isUserCancelled"] != null)
+                                                            ? (snapshot.data![index]["isUserCancelled"])
+                                                                ? "Cancelled"
+                                                                : "Pending"
+                                                            : "Pending",
+                                                    style: GoogleFonts.inter(fontSize: 17.0, fontWeight: FontWeight.w600),
+                                                    textAlign: TextAlign.center,
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
                                                 ),
-                                              ),
-                                              (snapshot.data![index][
-                                                          "isOrderCompleted"] &&
-                                                      snapshot.data![index]
-                                                              ["rating"] !=
-                                                          0)
-                                                  ? Row(
-                                                      children: [
-                                                        const Icon(
-                                                          Icons.star,
-                                                          color: Colors.amber,
-                                                        ),
-                                                        Text(
-                                                          (snapshot.data![index]
-                                                                  ["rating"])
-                                                              .toString(),
-                                                          style: GoogleFonts
-                                                              .inter(),
-                                                        )
-                                                      ],
-                                                    )
-                                                  : Container(),
-                                              const SizedBox(),
-                                            ],
-                                          ),
-                                          const SizedBox(
-                                            height: 20.0,
-                                          ),
+                                                if (snapshot.data![index]["isOrderCompleted"] && snapshot.data![index]["rating"] != 0)
+                                                  Row(
+                                                    children: [
+                                                      const Icon(Icons.star, color: Colors.amber),
+                                                      Text(
+                                                        (snapshot.data![index]["rating"]).toString(),
+                                                        style: GoogleFonts.inter(),
+                                                      )
+                                                    ],
+                                                  ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 20.0),
+                                          ],
                                           Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               SizedBox(
                                                 width: size.width * 0.80,
@@ -264,8 +191,7 @@ class BookingsTab extends StatelessWidget {
                                                     fontSize: 17.0,
                                                     fontWeight: FontWeight.w600,
                                                   ),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                  overflow: TextOverflow.ellipsis,
                                                 ),
                                               ),
                                               // SizedBox(
@@ -285,138 +211,107 @@ class BookingsTab extends StatelessWidget {
                                           const SizedBox(
                                             height: 20.0,
                                           ),
-                                          (snapshot.data![index]
-                                                      ["isOrderCompleted"] &&
-                                                  snapshot.data![index]
-                                                          ["rating"] ==
-                                                      0)
+                                          (snapshot.data![index]["isOrderCompleted"] && snapshot.data![index]["rating"] == 0)
                                               ? GestureDetector(
                                                   onTap: () {
-                                                    final reviewController =
-                                                        TextEditingController();
+                                                    final reviewController = TextEditingController();
                                                     showDialog(
                                                       context: context,
                                                       builder: (context) {
                                                         return Dialog(
-                                                          backgroundColor:
-                                                              Colors.white,
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
+                                                          backgroundColor: Colors.white,
+                                                          shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(10.0),
                                                           ),
                                                           child: Obx(
                                                             () => Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Colors
-                                                                    .white,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10.0),
+                                                              decoration: BoxDecoration(
+                                                                color: Colors.white,
+                                                                borderRadius: BorderRadius.circular(10.0),
                                                               ),
-                                                              child:
-                                                                  SingleChildScrollView(
+                                                              child: SingleChildScrollView(
                                                                 child: Column(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
+                                                                  crossAxisAlignment: CrossAxisAlignment.center,
                                                                   children: [
                                                                     const SizedBox(
-                                                                      height:
-                                                                          20.0,
+                                                                      height: 20.0,
                                                                     ),
                                                                     Image.asset(
                                                                       "assets/icons/rate.png",
                                                                     ),
                                                                     const SizedBox(
-                                                                      height:
-                                                                          20.0,
+                                                                      height: 20.0,
                                                                     ),
                                                                     Padding(
-                                                                      padding: const EdgeInsets
-                                                                              .all(
-                                                                          10.0),
-                                                                      child:
-                                                                          Text(
+                                                                      padding: const EdgeInsets.all(10.0),
+                                                                      child: Text(
                                                                         "Please share your feedback, your feedback will help us improve our services.",
-                                                                        style: GoogleFonts
-                                                                            .inter(
-                                                                          fontSize:
-                                                                              16.0,
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
+                                                                        style: GoogleFonts.inter(
+                                                                          fontSize: 16.0,
+                                                                          fontWeight: FontWeight.w500,
                                                                         ),
                                                                       ),
                                                                     ),
                                                                     const SizedBox(
-                                                                      height:
-                                                                          20.0,
+                                                                      height: 20.0,
                                                                     ),
                                                                     Padding(
-                                                                      padding: const EdgeInsets
-                                                                              .all(
-                                                                          10.0),
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
+                                                                      padding: const EdgeInsets.all(10.0),
+                                                                      child: Row(
+                                                                        mainAxisAlignment: MainAxisAlignment.center,
                                                                         children: [
                                                                           IconButton(
-                                                                            onPressed:
-                                                                                () {
+                                                                            onPressed: () {
                                                                               bookingController.setRating(1);
                                                                             },
-                                                                            icon:
-                                                                                Icon(
-                                                                              (bookingController.givenRating.value >= 1) ? Icons.star : Icons.star_border,
+                                                                            icon: Icon(
+                                                                              (bookingController.givenRating.value >= 1)
+                                                                                  ? Icons.star
+                                                                                  : Icons.star_border,
                                                                               color: Colors.amber,
                                                                             ),
                                                                           ),
                                                                           IconButton(
-                                                                            onPressed:
-                                                                                () {
+                                                                            onPressed: () {
                                                                               bookingController.setRating(2);
                                                                             },
-                                                                            icon:
-                                                                                Icon(
-                                                                              (bookingController.givenRating.value >= 2) ? Icons.star : Icons.star_border,
+                                                                            icon: Icon(
+                                                                              (bookingController.givenRating.value >= 2)
+                                                                                  ? Icons.star
+                                                                                  : Icons.star_border,
                                                                               color: Colors.amber,
                                                                             ),
                                                                           ),
                                                                           IconButton(
-                                                                            onPressed:
-                                                                                () {
+                                                                            onPressed: () {
                                                                               bookingController.setRating(3);
                                                                             },
-                                                                            icon:
-                                                                                Icon(
-                                                                              (bookingController.givenRating.value >= 3) ? Icons.star : Icons.star_border,
+                                                                            icon: Icon(
+                                                                              (bookingController.givenRating.value >= 3)
+                                                                                  ? Icons.star
+                                                                                  : Icons.star_border,
                                                                               color: Colors.amber,
                                                                             ),
                                                                           ),
                                                                           IconButton(
-                                                                            onPressed:
-                                                                                () {
+                                                                            onPressed: () {
                                                                               bookingController.setRating(4);
                                                                             },
-                                                                            icon:
-                                                                                Icon(
-                                                                              (bookingController.givenRating.value >= 4) ? Icons.star : Icons.star_border,
+                                                                            icon: Icon(
+                                                                              (bookingController.givenRating.value >= 4)
+                                                                                  ? Icons.star
+                                                                                  : Icons.star_border,
                                                                               color: Colors.amber,
                                                                             ),
                                                                           ),
                                                                           IconButton(
-                                                                            onPressed:
-                                                                                () {
+                                                                            onPressed: () {
                                                                               bookingController.setRating(5);
                                                                             },
-                                                                            icon:
-                                                                                Icon(
-                                                                              (bookingController.givenRating.value >= 5) ? Icons.star : Icons.star_border,
+                                                                            icon: Icon(
+                                                                              (bookingController.givenRating.value >= 5)
+                                                                                  ? Icons.star
+                                                                                  : Icons.star_border,
                                                                               color: Colors.amber,
                                                                             ),
                                                                           ),
@@ -424,99 +319,64 @@ class BookingsTab extends StatelessWidget {
                                                                       ),
                                                                     ),
                                                                     const SizedBox(
-                                                                      height:
-                                                                          20.0,
+                                                                      height: 20.0,
                                                                     ),
                                                                     Padding(
-                                                                      padding: const EdgeInsets
-                                                                              .all(
-                                                                          10.0),
-                                                                      child:
-                                                                          TextFormField(
-                                                                        controller:
-                                                                            reviewController,
-                                                                        maxLines:
-                                                                            4,
-                                                                        decoration:
-                                                                            InputDecoration(
-                                                                          border:
-                                                                              const OutlineInputBorder(
+                                                                      padding: const EdgeInsets.all(10.0),
+                                                                      child: TextFormField(
+                                                                        controller: reviewController,
+                                                                        maxLines: 4,
+                                                                        decoration: InputDecoration(
+                                                                          border: const OutlineInputBorder(
                                                                             borderRadius:
                                                                                 BorderRadius.all(Radius.circular(5.0)),
-                                                                            borderSide:
-                                                                                BorderSide(color: Colors.grey),
+                                                                            borderSide: BorderSide(color: Colors.grey),
                                                                           ),
-                                                                          focusedBorder:
-                                                                              const OutlineInputBorder(
+                                                                          focusedBorder: const OutlineInputBorder(
                                                                             borderRadius:
                                                                                 BorderRadius.all(Radius.circular(5.0)),
-                                                                            borderSide:
-                                                                                BorderSide(color: Colors.grey),
+                                                                            borderSide: BorderSide(color: Colors.grey),
                                                                           ),
-                                                                          labelText:
-                                                                              "Comment",
-                                                                          labelStyle:
-                                                                              GoogleFonts.inter(
-                                                                            color:
-                                                                                Colors.grey,
+                                                                          labelText: "Comment",
+                                                                          labelStyle: GoogleFonts.inter(
+                                                                            color: Colors.grey,
                                                                           ),
                                                                         ),
                                                                       ),
                                                                     ),
                                                                     const SizedBox(
-                                                                      height:
-                                                                          20.0,
+                                                                      height: 20.0,
                                                                     ),
                                                                     GestureDetector(
-                                                                      onTap:
-                                                                          () async {
-                                                                        var rating = bookingController
-                                                                            .givenRating
-                                                                            .value;
+                                                                      onTap: () async {
+                                                                        var rating =
+                                                                            bookingController.givenRating.value;
 
-                                                                        var comments =
-                                                                            reviewController.text;
+                                                                        var comments = reviewController.text;
 
-                                                                        var bookingId =
-                                                                            snapshot.data![index]["id"];
+                                                                        var bookingId = snapshot.data![index]["id"];
 
-                                                                        var data =
-                                                                            {
-                                                                          "rating":
-                                                                              rating,
-                                                                          "comments":
-                                                                              comments,
+                                                                        var data = {
+                                                                          "rating": rating,
+                                                                          "comments": comments,
                                                                         };
 
-                                                                        await BusinessServices().updateBookingsData(
-                                                                            bookingId,
-                                                                            data);
+                                                                        await BusinessServices()
+                                                                            .updateBookingsData(bookingId, data);
 
                                                                         Get.back();
                                                                       },
-                                                                      child:
-                                                                          Container(
-                                                                        height:
-                                                                            40.0,
-                                                                        width: size.width *
-                                                                            0.40,
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          color: const Color.fromRGBO(
-                                                                              63,
-                                                                              92,
-                                                                              159,
-                                                                              1),
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(10.0),
+                                                                      child: Container(
+                                                                        height: 40.0,
+                                                                        width: size.width * 0.40,
+                                                                        decoration: BoxDecoration(
+                                                                          color: const Color.fromRGBO(63, 92, 159, 1),
+                                                                          borderRadius: BorderRadius.circular(10.0),
                                                                         ),
-                                                                        child:
-                                                                            Center(
-                                                                          child:
-                                                                              Text(
+                                                                        child: Center(
+                                                                          child: Text(
                                                                             "Submit",
-                                                                            style:
-                                                                                GoogleFonts.inter(
+                                                                            style: GoogleFonts.inter(
                                                                               color: Colors.white,
                                                                               fontWeight: FontWeight.w600,
                                                                             ),
@@ -525,8 +385,7 @@ class BookingsTab extends StatelessWidget {
                                                                       ),
                                                                     ),
                                                                     const SizedBox(
-                                                                      height:
-                                                                          20.0,
+                                                                      height: 20.0,
                                                                     ),
                                                                   ],
                                                                 ),
@@ -541,31 +400,22 @@ class BookingsTab extends StatelessWidget {
                                                     height: 40.0,
                                                     width: size.width * 0.40,
                                                     decoration: BoxDecoration(
-                                                      color: const Color(
-                                                          0xFF3F5C9F),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
+                                                      color: const Color(0xFF3F5C9F),
+                                                      borderRadius: BorderRadius.circular(10.0),
                                                     ),
                                                     child: Center(
                                                       child: Text(
                                                         "Rate & Review",
-                                                        style:
-                                                            GoogleFonts.inter(
+                                                        style: GoogleFonts.inter(
                                                           color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.w600,
+                                                          fontWeight: FontWeight.w600,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
                                                 )
                                               : Container(),
-                                          (!snapshot.data![index][
-                                                      "isServiceProviderAccepted"] &&
-                                                  snapshot.data![index]
-                                                          ["isUserCancelled"] ==
-                                                      null)
+                                          (!snapshot.data![index]["isServiceProviderAccepted"] && snapshot.data![index]["isUserCancelled"] == null && snapshot.data![index]['status'] != 'Rejected')
                                               ? GestureDetector(
                                                   onTap: () {
                                                     showDialog(
@@ -575,111 +425,67 @@ class BookingsTab extends StatelessWidget {
                                                           title: const Text(
                                                             "Are you want to cancel?",
                                                           ),
-                                                          titleTextStyle:
-                                                              GoogleFonts.inter(
+                                                          titleTextStyle: GoogleFonts.inter(
                                                             color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.w600,
+                                                            fontWeight: FontWeight.w600,
                                                             fontSize: 16.0,
                                                           ),
                                                           actions: [
                                                             TextButton(
-                                                              onPressed: () {
-                                                                Get.back();
-                                                              },
+                                                              onPressed: () => Get.back(),
                                                               child: Text(
                                                                 "Cancel",
-                                                                style:
-                                                                    GoogleFonts
-                                                                        .inter(),
+                                                                style: GoogleFonts.inter(),
                                                               ),
                                                             ),
                                                             TextButton(
-                                                              onPressed:
-                                                                  () async {
+                                                              onPressed: () async {
                                                                 var data = {
-                                                                  "isUserCancelled":
-                                                                      true,
-                                                                  "userCancelledDate":
-                                                                      DateTime
-                                                                          .now(),
-                                                                  "isRefunded":
-                                                                      false,
+                                                                  "isUserCancelled": true,
+                                                                  "userCancelledDate": DateTime.now(),
+                                                                  "isRefunded": false,
                                                                 };
 
-                                                                var bookingId =
-                                                                    snapshot.data![
-                                                                            index]
-                                                                        ["id"];
+                                                                var bookingId = snapshot.data![index]["id"];
 
-                                                                var cancelStatus =
-                                                                    await BusinessServices()
-                                                                        .updateBookingsData(
-                                                                            bookingId,
-                                                                            data);
+                                                                var cancelStatus = await BusinessServices()
+                                                                    .updateBookingsData(bookingId, data);
 
-                                                                if (cancelStatus[
-                                                                        "status"] ==
-                                                                    "success") {
+                                                                if (cancelStatus["status"] == "success") {
                                                                   await BusinessServices().refundMoney(
-                                                                      snapshot.data![
-                                                                              index]
-                                                                          [
-                                                                          "userId"],
-                                                                      int.parse(snapshot
-                                                                          .data![
-                                                                              index]
-                                                                              [
-                                                                              "basicChargePaid"]
+                                                                      snapshot.data![index]["userId"],
+                                                                      int.parse(snapshot.data![index]["basicChargePaid"]
                                                                           .toString()));
-                                                                  final snackBar =
-                                                                      SnackBar(
-                                                                    content:
-                                                                        const Text(
+                                                                  final snackBar = SnackBar(
+                                                                    content: const Text(
                                                                       "Booking Cancelled Successfully",
                                                                     ),
-                                                                    action:
-                                                                        SnackBarAction(
-                                                                      label:
-                                                                          'Okay',
-                                                                      onPressed:
-                                                                          () {},
+                                                                    action: SnackBarAction(
+                                                                      label: 'Okay',
+                                                                      onPressed: () {},
                                                                     ),
                                                                   );
                                                                   // ignore: use_build_context_synchronously
-                                                                  ScaffoldMessenger.of(
-                                                                          context)
-                                                                      .showSnackBar(
-                                                                          snackBar);
+                                                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                                                   Get.back();
                                                                 } else {
-                                                                  final snackBar =
-                                                                      SnackBar(
-                                                                    content:
-                                                                        const Text(
+                                                                  final snackBar = SnackBar(
+                                                                    content: const Text(
                                                                       "Unable to cancel the order",
                                                                     ),
-                                                                    action:
-                                                                        SnackBarAction(
-                                                                      label:
-                                                                          'Okay',
-                                                                      onPressed:
-                                                                          () {},
+                                                                    action: SnackBarAction(
+                                                                      label: 'Okay',
+                                                                      onPressed: () {},
                                                                     ),
                                                                   );
                                                                   // ignore: use_build_context_synchronously
-                                                                  ScaffoldMessenger.of(
-                                                                          context)
-                                                                      .showSnackBar(
-                                                                          snackBar);
+                                                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                                                   Get.back();
                                                                 }
                                                               },
                                                               child: Text(
                                                                 "Confirm",
-                                                                style:
-                                                                    GoogleFonts
-                                                                        .inter(),
+                                                                style: GoogleFonts.inter(),
                                                               ),
                                                             )
                                                           ],
@@ -691,26 +497,38 @@ class BookingsTab extends StatelessWidget {
                                                     height: 40.0,
                                                     width: size.width * 0.40,
                                                     decoration: BoxDecoration(
-                                                      color: const Color(
-                                                          0xFF3F5C9F),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
+                                                      color: const Color(0xFF3F5C9F),
+                                                      borderRadius: BorderRadius.circular(10.0),
                                                     ),
                                                     child: Center(
                                                       child: Text(
                                                         "Cancel Booking",
-                                                        style:
-                                                            GoogleFonts.inter(
+                                                        style: GoogleFonts.inter(
                                                           color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.w600,
+                                                          fontWeight: FontWeight.w600,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
                                                 )
                                               : Container(),
+                                          if (snapshot.data![index]['status'] == 'Rejected')... [
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+                                              decoration: BoxDecoration(
+                                                color: Colors.red,
+                                                borderRadius: BorderRadius.circular(10.0),
+                                              ),
+                                              child: Text(
+                                                "Cancel by service provider",
+                                                textAlign: TextAlign.center,
+                                                style: GoogleFonts.inter(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ],
                                       ),
                                     ),

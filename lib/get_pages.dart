@@ -1,4 +1,5 @@
 import 'package:estraightwayapp/payment/confirmation.dart';
+import 'package:estraightwayapp/service/home/disclouser_screen.dart';
 import 'package:estraightwayapp/view/auth/login_home.dart';
 import 'package:estraightwayapp/view/auth/login_home_service_provider.dart';
 import 'package:estraightwayapp/view/auth/login_page.dart';
@@ -14,6 +15,7 @@ import 'package:estraightwayapp/view/home/businesses_by_date_page.dart';
 import 'package:estraightwayapp/view/home/cancellation_and_refund.dart';
 import 'package:estraightwayapp/view/home/contact_us.dart';
 import 'package:estraightwayapp/view/home/course_details_page.dart';
+import 'package:estraightwayapp/view/home/help_desk.dart';
 import 'package:estraightwayapp/view/home/home_page.dart';
 import 'package:estraightwayapp/view/home/plan_expired_page.dart';
 import 'package:estraightwayapp/view/home/privacy_policy.dart';
@@ -42,6 +44,7 @@ import 'package:estraightwayapp/view/service_provider/select_category.dart';
 import 'package:estraightwayapp/view/service_provider/select_location_page.dart';
 import 'package:estraightwayapp/view/service_provider/select_sub_category.dart';
 import 'package:estraightwayapp/view/service_provider/slot_based_service_provider.dart';
+import 'package:estraightwayapp/view/service_provider/sos_requests.dart';
 import 'package:estraightwayapp/view/service_provider/todays_cancelled_orders.dart';
 import 'package:estraightwayapp/view/service_provider/todays_confirmed_orders.dart';
 import 'package:estraightwayapp/view/service_provider/waiting_page.dart';
@@ -52,6 +55,11 @@ import 'view/auth/login_home_user.dart';
 import 'view/home/business_by_date_details.dart';
 
 final pages = [
+  GetPage(
+    name: '/disclosureScreen',
+    page: () => const DisclosureScreen(),
+    transition: Transition.rightToLeft,
+  ),
   //AUTH PAGES
   GetPage(
     name: '/splash',
@@ -189,11 +197,8 @@ final pages = [
     page: () => FailedPage(),
     transition: Transition.rightToLeft,
   ),
-  GetPage(
-    name: '/receivedBooking',
-    page: () => const ReceivedBookings(),
-    transition: Transition.rightToLeft,
-  ),
+  GetPage(name: '/receivedBooking', page: () => const ReceivedBookings(), transition: Transition.rightToLeft),
+  GetPage(name: '/sosRequests', page: () => const SosRequestScreen(), transition: Transition.rightToLeft),
   GetPage(
     name: '/newBooking',
     page: () => const NewBookings(),
@@ -277,6 +282,11 @@ final pages = [
   GetPage(
     name: '/refundPolicy',
     page: () => const CancellationAndRefund(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/helpdesk',
+    page: () => const HelpDeskScreen(),
     transition: Transition.rightToLeft,
   ),
   GetPage(

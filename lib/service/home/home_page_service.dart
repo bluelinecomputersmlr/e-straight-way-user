@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:estraightwayapp/model/categories_model.dart';
 import 'package:estraightwayapp/model/sub_category_model.dart';
@@ -7,6 +9,10 @@ import 'package:get/get.dart';
 class HomePageService extends GetConnect {
   Future<Map> getUserData() async {
     try {
+      log('User --> ${FirebaseAuth.instance.currentUser}');
+      if (FirebaseAuth.instance.currentUser == null) {
+        return {"status": "error", "message": 'User not logged in'};
+      }
       var response = await FirebaseFirestore.instance
           .collection("straightWayUsers")
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -21,8 +27,8 @@ class HomePageService extends GetConnect {
           "phone": FirebaseAuth.instance.currentUser!.phoneNumber
         };
       }
-    } catch (e) {
-      return {"status": "error", "message": "Some error occurred"};
+    } on FirebaseException catch (e) {
+      return {"status": "error", "message": e.message};
     }
   }
 

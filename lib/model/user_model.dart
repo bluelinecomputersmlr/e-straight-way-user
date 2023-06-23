@@ -56,7 +56,9 @@ class ServiceProviderModel {
   String? ifscCode;
   String? aadharDocument;
   String? drivingLicenceDocument;
+  String? gstNumber;
   String? vehicleRegistrationDocument;
+  bool? isInitialPaymentDone;
   ServiceProviderModel(
       {this.serviceProviderCategory,
       this.serviceProviderCategoryUID,
@@ -71,6 +73,8 @@ class ServiceProviderModel {
       this.ifscCode,
       this.aadharDocument,
       this.drivingLicenceDocument,
+      this.gstNumber,
+      this.isInitialPaymentDone,
       this.vehicleRegistrationDocument});
   Map<String, dynamic> toJson() => _$ServiceProviderModelToJson(this);
   factory ServiceProviderModel.fromJson(Map<String, dynamic> json) =>

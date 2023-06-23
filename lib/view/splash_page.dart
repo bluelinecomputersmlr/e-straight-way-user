@@ -1,12 +1,15 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:easy_splash_screen/easy_splash_screen.dart';
 import 'package:estraightwayapp/model/user_model.dart';
 import 'package:estraightwayapp/service/auth/login_service.dart';
+import 'package:estraightwayapp/service/home/disclouser_screen.dart';
 import 'package:estraightwayapp/view/auth/login_home.dart';
 import 'package:estraightwayapp/view/auth/sign_up_page.dart';
 import 'package:estraightwayapp/view/auth/sign_up_service_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home/home_page.dart';
 import 'service_provider/home_service_provider.dart';
 
@@ -39,6 +42,13 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<Widget> futureCall() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool? disco = prefs.getBool('isDisclouser');
+    log('Disco --> $disco');
+    if (disco == null) {
+      return Future.value(const DisclosureScreen());
+    }
+    print('User --> ${FirebaseAuth.instance.currentUser}');
     if (FirebaseAuth.instance.currentUser != null) {
       var response = await LoginService().loginUser();
       if (response["status"] == "success") {

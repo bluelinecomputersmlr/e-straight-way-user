@@ -31,6 +31,9 @@ class BusinessModel {
   String? vehicleRegistrationNo;
   List<Map<String, dynamic>>? addedServices;
   Map<String, dynamic>? location;
+  String? businessFcmToken;
+  String? userUid;
+  bool? isInitialPaymentDone;
 
   BusinessModel({
     this.uid,
@@ -43,6 +46,7 @@ class BusinessModel {
     this.description,
     this.gmapsLink,
     this.phoneNumber,
+    this.userUid,
     this.serviceCharge,
     this.creationTime,
     this.rating,
@@ -52,6 +56,8 @@ class BusinessModel {
     this.vehicleRegistrationNo,
     this.addedServices,
     this.location,
+    this.businessFcmToken,
+    this.isInitialPaymentDone,
   });
 
   factory BusinessModel.fromJson(Map<String, dynamic> json) =>

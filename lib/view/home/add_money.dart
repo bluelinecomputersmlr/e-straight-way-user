@@ -75,6 +75,7 @@ class AddMoney extends StatelessWidget {
                       onTap: () {
                         var amount = _amountController.text;
                         if (amount.isNotEmpty) {
+                          FocusScope.of(context).unfocus();
                           _addMoney(context, amount, addMoneyController);
                         }
                       },
@@ -122,7 +123,7 @@ void _addMoney(
   };
 
   var userResponse = await UserServices().getUserData();
-
+  print('User response --> $userResponse');
   if (userResponse["status"] == "success") {
     var userId = userResponse["data"][0]["uid"];
     var walletAmount = userResponse["data"][0]["wallet"];

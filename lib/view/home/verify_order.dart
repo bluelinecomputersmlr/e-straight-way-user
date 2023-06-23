@@ -140,7 +140,7 @@ class VerifyOrderPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "₹ ${verifyOrderController.selectedOrder["tokenAdvance"]}",
+                      "₹ ${(verifyOrderController.selectedOrder["tokenAdvance"] == 'null' ? '0' : verifyOrderController.selectedOrder["tokenAdvance"])}",
                       style: GoogleFonts.inter(
                         fontSize: 15.0,
                         fontWeight: FontWeight.w600,
@@ -220,12 +220,11 @@ class VerifyOrderPage extends StatelessWidget {
                     vertical: 10.0,
                   ),
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      await verifyOrderController.loadData();
                       if (int.parse(walletController.walletAmount.toString()) >
-                          int.parse(verifyOrderController
-                              .bookingData["basicChargePaid"])) {
-                        verifyOrderController.toggleWalletPaymentOption(
-                            !verifyOrderController.useWalletMoney.value);
+                          int.parse(verifyOrderController.bookingData["basicChargePaid"])) {
+                        verifyOrderController.toggleWalletPaymentOption(!verifyOrderController.useWalletMoney.value);
                       }
                     },
                     child: Container(
@@ -343,7 +342,7 @@ class VerifyOrderPage extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            "₹ ${(num.parse(verifyOrderController.selectedOrder["tokenAdvance"]) < 10) ? ((num.parse(verifyOrderController.selectedOrder["tokenAdvance"]) * 0.18) + (num.parse(verifyOrderController.selectedOrder["tokenAdvance"]))).toString() : verifyOrderController.selectedOrder["tokenAdvance"]}",
+                            "₹ ${(num.parse(verifyOrderController.selectedOrder["tokenAdvance"] == 'null' ? '0' : verifyOrderController.selectedOrder["tokenAdvance"]) < 10) ? ((num.parse(verifyOrderController.selectedOrder["tokenAdvance"] == 'null' ? '0' : verifyOrderController.selectedOrder["tokenAdvance"]) * 0.18) + (num.parse(verifyOrderController.selectedOrder["tokenAdvance"] == 'null' ? '0' : verifyOrderController.selectedOrder["tokenAdvance"]))).toString() : (verifyOrderController.selectedOrder["tokenAdvance"] == 'null' ? '0' : verifyOrderController.selectedOrder["tokenAdvance"])}",
                             style: GoogleFonts.inter(
                               fontWeight: FontWeight.w600,
                               color: Colors.white,

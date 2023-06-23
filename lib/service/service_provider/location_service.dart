@@ -6,12 +6,14 @@ import 'package:geocoding/geocoding.dart' as GeoCoding;
 class LocationService {
   Future<Map> updateBusinessLocation(String uid, LatLng position) async {
     final geo = GeoFlutterFire();
-
+    print('positions --> $position');
     GeoFirePoint location =
         geo.point(latitude: position.latitude, longitude: position.longitude);
+    print('locations --> $location');
 
     try {
       ///Get users business id
+      print('uid --> $uid');
       var response = await FirebaseFirestore.instance
           .collection("straightWayUsers")
           .doc(uid)

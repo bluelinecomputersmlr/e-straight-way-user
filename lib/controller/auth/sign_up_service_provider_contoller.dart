@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -7,9 +8,12 @@ import 'package:estraightwayapp/model/categories_model.dart';
 import 'package:estraightwayapp/model/single_course_model.dart';
 import 'package:estraightwayapp/model/sub_category_model.dart';
 import 'package:estraightwayapp/model/user_model.dart';
+import 'package:estraightwayapp/notification_service.dart';
 import 'package:estraightwayapp/service/auth/login_service.dart';
 import 'package:estraightwayapp/service/home/home_page_service.dart';
 import 'package:estraightwayapp/service/home/sub_category_services.dart';
+import 'package:estraightwayapp/service/service_provider/service_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -53,6 +57,7 @@ class SignUpServiceProviderController extends GetxController {
   final ifscCodeController = TextEditingController();
 
   final upiIdController = TextEditingController();
+  final gstController = TextEditingController();
 
   final vehiceRegistrationController = TextEditingController();
 
@@ -66,6 +71,7 @@ class SignUpServiceProviderController extends GetxController {
 
   var businessDescriptionConroller = TextEditingController();
   var addedServiceModel = <AddedServiceModel>[AddedServiceModel()].obs;
+
   @override
   void onInit() {
     getUserData();
@@ -202,6 +208,64 @@ class SignUpServiceProviderController extends GetxController {
   }
 
   Future submitFormDirectBooking() async {
+    log("---1-----");
+    isMainPageLoading(true);
+    log("---2-----");
+    var businessUID = const Uuid().v4().trimRight();
+    log("---3-----");
+    log("---4-----");
+    business = BusinessModel(
+      uid: businessUID,
+      address: addressController.text,
+      businessName: businessNameConroller.text,
+      categoryUID: category!.uid,
+      subCategoryUID: subCategory!.uid,
+      serviceCharge: double.parse(serviceChargeController.text),
+      phoneNumber: businessPhoneController.text,
+      creationTime: Timestamp.now(),
+      isInitialPaymentDone: false,
+      userUid: FirebaseAuth.instance.currentUser!.uid,
+      subCategoryType: subCategory!.subCategoryType,
+      experience: experienceController.text,
+      businessFcmToken: NotificationService.instance.fcmToken ?? '',
+    );
+    log("---5-----");
+    ServiceProviderModel serviceProvider = ServiceProviderModel(
+      serviceProviderCategory: category!.name,
+      serviceProviderCategoryUID: category!.uid,
+      serviceProviderSubCategory: subCategory!.subCategoryName,
+      serviceProviderSubCategoryUID: subCategory!.uid,
+      businessUID: businessUID,
+      businessType: subCategory!.subCategoryType,
+      userAddress: addressController.text,
+      bankAccountName: bankAccountNumberController.text,
+      ifscCode: ifscCodeController.text,
+      bankName: '',
+      gstNumber: gstController.text,
+      isInitialPaymentDone: false,
+    );
+    log("---6-----");
+    var businessJSON = business!.toJson();
+    log("---7-----");
+    businessJSON["pinCode"] = pincodeController.text;
+    await LoginService()
+        .addUserServiceProvider(userNameController.text, serviceProvider);
+    log("---8-----");
+    await LoginService().addBusiness(businessJSON).whenComplete(() async {
+      log("---9-----");
+      LoginService().uploadDocument(aadharPhoto, 'aadharDocument', businessUID);
+      log("---10-----");
+      LoginService()
+          .uploadBusinessPhoto(profilePhoto, 'businessImage', businessUID);
+      log("---11-----");
+    });
+    SubServiceProviderService().getSubAdmin(pincodeController.text);
+    isMainPageLoading(false);
+    log("---12-----");
+    return true;
+  }
+
+  Future submitFormMapBasedBooking() async {
     isMainPageLoading(true);
     var businessUID = const Uuid().v4().trimRight();
     business = BusinessModel(
@@ -213,8 +277,12 @@ class SignUpServiceProviderController extends GetxController {
       serviceCharge: double.parse(serviceChargeController.text),
       phoneNumber: businessPhoneController.text,
       creationTime: Timestamp.now(),
+      isInitialPaymentDone: false,
       subCategoryType: subCategory!.subCategoryType,
       experience: experienceController.text,
+      vehicleRegistrationNo: vehiceRegistrationController.text,
+      businessFcmToken: NotificationService.instance.fcmToken ?? '',
+      userUid: FirebaseAuth.instance.currentUser!.uid,
     );
     ServiceProviderModel serviceProvider = ServiceProviderModel(
       serviceProviderCategory: category!.name,
@@ -227,51 +295,11 @@ class SignUpServiceProviderController extends GetxController {
       bankAccountName: bankAccountNumberController.text,
       ifscCode: ifscCodeController.text,
       bankName: '',
+      isInitialPaymentDone: false,
+      gstNumber: gstController.text,
     );
     var businessJSON = business!.toJson();
-    businessJSON["pinCode"] = pincodeController.text;
-    await LoginService()
-        .addUserServiceProvider(userNameController.text, serviceProvider);
-    await LoginService().addBusiness(businessJSON).whenComplete(() async {
-      await LoginService()
-          .uploadDocument(aadharPhoto, 'aadharDocument', businessUID);
-      await LoginService()
-          .uploadBusinessPhoto(profilePhoto, 'businessImage', businessUID);
-    });
-
-    isMainPageLoading(false);
-    return true;
-  }
-
-  Future submitFormMapBasedBooking() async {
-    isMainPageLoading(true);
-    var businessUID = const Uuid().v4().trimRight();
-    business = BusinessModel(
-        uid: businessUID,
-        address: addressController.text,
-        businessName: businessNameConroller.text,
-        categoryUID: category!.uid,
-        subCategoryUID: subCategory!.uid,
-        serviceCharge: double.parse(serviceChargeController.text),
-        phoneNumber: businessPhoneController.text,
-        creationTime: Timestamp.now(),
-        subCategoryType: subCategory!.subCategoryType,
-        experience: experienceController.text,
-        vehicleRegistrationNo: vehiceRegistrationController.text);
-    ServiceProviderModel serviceProvider = ServiceProviderModel(
-      serviceProviderCategory: category!.name,
-      serviceProviderCategoryUID: category!.uid,
-      serviceProviderSubCategory: subCategory!.subCategoryName,
-      serviceProviderSubCategoryUID: subCategory!.uid,
-      businessUID: businessUID,
-      businessType: subCategory!.subCategoryType,
-      userAddress: addressController.text,
-      bankAccountName: bankAccountNumberController.text,
-      ifscCode: ifscCodeController.text,
-      bankName: '',
-    );
-    var businessJSON = business!.toJson();
-    businessJSON["pinCode"] = pincodeController.text;
+    businessJSON["pinCode"] = pincodeController.value;
     await LoginService()
         .addUserServiceProvider(userNameController.text, serviceProvider);
     await LoginService().addBusiness(businessJSON).whenComplete(() async {
@@ -292,21 +320,25 @@ class SignUpServiceProviderController extends GetxController {
     isMainPageLoading(true);
     var businessUID = const Uuid().v4().trimRight();
     List<Map<String, dynamic>>? list = [];
-    addedServiceModel.forEach((element) {
+    for (var element in addedServiceModel) {
       list.add(element.toJson());
-    });
+    }
 
     business = BusinessModel(
-        uid: businessUID,
-        address: addressController.text,
-        businessName: businessNameConroller.text,
-        categoryUID: category!.uid,
-        subCategoryUID: subCategory!.uid,
-        description: businessDescriptionConroller.text,
-        phoneNumber: businessPhoneController.text,
-        creationTime: Timestamp.now(),
-        subCategoryType: subCategory!.subCategoryType,
-        addedServices: list);
+      uid: businessUID,
+      address: addressController.text,
+      businessName: businessNameConroller.text,
+      categoryUID: category!.uid,
+      subCategoryUID: subCategory!.uid,
+      description: businessDescriptionConroller.text,
+      phoneNumber: businessPhoneController.text,
+      creationTime: Timestamp.now(),
+      subCategoryType: subCategory!.subCategoryType,
+      isInitialPaymentDone: false,
+      addedServices: list,
+      businessFcmToken: NotificationService.instance.fcmToken ?? '',
+      userUid: FirebaseAuth.instance.currentUser!.uid,
+    );
     ServiceProviderModel serviceProvider = ServiceProviderModel(
       serviceProviderCategory: category!.name,
       serviceProviderCategoryUID: category!.uid,
@@ -318,10 +350,12 @@ class SignUpServiceProviderController extends GetxController {
       bankAccountName: bankAccountNumberController.text,
       ifscCode: ifscCodeController.text,
       bankName: '',
+      isInitialPaymentDone: false,
+      gstNumber: gstController.text,
     );
     var businessJSON = business!.toJson();
     businessJSON["gstRegisteredStatus"] = isGstRegistered.value;
-    businessJSON["pinCode"] = pincodeController.text;
+    businessJSON["pinCode"] = pincodeController.value.text;
     await LoginService()
         .addUserServiceProvider(userNameController.text, serviceProvider);
     await LoginService().addBusiness(businessJSON).whenComplete(() async {

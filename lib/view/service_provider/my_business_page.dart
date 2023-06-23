@@ -70,7 +70,7 @@ class MyBusinesPage extends StatelessWidget {
                         height: 20.0,
                       ),
 
-                      (businessController.businessData[0]["addedServices"] !=
+                      businessController.businessData.isNotEmpty ?   (businessController.businessData[0]["addedServices"] !=
                               null)
                           ? Column(
                               children: businessController.businessData[0]
@@ -276,10 +276,10 @@ class MyBusinesPage extends StatelessWidget {
                                   )
                                 ],
                               ),
-                            ),
+                            ) : Container(),
                     ],
                   ),
-                  (businessController.businessData[0]["subCategoryType"] ==
+                  businessController.businessData.isNotEmpty ?   (businessController.businessData[0]["subCategoryType"] ==
                           "date")
                       ? Positioned(
                           bottom: 0,
@@ -310,7 +310,7 @@ class MyBusinesPage extends StatelessWidget {
                             ),
                           ),
                         )
-                      : Container(),
+                      : Container() : Container(),
                 ],
               ),
       ),

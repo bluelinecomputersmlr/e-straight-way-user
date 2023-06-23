@@ -41,7 +41,8 @@ class PaymentConfirmationController extends GetxController {
         .updateServiceProviderPaymentStatus(userData);
 
     if (response["status"] == "success") {
-      Get.back();
+      // Get.back();
+      await Future.delayed(const Duration(seconds: 2));
       Get.offAllNamed("/homeServiceProviderPage");
     } else {
       final snackBar = SnackBar(
@@ -53,7 +54,9 @@ class PaymentConfirmationController extends GetxController {
           onPressed: () {},
         ),
       );
-      Get.back();
+      // Get.back();
+      Get.toNamed('/wait');
+
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
@@ -103,6 +106,10 @@ class PaymentConfirmationController extends GetxController {
     context = contextParam;
     loadingDialogWidget(context);
     final homePageController = Get.put(HomeServiceProviderController());
+    await homePageController.getUserData();
+    homePageController.isFromPay(true);
+    // HomeServiceProviderController homePageController = Get.find();
+    await Future.delayed(const Duration(seconds: 5));
     var order = await BusinessServices().createOrder(
       homePageController.userData.value.userName.toString(),
       homePageController.userData.value.uid.toString(),
@@ -111,6 +118,8 @@ class PaymentConfirmationController extends GetxController {
       double.parse("1"),
       orderId,
     );
+
+    print('Order --> $order');
 
     if (order["status"] == "success") {
       paymentSessionId = order["data"]["payment_session_id"];
@@ -133,7 +142,7 @@ class PaymentConfirmationController extends GetxController {
             .setTheme(theme)
             .build();
 
-        cfPaymentGatewayService.doPayment(cfDropCheckoutPayment);
+        await cfPaymentGatewayService.doPayment(cfDropCheckoutPayment);
       } on CFException catch (e) {
         print(e.message);
       }

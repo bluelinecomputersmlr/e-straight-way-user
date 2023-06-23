@@ -42,7 +42,7 @@ class UserServices {
   }
 
   Future<Map> getUserData({String userId = ""}) async {
-    try {
+    // try {
       if (userId == "") {
         userId = FirebaseAuth.instance.currentUser!.uid;
       }
@@ -59,14 +59,15 @@ class UserServices {
         for (var doc in data) {
           responseData.add(doc.data());
         }
-        return {"status": "success", "data": responseData};
+        print('Response --> $responseData');
+      return {"status": "success", "data": responseData};
       } else {
         return {"status": "error", "message": "Invalid code"};
       }
-    } catch (e) {
-      print(e);
-      return {"status": "error"};
-    }
+    // } catch (e) {
+    //   print(e);
+    //   return {"status": "error"};
+    // }
   }
 
   Future<Map> getTransactions() async {
