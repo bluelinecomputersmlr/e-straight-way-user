@@ -10,7 +10,8 @@ exports.notifySubscribers = functions.https.onCall(async (data, _) => {
         await messaging.sendToDevice(data.targetDevices, {
             notification: {
                 title: data.messageTitle,
-                body: data.messageBody
+                body: data.messageBody,
+                sound:"notification_sound.mp3"
             }
         });
 

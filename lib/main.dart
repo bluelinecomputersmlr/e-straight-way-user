@@ -1,5 +1,4 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:background_fetch/background_fetch.dart';
 import 'package:estraightwayapp/notification_service.dart';
 import 'package:estraightwayapp/view/auth/login_home.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,6 +15,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 ///This is to handle the background notification
+@pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   Noti.showBigTextNotification(
       title: message.notification!.title.toString(),
@@ -27,6 +27,7 @@ void main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   //Setting Firebse messaging
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -188,8 +189,6 @@ class _MyAppState extends State<MyApp> {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print("onMessageOpenedApp: $message");
     });
-
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
     Noti.initialize(flutterLocalNotificationsPlugin);
 

@@ -52,6 +52,7 @@ app.post("/api/v1/notify", async (req, res) => {
       notification: {
         title: data.messageTitle,
         body: data.messageBody,
+        sound:"notification_sound.mp3"
       },
     });
 
