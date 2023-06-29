@@ -133,7 +133,7 @@ class VerifyOrderController extends GetxController {
     var response = await BusinessServices().bookService(bookingData);
 
     if (response["status"] == "success") {
-     /* sendNotification(
+      /* sendNotification(
           bookingData["businessId"],
           "You have new Service Booking",
           "${bookingData["userName"]} has booked a Service",
@@ -249,11 +249,11 @@ class VerifyOrderController extends GetxController {
     var response = await BusinessServices().bookService(bookingData);
 
     if (response["status"] == "success") {
-    /*  sendNotification(
+      sendNotification(
           bookingData["businessId"],
           "You have new Service Booking",
           "${bookingData["userName"]} has booked a Service",
-          true);*/
+          true);
       final snackBar = SnackBar(
         content: const Text(
           "Order Place Successfuly!",
@@ -362,7 +362,6 @@ class VerifyOrderController extends GetxController {
 
         /// ----------- Jemin -----------
         // var response = await BusinessServices().bookService(bookingData);
-
       } on CFException catch (e) {
         print(e.message);
       }
